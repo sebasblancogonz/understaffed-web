@@ -1,0 +1,58 @@
+---
+import '@fontsource-variable/inter';
+import '@fontsource-variable/jetbrains-mono';
+import interLatin from '@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url';
+import '../styles/global.css';
+import { config, locales, paths, type Lang } from '../config';
+import { getDict } from '../i18n';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = getDict(lang);
+
+const site = Astro.site!;
+const canonical = new URL(paths[lang], site).href;
+const ogImage = new URL(config.ogImagePath, site).href;
+---
+
+<!doctype html>
+<html lang={t.lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{t.meta.title}</title>
+    <meta name="description" content={t.meta.description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preload" href={interLatin} as="font" type="font/woff2" crossorigin />
+    <meta name="color-scheme" content="light dark" />
+
+    {locales.map((l) => <link rel="alternate" hreflang={l} href={new URL(paths[l], site).href} />)}
+    <link rel="alternate" hreflang="x-default" href={new URL(paths.es, site).href} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Understaffed" />
+    <meta property="og:title" content={t.meta.title} />
+    <meta property="og:description" content={t.meta.description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content={t.ogLocale} />
+    <!-- TODO: imagen Open Graph (public/og.png, 1200x630) pendiente del equipo -->
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:alt" content={t.meta.ogImageAlt} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={t.meta.title} />
+    <meta name="twitter:description" content={t.meta.description} />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image:alt" content={t.meta.ogImageAlt} />
+  </head>
+  <body>
+    <a class="skip" href="#main">{t.skip}</a>
+    <slot name="header" />
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+    <slot name="footer" />
+  </body>
+</html>

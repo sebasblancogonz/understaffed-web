@@ -1,0 +1,63 @@
+---
+import { Image } from 'astro:assets';
+
+interface Props {
+  /** Nombre del archivo esperado en src/assets/ */
+  file: string;
+  alt: string;
+  label: string;
+  /** Proporción del hueco mientras no exista la captura */
+  ratio?: string;
+}
+const { file, alt, label, ratio = '16 / 10' } = Astro.props;
+
+const shots = import.meta.glob<{ default: ImageMetadata }>(
+  '/src/assets/*.{png,jpg,jpeg,webp}',
+  { eager: true },
+);
+const shot = shots[`/src/assets/${file}`]?.default;
+---
+
+{
+  shot ? (
+    <Image
+      src={shot}
+      alt={alt}
+      widths={[480, 800, 1200]}
+      sizes="(min-width: 72rem) 70rem, 100vw"
+      class="shot"
+    />
+  ) : (
+    <div class="todo" style={`aspect-ratio: ${ratio}`} role="img" aria-label={alt}>
+      <p class="mono"><strong>{label}</strong></p>
+      <p class="mono name">src/assets/{file}</p>
+    </div>
+  )
+}
+
+<style>
+  .shot {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+  }
+  .todo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    padding: 1rem;
+    width: 100%;
+    background: var(--surface);
+    border: 1px dashed var(--text-secondary);
+    border-radius: var(--radius);
+    text-align: center;
+  }
+  .name {
+    color: var(--text-secondary);
+    overflow-wrap: anywhere;
+  }
+</style>

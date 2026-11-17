@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# TODO: ajustar la URL si cambia el dominio público (ver astro.config.mjs).
+Sitemap: https://understaffed.example/sitemap-index.xml

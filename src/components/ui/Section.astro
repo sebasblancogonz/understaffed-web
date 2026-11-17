@@ -1,0 +1,46 @@
+---
+interface Props {
+  id: string;
+  title: string;
+  intro?: string;
+}
+const { id, title, intro } = Astro.props;
+const headingId = `${id}-title`;
+---
+
+<section {id} aria-labelledby={headingId} tabindex="-1" class="section">
+  <div class="container">
+    <header class="head">
+      <h2 id={headingId}>{title}</h2>
+      {intro && <p class="intro">{intro}</p>}
+    </header>
+    <slot />
+  </div>
+</section>
+
+<style>
+  .section {
+    padding-block: 4rem;
+    scroll-margin-top: 1rem;
+  }
+  .section:focus {
+    outline: none;
+  }
+  .head {
+    max-width: 40rem;
+    margin-bottom: 2.5rem;
+  }
+  h2 {
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+  }
+  .intro {
+    margin-top: 0.75rem;
+    color: var(--text-secondary);
+    font-size: 1.125rem;
+  }
+  @media (min-width: 48rem) {
+    .section {
+      padding-block: 6rem;
+    }
+  }
+</style>

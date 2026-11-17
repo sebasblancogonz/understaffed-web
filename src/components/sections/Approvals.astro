@@ -1,0 +1,63 @@
+---
+import Section from '../ui/Section.astro';
+import Placeholder from '../ui/Placeholder.astro';
+import type { Dict } from '../../i18n/types';
+
+interface Props {
+  t: Dict;
+}
+const { t } = Astro.props;
+const { approvals } = t;
+---
+
+<Section id={approvals.id} title={approvals.title} intro={approvals.intro}>
+  <div class="grid">
+    <ul class="items">
+      {approvals.items.map((item, i) => (
+        <li class="item">
+          <span class="num mono" aria-hidden="true">{i + 1}/{approvals.items.length}</span>
+          <h3>{item.title}</h3>
+          <p>{item.text}</p>
+        </li>
+      ))}
+    </ul>
+    <Placeholder file={approvals.shot.file} alt={approvals.shot.alt} label={t.placeholder.label} />
+  </div>
+</Section>
+
+<style>
+  .grid {
+    display: grid;
+    gap: 2rem;
+    align-items: center;
+  }
+  .items {
+    display: grid;
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .item {
+    padding: 1.5rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+  }
+  .num {
+    color: var(--text-secondary);
+  }
+  h3 {
+    margin-top: 0.5rem;
+    font-size: 1.25rem;
+  }
+  .item p {
+    margin-top: 0.5rem;
+    color: var(--text-secondary);
+  }
+  @media (min-width: 60rem) {
+    .grid {
+      grid-template-columns: 1fr 1.3fr;
+      gap: 3rem;
+    }
+  }
+</style>

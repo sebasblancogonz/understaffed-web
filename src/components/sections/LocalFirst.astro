@@ -1,0 +1,32 @@
+---
+import Section from '../ui/Section.astro';
+import type { Dict } from '../../i18n/types';
+
+interface Props {
+  t: Dict;
+}
+const { t } = Astro.props;
+const { local } = t;
+---
+
+<Section id={local.id} title={local.title}>
+  <div class="box">
+    <p>{local.text}</p>
+    <p class="account">{local.account}</p>
+  </div>
+</Section>
+
+<style>
+  .box {
+    max-width: 40rem;
+    padding: 1.75rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    font-size: 1.125rem;
+  }
+  .account {
+    margin-top: 0.75rem;
+    color: var(--text-secondary);
+  }
+</style>

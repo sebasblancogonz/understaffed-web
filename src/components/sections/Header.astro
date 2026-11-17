@@ -1,0 +1,76 @@
+---
+import { paths, type Lang } from '../../config';
+import type { Dict } from '../../i18n/types';
+
+interface Props {
+  t: Dict;
+}
+const { t } = Astro.props;
+const other: Lang = t.lang === 'es' ? 'en' : 'es';
+---
+
+<header class="header">
+  <div class="container bar">
+    <a class="brand" href={paths[t.lang]} aria-label="Understaffed">Understaffed</a>
+    <nav aria-label={t.nav.label} class="nav">
+      <ul>
+        {t.nav.items.map((item) => (
+          <li><a href={`#${item.id}`}>{item.label}</a></li>
+        ))}
+      </ul>
+      <a class="lang" href={paths[other]} hreflang={other} lang={other} aria-label={t.nav.switchLabel}>
+        {t.nav.switchText}
+      </a>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .header {
+    border-bottom: 1px solid var(--border);
+  }
+  .bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem 1.5rem;
+    min-height: 4rem;
+    padding-block: 0.5rem;
+  }
+  .brand {
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    text-decoration: none;
+  }
+  .nav {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.25rem 1.25rem;
+  }
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .nav a {
+    display: inline-block;
+    padding-block: 0.6rem;
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.95rem;
+  }
+  .nav a:hover {
+    color: var(--text);
+  }
+  .nav .lang {
+    padding-inline: 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    color: var(--text);
+  }
+</style>

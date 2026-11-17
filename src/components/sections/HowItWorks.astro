@@ -1,0 +1,87 @@
+---
+import Section from '../ui/Section.astro';
+import Placeholder from '../ui/Placeholder.astro';
+import type { Dict } from '../../i18n/types';
+
+interface Props {
+  t: Dict;
+}
+const { t } = Astro.props;
+const { how } = t;
+---
+
+<Section id={how.id} title={how.title} intro={how.intro}>
+  <ol class="steps">
+    {how.steps.map((step, i) => (
+      <li class="step">
+        <span class="num mono" aria-hidden="true">{i + 1}</span>
+        <h3>{step.title}</h3>
+        <p>{step.text}</p>
+      </li>
+    ))}
+  </ol>
+  <p class="path">
+    {how.pathLabel} <code>{how.pathExample}</code>
+  </p>
+  <p class="cli">{how.cli}</p>
+  <div class="visual">
+    <Placeholder file={how.shot.file} alt={how.shot.alt} label={t.placeholder.label} />
+  </div>
+</Section>
+
+<style>
+  .steps {
+    display: grid;
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .step {
+    padding: 1.5rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+  }
+  .num {
+    display: block;
+    margin-bottom: 0.75rem;
+    color: var(--text-secondary);
+  }
+  h3 {
+    font-size: 1.125rem;
+  }
+  .step p {
+    margin-top: 0.5rem;
+    color: var(--text-secondary);
+  }
+  .path {
+    margin-top: 2rem;
+    color: var(--text-secondary);
+  }
+  code {
+    padding: 0.15rem 0.5rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    overflow-wrap: anywhere;
+  }
+  .cli {
+    margin-top: 0.75rem;
+    font-weight: 500;
+  }
+  .visual {
+    margin-top: 3rem;
+  }
+  @media (min-width: 48rem) {
+    .steps {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 72rem) {
+    .steps {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+</style>

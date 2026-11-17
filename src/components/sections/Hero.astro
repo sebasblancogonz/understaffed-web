@@ -1,0 +1,76 @@
+---
+import Button from '../ui/Button.astro';
+import Placeholder from '../ui/Placeholder.astro';
+import { config } from '../../config';
+import type { Dict } from '../../i18n/types';
+
+interface Props {
+  t: Dict;
+}
+const { t } = Astro.props;
+const href = config.downloadUrl || `#${t.how.id}`;
+---
+
+<section class="hero" aria-labelledby="hero-title">
+  <div class="container">
+    <div class="copy">
+      <h1 id="hero-title">{t.hero.title}</h1>
+      <p class="lead">{t.hero.lead}</p>
+      <div class="actions">
+        <Button href={href}>{t.hero.cta}</Button>
+        {!config.downloadUrl && <p class="todo mono">{t.hero.ctaTodo}</p>}
+      </div>
+      <p class="note">{t.hero.note}</p>
+    </div>
+    <div class="visual">
+      <Placeholder file={t.hero.shot.file} alt={t.hero.shot.alt} label={t.placeholder.label} />
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    padding-block: 3.5rem 2rem;
+  }
+  .copy {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 48rem;
+    margin-inline: auto;
+    text-align: center;
+  }
+  h1 {
+    font-size: clamp(2.25rem, 7vw, 4rem);
+    letter-spacing: -0.035em;
+  }
+  .lead {
+    margin-top: 1.25rem;
+    color: var(--text-secondary);
+    font-size: 1.1875rem;
+  }
+  .actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 2rem;
+  }
+  .todo {
+    color: var(--text-secondary);
+    font-size: 0.8125rem;
+  }
+  .note {
+    margin-top: 1.25rem;
+    color: var(--text-secondary);
+    font-size: 0.9375rem;
+  }
+  .visual {
+    margin-top: 3rem;
+  }
+  @media (min-width: 48rem) {
+    .hero {
+      padding-block: 6rem 3rem;
+    }
+  }
+</style>

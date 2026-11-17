@@ -1,0 +1,23 @@
+---
+import type { Dict } from '../../i18n/types';
+
+interface Props {
+  t: Dict;
+}
+const { t } = Astro.props;
+---
+
+<footer class="footer">
+  <div class="container">
+    <p>{t.footer.text}</p>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    padding-block: 2.5rem;
+    border-top: 1px solid var(--border);
+    color: var(--text-secondary);
+    font-size: 0.9375rem;
+  }
+</style>
