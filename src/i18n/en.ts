@@ -33,7 +33,7 @@ export const en: Dict = {
     note: 'It launches Claude Code, the CLI you already have and already pay for. It stores no keys.',
     ctaTodo: 'TODO: download link pending',
     shot: {
-      file: 'tablero.png',
+      file: 'tablero-en.png',
       alt: 'Understaffed board with tasks assigned to the roles on the team',
     },
   },
@@ -57,7 +57,7 @@ export const en: Dict = {
     // DRAFT
     cli: 'Understaffed launches Claude Code, the AI CLI you already have and already pay for. It stores no keys.',
     shot: {
-      file: 'revision.png',
+      file: 'revision-en.png',
       alt: 'Task review screen in Understaffed',
     },
   },
@@ -73,7 +73,7 @@ export const en: Dict = {
       { title: 'The code', text: 'When the role is done, you approve the code.' },
     ],
     shot: {
-      file: 'aprobacion.png',
+      file: 'aprobacion-en.png',
       alt: 'Approving a task spec in Understaffed',
     },
   },
