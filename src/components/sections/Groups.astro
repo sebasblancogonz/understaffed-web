@@ -1,0 +1,72 @@
+---
+import Section from '../ui/Section.astro';
+import Placeholder from '../ui/Placeholder.astro';
+import type { Dict } from '../../i18n/types';
+
+interface Props {
+  t: Dict;
+}
+const { t } = Astro.props;
+const { groups } = t;
+---
+
+<Section id={groups.id} title={groups.title} intro={groups.intro}>
+  <div class="grid">
+    <ul class="points">
+      {groups.items.map((item) => (
+        <li class="point">
+          <h3>{item.title}</h3>
+          <p>{item.text}</p>
+        </li>
+      ))}
+    </ul>
+    <div class="shot">
+      <Placeholder
+        lang={t.lang}
+        file={groups.shot.file}
+        alt={groups.shot.alt}
+        label={t.placeholder.label}
+        sizes="(min-width: 72rem) 40rem, (min-width: 60rem) 58vw, 100vw"
+      />
+    </div>
+  </div>
+</Section>
+
+<style>
+  .grid {
+    display: grid;
+    gap: 2.5rem;
+  }
+  .points {
+    display: grid;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .point {
+    padding-block: 1.25rem;
+    border-top: 1px solid var(--border);
+  }
+  h3 {
+    font-size: 1.125rem;
+  }
+  .point p {
+    margin-top: 0.5rem;
+    color: var(--text-secondary);
+  }
+  /* En escritorio la captura va a la izquierda: Aprobaciones, justo antes, la lleva a la derecha. */
+  @media (min-width: 60rem) {
+    .grid {
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+      grid-template-areas: 'shot points';
+      gap: 3rem;
+      align-items: center;
+    }
+    .points {
+      grid-area: points;
+    }
+    .shot {
+      grid-area: shot;
+    }
+  }
+</style>

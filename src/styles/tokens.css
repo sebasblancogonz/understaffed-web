@@ -6,6 +6,10 @@
   --text-secondary: #5b6474;
   --surface: #f1f4f6;
   --border: #e3e6eb;
+  /* Borde de campos de formulario: 3:1 o más frente a --surface y --bg (WCAG 1.4.11). */
+  --field-border: #7c8494;
+  /* Rojo de error de la app: solo para un campo que el navegador rechaza. */
+  --danger: #d92d20;
   --accent: #2f5bea;
   --on-accent: #ffffff;
 
@@ -24,6 +28,8 @@
     --text-secondary: #9aa3b2;
     --surface: #1f2430;
     --border: #262d39;
+    --field-border: #6b7383;
+    --danger: #f97066;
     --accent: #5b7fff;
     --on-accent: #0d1017;
   }

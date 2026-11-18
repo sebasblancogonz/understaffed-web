@@ -1,0 +1,75 @@
+---
+import Section from '../ui/Section.astro';
+import Placeholder from '../ui/Placeholder.astro';
+import type { Dict } from '../../i18n/types';
+
+interface Props {
+  t: Dict;
+}
+const { t } = Astro.props;
+const { status } = t;
+---
+
+<Section id={status.id} title={status.title} intro={status.intro}>
+  <ul class="parts">
+    {status.items.map((item, i) => (
+      <li class="part">
+        <h3>
+          {/* Como en la app: el cobalto solo marca lo que espera tu decisión. */}
+          <span class:list={['chip', { awaiting: i === 0 }]}>{item.title}</span>
+        </h3>
+        <p>{item.text}</p>
+      </li>
+    ))}
+  </ul>
+  <div class="visual">
+    <Placeholder lang={t.lang} file={status.shot.file} alt={status.shot.alt} label={t.placeholder.label} />
+  </div>
+</Section>
+
+<style>
+  .parts {
+    display: grid;
+    gap: 1.75rem 2rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .part {
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--border);
+  }
+  h3 {
+    font-size: 0.9375rem;
+    line-height: 1;
+  }
+  .chip {
+    display: inline-block;
+    padding: 0.4rem 0.75rem;
+    border-radius: 999px;
+    background: var(--surface);
+    color: var(--text);
+    font-weight: 600;
+  }
+  .chip.awaiting {
+    background: var(--accent);
+    color: var(--on-accent);
+  }
+  .part p {
+    margin-top: 0.75rem;
+    color: var(--text-secondary);
+  }
+  .visual {
+    margin-top: 3rem;
+  }
+  @media (min-width: 48rem) {
+    .parts {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 72rem) {
+    .parts {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+</style>

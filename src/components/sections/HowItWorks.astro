@@ -25,7 +25,7 @@ const { how } = t;
   </p>
   <p class="cli">{how.cli}</p>
   <div class="visual">
-    <Placeholder file={how.shot.file} alt={how.shot.alt} label={t.placeholder.label} />
+    <Placeholder lang={t.lang} file={how.shot.file} alt={how.shot.alt} label={t.placeholder.label} />
   </div>
 </Section>
 
@@ -81,7 +81,7 @@ const { how } = t;
   }
   @media (min-width: 72rem) {
     .steps {
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(5, 1fr);
     }
   }
 </style>

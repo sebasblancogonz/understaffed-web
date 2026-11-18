@@ -10,6 +10,14 @@ export interface Shot {
   alt: string;
 }
 
+/** Bloque con título, texto y su captura (p. ej. sincronizar o colaborar). */
+export interface Feature {
+  title: string;
+  text: string;
+  detail: string;
+  shot: Shot;
+}
+
 export interface Dict {
   lang: Lang;
   ogLocale: string;
@@ -26,7 +34,6 @@ export interface Dict {
     lead: string;
     cta: string;
     note: string;
-    ctaTodo: string;
     shot: Shot;
   };
   how: {
@@ -46,7 +53,42 @@ export interface Dict {
     items: Step[];
     shot: Shot;
   };
-  local: { id: string; title: string; text: string; account: string };
+  status: {
+    id: string;
+    title: string;
+    intro: string;
+    /** El primero es lo que espera tu decisión: lleva el acento. */
+    items: Step[];
+    shot: Shot;
+  };
+  groups: {
+    id: string;
+    title: string;
+    intro: string;
+    items: Step[];
+    shot: Shot;
+  };
+  local: {
+    id: string;
+    title: string;
+    text: string;
+    account: string;
+    sync: Feature;
+    team: Feature;
+  };
+  requirements: { id: string; title: string; items: string[]; note: string };
+  waitlist: {
+    id: string;
+    title: string;
+    intro: string;
+    account: string;
+    label: string;
+    submit: string;
+    todo: string;
+    privacyTodo: string;
+    thanksTitle: string;
+    thanks: string;
+  };
   placeholder: { label: string };
   footer: { text: string };
 }

@@ -1,0 +1,52 @@
+---
+import Section from '../ui/Section.astro';
+import type { Dict } from '../../i18n/types';
+
+interface Props {
+  t: Dict;
+}
+const { t } = Astro.props;
+const { requirements } = t;
+// Nombres de comando en monoespaciada: git y claude
+const parts = (text: string) => text.split(/(\bgit\b)/g);
+---
+
+<Section id={requirements.id} title={requirements.title}>
+  <div class="box">
+    <ul>
+      {requirements.items.map((item) => (
+        <li>{parts(item).map((p) => (p === 'git' ? <code>git</code> : p))}</li>
+      ))}
+    </ul>
+    <p class="note">{parts(requirements.note).map((p) => (p === 'git' ? <code>git</code> : p))}</p>
+  </div>
+</Section>
+
+<style>
+  .box {
+    max-width: 40rem;
+    padding: 1.75rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    font-size: 1.125rem;
+  }
+  ul {
+    margin: 0;
+    padding-left: 1.25rem;
+  }
+  li + li {
+    margin-top: 0.5rem;
+  }
+  .note {
+    margin-top: 1rem;
+    color: var(--text-secondary);
+  }
+  code {
+    padding: 0.1rem 0.4rem;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.95em;
+  }
+</style>
