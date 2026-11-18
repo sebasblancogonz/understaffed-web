@@ -138,7 +138,7 @@ El formulario de la lista de espera SHALL tener etiqueta visible y foco visible,
 
 #### Scenario: Fallo del envío
 - **WHEN** el servidor no responde, responde con un error o tarda más de 15 segundos
-- **THEN** bajo el campo aparece un texto que lo dice y ofrece el buzón de la lista, el campo conserva el email y no queda marcado como inválido, y el botón vuelve a estar habilitado
+- **THEN** bajo el campo aparece un texto que lo dice y ofrece el buzón de la lista como enlace `mailto:`, el campo conserva el email y no queda marcado como inválido, y el botón vuelve a estar habilitado
 
 #### Scenario: Demasiados intentos
 - **WHEN** el servidor responde `429`
@@ -146,7 +146,7 @@ El formulario de la lista de espera SHALL tener etiqueta visible y foco visible,
 
 #### Scenario: Botón mientras envía
 - **WHEN** el formulario está enviando
-- **THEN** el botón está deshabilitado, dice «Enviando…», se distingue visualmente del habilitado y conserva su ancho
+- **THEN** el botón lleva `aria-disabled="true"`, no envía otra vez, dice «Enviando…», se distingue visualmente del habilitado y conserva su ancho y el foco si lo tenía
 
 #### Scenario: Sin JavaScript
 - **WHEN** se carga la portada con JavaScript deshabilitado

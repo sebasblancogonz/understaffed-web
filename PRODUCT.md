@@ -110,8 +110,9 @@ hay enlace de descarga público.
   usuario, no son integraciones, y no se presentan como compatibles.
 - Colaboración: están hechas las fases 1 y 2. Están pendientes la fase 3 (ramas y logs bajo
   demanda, y Aprobar que sube al remoto) y las integraciones con Jira, Linear o GitHub Issues,
-  los sprints, la delegación entre agentes y las ejecuciones en paralelo. Nada de eso se
-  anuncia como disponible.
+  los sprints y la delegación entre agentes. Nada de eso se anuncia como disponible.
+- Ejecuciones en paralelo: la app ya ejecuta varias tareas a la vez (confirmado el 2026-11-18),
+  así que la demostración puede enseñar dos tareas en marcha.
 - Sin una cuenta abierta, la app no hace ninguna petición de red. Con una, solo habla con el
   servidor de la cuenta y con los remotos git.
 

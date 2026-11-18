@@ -27,7 +27,6 @@ export const en: Dict = {
     cta: 'Request access',
     menu: 'Sections',
     switchText: 'Español',
-    switchLabel: 'Cambiar a español',
   },
   hero: {
     // DRAFT
@@ -48,7 +47,7 @@ export const en: Dict = {
     demo: {
       label: 'Demo of the Understaffed board with task #6',
       // DRAFT
-      caption: 'Demo with the sample project storefront. Press the actions on task #6; the run is simulated.',
+      caption: 'Demo with the storefront sample project; the run is simulated.',
       // app
       app: {
         projects: 'Projects',
@@ -93,16 +92,35 @@ export const en: Dict = {
         // DRAFT (demo control, not in the app)
         restart: 'Start over',
       },
+      // DRAFT: what to do at each step
       hints: [
-        'Tasks reach To do when their spec is approved.',
-        'Tasks reach In progress by running a To do task or sending back one in review.',
-        'Tasks reach In review when a run finishes successfully.',
-        'Tasks reach Done by approving the code of a task in review.',
+        'Read the criteria in the spec of task #6 and approve it, or request changes.',
+        'The spec is approved. Run the task: its role will work on its own branch.',
+        'The Frontend role is working on its branch. There is nothing for you to do until it finishes.',
+        'It finished successfully. Look at the files it changed and approve, or send it back with a comment.',
         "All of the task's work in a single commit on your branch, with your hooks and signature.",
       ],
       notes: {
         requestChanges: 'The assignee will revise the change with your comment, without starting over.',
         sendBack: 'It will resume its session with your comment on top of the work already done, and the task will go back to In progress.',
+      },
+      // app (task #6 panel, Spec tab): the titles of its acceptance criteria
+      spec: {
+        head: 'Acceptance criteria',
+        criteria: ['Theme follows the system', 'User choice', 'Sufficient contrast'],
+        valid: 'The spec passes OpenSpec validation.',
+      },
+      // app (task review: the "Code" list and last message). The files and their figures are
+      // made-up samples for the demo.
+      code: {
+        head: 'Code',
+        files: [
+          { name: 'admin/theme.css', add: 64 },
+          { name: 'admin/ThemeMenu.tsx', add: 41 },
+          { name: 'profile/prefs.ts', add: 9, del: 1 },
+          { name: 'admin/theme.test.ts', add: 36 },
+        ],
+        message: 'Done. Every task is checked off and the tests pass.',
       },
       // app (log strings); the hash 9c41e7a is a made-up sample for the demo
       log: [
@@ -137,8 +155,8 @@ export const en: Dict = {
         // DRAFT
         title: 'First, the spec',
         // DRAFT
-        text: 'You write the task and its role drafts the OpenSpec change in your repository: proposal, requirements with scenarios, design and tasks. You approve it or request changes.',
-        shot: { file: 'aprobacion-spec', alt: 'Spec of task #6 with its acceptance criteria, awaiting your approval' },
+        text: 'You write the task and its role drafts the change in OpenSpec, an open spec format that lives in files in your repository: proposal, requirements with scenarios, design and tasks. You approve it or request changes.',
+        shot: { file: 'aprobacion-spec', alt: 'Acceptance criteria in the spec of task #6: “Theme follows the system”, with its requirement and the “Dark system” scenario' },
       },
       {
         tone: 'orange',
@@ -158,7 +176,7 @@ export const en: Dict = {
         title: 'Finally, the code',
         // DRAFT
         text: 'You review the diff and approve it, send it back with a comment or discard it. Approving brings it to your branch in one commit, with your hooks and signature.',
-        shot: { file: 'revision-acciones', alt: 'Review of task #4 with the Discard implementation, Send back and Approve buttons, and the result of the run' },
+        shot: { file: 'revision-diff', alt: 'Diff of src/orders/orders.routes.ts in the review of task #4, with its added and removed lines' },
       },
     ],
   },
@@ -183,6 +201,12 @@ export const en: Dict = {
     title: 'Hire the roles you need',
     // DRAFT
     lead: 'Start from a template or a blank role. Every role has its instructions, its model and its permission to run commands.',
+    // DRAFT
+    templatesLabel: 'Templates, and how their instructions begin',
+    // DRAFT
+    current: 'In the dialog',
+    // DRAFT
+    caption: 'The app’s hire dialog, with the Backend developer template.',
     // app (template catalogue: name and first sentence of its instructions)
     templates: [
       { name: 'Product analyst', text: 'Your strength is understanding the problem before the solution: what the user needs, why, and how everyone will know it is solved.', tone: 'green' },
@@ -225,7 +249,7 @@ export const en: Dict = {
           'Without an account signed in, the app doesn’t connect to any server.',
           'Each role works on its own branch; approving brings the work to your branch in one commit.',
         ],
-        media: { kind: 'shot', shot: { file: 'tablero-sin-cuenta', alt: 'Sidebar of the Understaffed board with no account: No account, Sign in in Settings, Send and Receive' } },
+        media: { kind: 'shot', shot: { file: 'tablero-sin-cuenta', alt: 'Foot of the board sidebar with no account: “No account”, “Sign in in Settings” and the Send and Receive buttons inactive' } },
       },
       {
         title: 'With an account',
@@ -291,7 +315,9 @@ export const en: Dict = {
     // DRAFT
     thanksTitle: 'You’re on the list.',
     // DRAFT
-    thanks: 'We’ll write to you when you can install Understaffed.',
+    thanks: 'We’ll write to {email} when you can install Understaffed.',
+    // DRAFT
+    again: 'Use another email',
   },
   footer: {
     // DRAFT

@@ -29,7 +29,7 @@ export interface Dict {
   ogLocale: string;
   meta: { title: string; description: string; ogImageAlt: string };
   skip: string;
-  header: { home: string; navLabel: string; nav: Link[]; cta: string; menu: string; switchText: string; switchLabel: string };
+  header: { home: string; navLabel: string; nav: Link[]; cta: string; menu: string; switchText: string };
   hero: {
     title: [string, string];
     lead: string;
@@ -67,6 +67,10 @@ export interface Dict {
       /** Pista de la app para cada paso: Backlog, Por hacer, En curso, En revisión, Hecho. */
       hints: [string, string, string, string, string];
       notes: { requestChanges: string; sendBack: string };
+      /** Lo que se aprueba en el primer paso: los criterios de la spec de la tarea. */
+      spec: { head: string; criteria: string[]; valid: string };
+      /** Lo que se revisa antes de aprobar el código: los archivos cambiados y el último mensaje del rol. */
+      code: { head: string; files: { name: string; add: number; del?: number }[]; message: string };
       log: string[];
       review: { files: string; result: string; message: string };
       done: string;
@@ -99,6 +103,12 @@ export interface Dict {
     id: string;
     title: string;
     lead: string;
+    /** El título de la lista de plantillas. */
+    templatesLabel: string;
+    /** La marca de la plantilla que enseña el diálogo. */
+    current: string;
+    /** El pie del diálogo. */
+    caption: string;
     templates: { name: string; text: string; tone: Tone }[];
     dialog: {
       /** Lo que enseña el diálogo, para quien no lo ve. */
@@ -157,7 +167,10 @@ export interface Dict {
       failed: string;
     };
     thanksTitle: string;
+    /** `{email}` es la dirección que se acaba de apuntar. */
     thanks: string;
+    /** Vuelve al formulario para apuntar otra dirección. */
+    again: string;
   };
   footer: {
     text: string;

@@ -39,6 +39,9 @@ button, input, textarea { font: inherit; color: inherit; }
 a { color: inherit; text-underline-offset: 0.2em; }
 
 code, pre { font-family: var(--font-mono); font-size: 0.875em; }
+/* Las citas llevan las comillas de su idioma. */
+:lang(es) q { quotes: '«' '»'; }
+:lang(en) q { quotes: '“' '”'; }
 pre code { font-size: 1em; }
 
 ::selection { background: color-mix(in srgb, var(--accent) 22%, transparent); }
@@ -133,7 +136,7 @@ section[id] { scroll-margin-top: 5rem; }
 .button.secondary {
   background: var(--bg);
   color: var(--ink);
-  box-shadow: inset 0 0 0 2px var(--border);
+  box-shadow: inset 0 0 0 1.5px var(--field-border);
 }
 @media (hover: hover) and (pointer: fine) {
   .button:hover { background-color: var(--accent-hover); }

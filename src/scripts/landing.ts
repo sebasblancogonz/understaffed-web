@@ -42,6 +42,8 @@ function initDemo() {
   const progress = task.querySelector<HTMLElement>('[data-progress]')!;
   const log = task.querySelector<HTMLElement>('[data-log]')!;
   const result = task.querySelector<HTMLElement>('[data-result]')!;
+  const spec = task.querySelector<HTMLElement>('[data-spec]')!;
+  const note = task.querySelector<HTMLElement>('[data-note]')!;
   const hint = scope.querySelector<HTMLElement>('[data-hint]')!;
   const live = scope.querySelector<HTMLElement>('[data-live]')!;
   const buttons = Object.fromEntries(
@@ -108,6 +110,8 @@ function initDemo() {
     if (cta) cta.hidden = step !== 5;
     log.hidden = step !== 2;
     result.hidden = step !== 3;
+    spec.hidden = step !== 0;
+    note.hidden = true;
     for (const [name, button] of Object.entries(buttons)) button.hidden = !actionsOf[step].includes(name as keyof typeof buttons);
     place();
     announce();
@@ -133,9 +137,13 @@ function initDemo() {
     render();
   };
 
-  buttons.request.addEventListener('click', () => {
-    hint.textContent = s.notes.requestChanges;
-  });
+  // La consecuencia de pedir cambios o devolver se lee en la propia tarjeta.
+  const remark = (text: string) => {
+    note.textContent = text;
+    note.hidden = false;
+    live.textContent = text;
+  };
+  buttons.request.addEventListener('click', () => remark(s.notes.requestChanges));
   buttons.approve.addEventListener('click', () => {
     if (busy) return;
     step = 1;
@@ -148,7 +156,7 @@ function initDemo() {
     if (busy) return;
     busy = true;
     buttons.sendback.disabled = buttons.approvecode.disabled = true;
-    hint.textContent = s.notes.sendBack;
+    remark(s.notes.sendBack);
     await wait(1200);
     buttons.sendback.disabled = buttons.approvecode.disabled = false;
     void runTask();
@@ -197,6 +205,8 @@ function initMenu() {
 interface WaitlistStrings {
   sending: string;
   errors: { empty: string; invalid: string; limited: string; failed: string };
+  /** El buzón de la lista: `{email}` en el fallo del envío, como enlace. */
+  mailbox: string;
   thanksTitle: string;
   thanks: string;
 }
@@ -221,33 +231,63 @@ function initWaitlist() {
   const error = form.querySelector<HTMLElement>('[role="alert"]')!;
   const title = root.querySelector<HTMLElement>('[data-title]')!;
   const lead = root.querySelector<HTMLElement>('[data-lead]')!;
+  const again = root.querySelector<HTMLElement>('[data-again]')!;
   const label = submit.textContent;
+  const ask = { title: title.textContent, lead: lead.textContent };
+  let busy = false;
   // Los errores los escribe este script, con su texto: no el globo del navegador.
   form.noValidate = true;
 
   /** Escribe el error bajo el campo. `invalid` marca el campo cuando el problema es lo escrito. */
   const fail = (message: string, invalid = false) => {
-    error.textContent = message;
+    // `{email}` es el buzón de la lista, como enlace para escribirle.
+    const [before, after] = message.split('{email}');
+    error.replaceChildren(before);
+    if (after !== undefined) {
+      const link = scoped(error, Object.assign(document.createElement('a'), { href: `mailto:${s.mailbox}`, textContent: s.mailbox }));
+      error.append(link, after);
+    }
     if (invalid) field.setAttribute('aria-invalid', 'true');
     field.focus();
   };
   const clear = () => {
-    error.textContent = '';
+    error.replaceChildren();
     field.removeAttribute('aria-invalid');
   };
   const sending = (on: boolean) => {
-    // El botón conserva su ancho aunque cambie su texto.
+    busy = on;
+    // El botón conserva su ancho aunque cambie su texto, y el foco si lo tenía.
     submit.style.minWidth = on ? `${submit.offsetWidth}px` : '';
     form.setAttribute('aria-busy', String(on));
     field.readOnly = on;
-    submit.disabled = on;
+    submit.setAttribute('aria-disabled', String(on));
     submit.textContent = on ? s.sending : label;
   };
+  /** La confirmación ocupa el sitio de la pregunta sin que la banda cambie de alto. */
+  const confirm = (email: string) => {
+    root.style.minHeight = `${root.offsetHeight}px`;
+    root.dataset.done = '';
+    title.textContent = s.thanksTitle;
+    lead.textContent = s.thanks.replace('{email}', email);
+    form.hidden = true;
+    again.hidden = false;
+    title.focus();
+  };
+  again.querySelector('button')!.addEventListener('click', () => {
+    title.textContent = ask.title;
+    lead.textContent = ask.lead;
+    form.hidden = false;
+    again.hidden = true;
+    root.style.minHeight = '';
+    delete root.dataset.done;
+    field.focus();
+    field.select();
+  });
 
   field.addEventListener('input', clear);
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
-    if (submit.disabled) return;
+    if (busy) return;
     clear();
     field.value = field.value.trim();
     if (field.validity.valueMissing) return fail(s.errors.empty, true);
@@ -271,12 +311,8 @@ function initWaitlist() {
     clearTimeout(timer);
     sending(false);
 
-    if (status === 202) {
-      title.textContent = s.thanksTitle;
-      lead.textContent = s.thanks;
-      form.hidden = true;
-      title.focus();
-    } else if (status === 400) fail(s.errors.invalid, true);
+    if (status === 202) confirm(field.value);
+    else if (status === 400) fail(s.errors.invalid, true);
     else if (status === 429) fail(s.errors.limited);
     else fail(s.errors.failed);
   });

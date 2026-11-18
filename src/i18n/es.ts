@@ -27,7 +27,6 @@ export const es: Dict = {
     cta: 'Pedir acceso',
     menu: 'Secciones',
     switchText: 'English',
-    switchLabel: 'Cambiar a inglés',
   },
   hero: {
     // DRAFT
@@ -48,7 +47,7 @@ export const es: Dict = {
     demo: {
       label: 'Demostración del tablero de Understaffed con la tarea #6',
       // DRAFT
-      caption: 'Demostración con el proyecto de ejemplo storefront. Pulsa las acciones de la tarea #6; la ejecución está simulada.',
+      caption: 'Demostración con el proyecto de ejemplo storefront; la ejecución está simulada.',
       // app
       app: {
         projects: 'Proyectos',
@@ -93,16 +92,35 @@ export const es: Dict = {
         // DRAFT (control de la demostración, no de la app)
         restart: 'Volver a empezar',
       },
+      // DRAFT: lo que toca hacer en cada paso
       hints: [
-        'A Por hacer se llega aprobando la spec de la tarea.',
-        'A En curso se llega ejecutando una tarea de Por hacer o devolviendo una de En revisión.',
-        'A En revisión se llega cuando una ejecución termina bien.',
-        'A Hecho se llega aprobando el código de una tarea en revisión.',
+        'Lee los criterios de la spec de la tarea #6 y apruébala, o pide cambios.',
+        'La spec está aprobada. Ejecuta la tarea: su rol trabajará en una rama propia.',
+        'El rol Frontend trabaja en su rama. No tienes que hacer nada hasta que termine.',
+        'Ha terminado bien. Mira los archivos que ha cambiado y aprueba, o devuélvela con un comentario.',
         'Todo el trabajo de la tarea en un único commit sobre tu rama, con tus hooks y tu firma.',
       ],
       notes: {
         requestChanges: 'El responsable revisará el cambio con tu comentario, sin empezar de cero.',
         sendBack: 'Retomará su sesión con tu comentario sobre lo que ya hizo, y la tarea volverá a En curso.',
+      },
+      // app (panel de la tarea #6, pestaña Spec): los títulos de sus criterios de aceptación
+      spec: {
+        head: 'Criterios de aceptación',
+        criteria: ['Tema según el sistema', 'Elección del usuario', 'Contraste suficiente'],
+        valid: 'La spec pasa la validación de OpenSpec.',
+      },
+      // app (revisión de una tarea: lista «Código» y último mensaje). Los archivos y sus cifras son
+      // de muestra, inventados para la demostración.
+      code: {
+        head: 'Código',
+        files: [
+          { name: 'admin/theme.css', add: 64 },
+          { name: 'admin/ThemeMenu.tsx', add: 41 },
+          { name: 'profile/prefs.ts', add: 9, del: 1 },
+          { name: 'admin/theme.test.ts', add: 36 },
+        ],
+        message: 'Hecho. Todas las tareas están marcadas y las pruebas pasan.',
       },
       // app (textos del log); el hash 9c41e7a es de muestra, inventado para la demostración
       log: [
@@ -137,8 +155,8 @@ export const es: Dict = {
         // DRAFT
         title: 'Primero, la spec',
         // DRAFT
-        text: 'Anotas la tarea y su rol redacta el cambio de OpenSpec en tu repositorio: propuesta, requisitos con escenarios, diseño y tareas. Lo apruebas o pides cambios.',
-        shot: { file: 'aprobacion-spec', alt: 'Spec de la tarea #6 con sus criterios de aceptación, esperando tu aprobación' },
+        text: 'Anotas la tarea y su rol redacta el cambio en OpenSpec, un formato abierto de specs que vive en archivos de tu repositorio: propuesta, requisitos con escenarios, diseño y tareas. Lo apruebas o pides cambios.',
+        shot: { file: 'aprobacion-spec', alt: 'Criterios de aceptación de la spec de la tarea #6: «Tema según el sistema», con su requisito y el escenario «Sistema en oscuro»' },
       },
       {
         tone: 'orange',
@@ -158,7 +176,7 @@ export const es: Dict = {
         title: 'Al final, el código',
         // DRAFT
         text: 'Revisas el diff y lo apruebas, lo devuelves con un comentario o lo descartas. Aprobar lo integra en tu rama en un commit, con tus hooks y tu firma.',
-        shot: { file: 'revision-acciones', alt: 'Revisión de la tarea #4 con los botones Descartar la implementación, Devolver y Aprobar, y el coste y el progreso de la ejecución' },
+        shot: { file: 'revision-diff', alt: 'Diff de src/orders/orders.routes.ts en la revisión de la tarea #4, con las líneas añadidas y quitadas' },
       },
     ],
   },
@@ -183,6 +201,12 @@ export const es: Dict = {
     title: 'Contrata los roles que necesitas',
     // DRAFT
     lead: 'Empieza por una plantilla o por un rol en blanco. Cada rol lleva sus instrucciones, su modelo y su permiso para ejecutar comandos.',
+    // DRAFT
+    templatesLabel: 'Plantillas, y cómo empiezan sus instrucciones',
+    // DRAFT
+    current: 'La del diálogo',
+    // DRAFT
+    caption: 'El diálogo de contratar de la app, con la plantilla Desarrollador backend.',
     // app (catálogo de plantillas: nombre y primera frase de sus instrucciones)
     templates: [
       { name: 'Analista de producto', text: 'Tu fuerte es entender el problema antes que la solución: qué necesita el usuario, por qué y cómo se sabrá que está resuelto.', tone: 'green' },
@@ -225,7 +249,7 @@ export const es: Dict = {
           'Sin una cuenta abierta, la app no se conecta con ningún servidor.',
           'Cada rol trabaja en una rama propia; aprobar lleva el trabajo a tu rama en un commit.',
         ],
-        media: { kind: 'shot', shot: { file: 'tablero-sin-cuenta', alt: 'Barra lateral del tablero de Understaffed sin cuenta: Sin cuenta, Entra en Ajustes, Enviar y Recibir' } },
+        media: { kind: 'shot', shot: { file: 'tablero-sin-cuenta', alt: 'Pie de la barra lateral del tablero sin cuenta: «Sin cuenta», «Entra en Ajustes» y los botones Enviar y Recibir sin activar' } },
       },
       {
         title: 'Con cuenta',
@@ -291,7 +315,9 @@ export const es: Dict = {
     // DRAFT
     thanksTitle: 'Estás en la lista.',
     // DRAFT
-    thanks: 'Te escribiremos cuando puedas instalar Understaffed.',
+    thanks: 'Escribiremos a {email} cuando puedas instalar Understaffed.',
+    // DRAFT
+    again: 'Usar otro email',
   },
   footer: {
     // DRAFT
