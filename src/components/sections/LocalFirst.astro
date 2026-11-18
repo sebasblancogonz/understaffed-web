@@ -1,5 +1,6 @@
 ---
 import Section from '../ui/Section.astro';
+import Placeholder from '../ui/Placeholder.astro';
 import type { Dict } from '../../i18n/types';
 
 interface Props {
@@ -7,26 +8,73 @@ interface Props {
 }
 const { t } = Astro.props;
 const { local } = t;
+// Lo compartido no gasta el cobalto, como en la app: estos bloques van en tinta y gris.
+const blocks = [local.sync, local.team];
 ---
 
-<Section id={local.id} title={local.title}>
-  <div class="box">
-    <p>{local.text}</p>
-    <p class="account">{local.account}</p>
+<Section id={local.id} title={local.title} intro={local.text}>
+  <p slot="head" class="account">{local.account}</p>
+  <div class="blocks">
+    {blocks.map((block) => (
+      <article class="block">
+        <h3>{block.title}</h3>
+        <p class="text">{block.text}</p>
+        <p class="detail">{block.detail}</p>
+        <div class="shot">
+          <Placeholder
+            lang={t.lang}
+            file={block.shot.file}
+            alt={block.shot.alt}
+            label={t.placeholder.label}
+            ratio="1360 / 1640"
+            sizes="(min-width: 72rem) 34rem, (min-width: 60rem) 48vw, 100vw"
+          />
+        </div>
+      </article>
+    ))}
   </div>
 </Section>
 
 <style>
-  .box {
-    max-width: 40rem;
-    padding: 1.75rem;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    font-size: 1.125rem;
-  }
   .account {
+    margin-top: 1rem;
+    font-size: 1.125rem;
+    font-weight: 500;
+  }
+  .blocks {
+    display: grid;
+    gap: 3rem;
+  }
+  .block {
+    display: flex;
+    flex-direction: column;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--border);
+  }
+  h3 {
+    font-size: 1.375rem;
+  }
+  .text {
     margin-top: 0.75rem;
+    max-width: 34rem;
+  }
+  .detail {
+    margin-top: 0.5rem;
+    max-width: 34rem;
     color: var(--text-secondary);
+  }
+  .shot {
+    margin-top: 2rem;
+  }
+  @media (min-width: 60rem) {
+    .blocks {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 3rem;
+    }
+    /* Las capturas se alinean abajo aunque los textos tengan distinta longitud. */
+    .shot {
+      margin-top: auto;
+      padding-top: 2rem;
+    }
   }
 </style>

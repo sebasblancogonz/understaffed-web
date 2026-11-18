@@ -27,9 +27,14 @@ body {
 }
 
 h1, h2, h3, p { margin: 0; }
+p { text-wrap: pretty; }
 h1, h2, h3 { line-height: 1.15; letter-spacing: -0.02em; font-weight: 650; }
 
 a { color: inherit; }
+
+/* Superficies del navegador con la paleta: selección y cursor de texto en cobalto, como en la app. */
+::selection { background: color-mix(in srgb, var(--accent) 22%, transparent); }
+input { caret-color: var(--accent); }
 
 code, .mono { font-family: var(--font-mono); font-size: 0.9em; }
 

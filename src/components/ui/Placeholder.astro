@@ -9,8 +9,20 @@ interface Props {
   label: string;
   /** Proporción del hueco mientras no exista la captura */
   ratio?: string;
+  /** `eager` solo para la captura del hero; el resto se carga en diferido. */
+  loading?: 'eager' | 'lazy';
+  /** Ancho que ocupa la captura en la página, para elegir el archivo adecuado. */
+  sizes?: string;
 }
-const { file, lang, alt, label, ratio = '16 / 10' } = Astro.props;
+const {
+  file,
+  lang,
+  alt,
+  label,
+  ratio = '16 / 10',
+  loading = 'lazy',
+  sizes = '(min-width: 72rem) 70rem, 100vw',
+} = Astro.props;
 
 const shots = import.meta.glob<{ default: ImageMetadata }>(
   '/src/assets/*.{png,jpg,jpeg,webp}',
@@ -23,7 +35,6 @@ const dark = shots[`/src/assets/${darkName}`]?.default;
 const missing = [light ? '' : lightName, dark ? '' : darkName].filter(Boolean);
 
 const widths = [480, 800, 1200];
-const sizes = '(min-width: 72rem) 70rem, 100vw';
 const lightImg = light && (await getImage({ src: light, widths, format: 'webp' }));
 const darkImg = dark && (await getImage({ src: dark, widths, format: 'webp' }));
 ---
@@ -43,6 +54,7 @@ const darkImg = dark && (await getImage({ src: dark, widths, format: 'webp' }));
         width={light.width}
         height={light.height}
         alt={alt}
+        loading={loading}
         decoding="async"
         class="shot"
       />

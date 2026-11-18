@@ -1,11 +1,27 @@
 ---
+/**
+ * Acción principal. Con `href` es un enlace; sin él, un botón de envío de formulario,
+ * que puede ir deshabilitado (p. ej. mientras falta el destino de la lista de espera).
+ */
 interface Props {
-  href: string;
+  href?: string;
+  disabled?: boolean;
+  describedby?: string;
 }
-const { href } = Astro.props;
+const { href, disabled = false, describedby } = Astro.props;
 ---
 
-<a class="button" href={href}><slot /></a>
+{
+  href ? (
+    <a class="button" href={href}>
+      <slot />
+    </a>
+  ) : (
+    <button class="button" type="submit" disabled={disabled} aria-describedby={describedby}>
+      <slot />
+    </button>
+  )
+}
 
 <style>
   .button {
@@ -14,17 +30,28 @@ const { href } = Astro.props;
     justify-content: center;
     min-height: 3rem;
     padding: 0.7rem 1.4rem;
+    border: 0;
     border-radius: 999px;
     background: var(--accent);
     color: var(--on-accent);
+    font: inherit;
     font-weight: 600;
     text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+  /* Deshabilitado: relleno neutro sin cobalto, para que no se confunda con un campo; un texto
+     visible explica por qué. */
+  .button:disabled {
+    background: var(--border);
+    color: var(--text-secondary);
+    cursor: not-allowed;
   }
   @media (prefers-reduced-motion: no-preference) {
     .button {
       transition: transform 0.15s ease;
     }
-    .button:hover {
+    .button:not(:disabled):hover {
       transform: translateY(-1px);
     }
   }

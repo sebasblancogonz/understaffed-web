@@ -1,0 +1,113 @@
+---
+import Section from '../ui/Section.astro';
+import Button from '../ui/Button.astro';
+import { config } from '../../config';
+import type { Dict } from '../../i18n/types';
+
+interface Props {
+  t: Dict;
+}
+const { t } = Astro.props;
+const { waitlist } = t;
+
+// Sin destino no hay envío: el formulario no lleva `action` y el botón va deshabilitado,
+// lo que también impide el envío implícito con Intro.
+const ready = Boolean(config.waitlistUrl);
+---
+
+<Section id={waitlist.id} title={waitlist.title} intro={waitlist.intro} tone="surface" layout="split">
+  <p slot="head" class="account">{waitlist.account}</p>
+  <div class="panel">
+    <form class="form" method="post" action={ready ? config.waitlistUrl : undefined}>
+      <input type="hidden" name="lang" value={t.lang} />
+      <label for="waitlist-email">{waitlist.label}</label>
+      <div class="row">
+        <input
+          id="waitlist-email"
+          name="email"
+          type="email"
+          required
+          autocomplete="email"
+          inputmode="email"
+          autocapitalize="off"
+          spellcheck="false"
+        />
+        <Button disabled={!ready} describedby={ready ? undefined : 'waitlist-todo'}>{waitlist.submit}</Button>
+      </div>
+      {!ready && <p id="waitlist-todo" class="todo mono">{waitlist.todo}</p>}
+      <p class="todo mono">{waitlist.privacyTodo}</p>
+    </form>
+    {/* Si el servicio redirige a `#thanks`, la confirmación aparece sin JavaScript. */}
+    <div id="thanks" class="thanks" tabindex="-1">
+      <h3>{waitlist.thanksTitle}</h3>
+      <p>{waitlist.thanks}</p>
+    </div>
+  </div>
+</Section>
+
+<style>
+  .account {
+    margin-top: 1rem;
+    font-weight: 500;
+  }
+  label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+  }
+  .row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  input[type='email'] {
+    flex: 1;
+    min-width: 0;
+    min-height: 3rem;
+    padding: 0 1.25rem;
+    border: 1px solid var(--field-border);
+    border-radius: 999px;
+    background: var(--bg);
+    color: var(--text);
+    font: inherit;
+    font-size: 1rem;
+  }
+  input[type='email']:user-invalid {
+    border-color: var(--danger);
+  }
+  .todo {
+    margin-top: 0.75rem;
+    color: var(--text-secondary);
+    font-size: 0.8125rem;
+  }
+  .row + .todo {
+    margin-top: 1rem;
+  }
+  /* Al llegar con #thanks, el encabezado de la sección sigue a la vista sobre la confirmación. */
+  .thanks {
+    display: none;
+    scroll-margin-top: 12rem;
+  }
+  .thanks:target {
+    display: block;
+  }
+  .panel:has(.thanks:target) .form {
+    display: none;
+  }
+  .thanks:focus {
+    outline: none;
+  }
+  .thanks h3 {
+    font-size: 1.5rem;
+  }
+  .thanks p {
+    margin-top: 0.5rem;
+    color: var(--text-secondary);
+    font-size: 1.125rem;
+  }
+  @media (min-width: 40rem) {
+    .row {
+      flex-direction: row;
+    }
+  }
+</style>

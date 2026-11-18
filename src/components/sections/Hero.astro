@@ -1,14 +1,14 @@
 ---
 import Button from '../ui/Button.astro';
 import Placeholder from '../ui/Placeholder.astro';
-import { config } from '../../config';
 import type { Dict } from '../../i18n/types';
 
 interface Props {
   t: Dict;
 }
 const { t } = Astro.props;
-const href = config.downloadUrl || `#${t.how.id}`;
+// La acción principal lleva al único formulario de la página, en la sección de cierre.
+const href = `#${t.waitlist.id}`;
 
 // Vídeo de fondo: solo en escritorio y sin movimiento reducido. Las condiciones van en el
 // `media` de cada fuente para que el navegador no descargue nada si no se cumplen, y la
@@ -40,7 +40,6 @@ const stills = `--still-light: url(${video}-light-poster.jpg); --still-dark: url
         <p class="lead">{t.hero.lead}</p>
         <div class="actions">
           <Button href={href}>{t.hero.cta}</Button>
-          {!config.downloadUrl && <p class="todo mono">{t.hero.ctaTodo}</p>}
         </div>
         <p class="note">{t.hero.note}</p>
       </div>
@@ -48,7 +47,7 @@ const stills = `--still-light: url(${video}-light-poster.jpg); --still-dark: url
   </div>
   <div class="container">
     <div class="visual">
-      <Placeholder lang={t.lang} file={t.hero.shot.file} alt={t.hero.shot.alt} label={t.placeholder.label} />
+      <Placeholder lang={t.lang} file={t.hero.shot.file} alt={t.hero.shot.alt} label={t.placeholder.label} loading="eager" />
     </div>
   </div>
 </section>
@@ -88,10 +87,6 @@ const stills = `--still-light: url(${video}-light-poster.jpg); --still-dark: url
     align-items: center;
     gap: 0.75rem;
     margin-top: 2rem;
-  }
-  .todo {
-    color: var(--text-secondary);
-    font-size: 0.8125rem;
   }
   .note {
     margin-top: 1.25rem;
