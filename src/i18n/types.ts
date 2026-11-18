@@ -144,8 +144,19 @@ export interface Dict {
     label: string;
     submit: string;
     after: string;
-    todo: string;
-    privacyTodo: string;
+    /** El aviso de privacidad. `{email}` es el buzón de la lista. */
+    privacy: string;
+    /** Lo que se ve en lugar del formulario sin JavaScript. `{email}` es el buzón de la lista. */
+    noJs: string;
+    /** El texto del botón mientras se envía. */
+    sending: string;
+    errors: {
+      empty: string;
+      invalid: string;
+      limited: string;
+      /** `{email}` es el buzón de la lista. */
+      failed: string;
+    };
     thanksTitle: string;
     thanks: string;
   };

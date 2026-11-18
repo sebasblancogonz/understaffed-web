@@ -277,8 +277,21 @@ export const en: Dict = {
     submit: 'Request access',
     // DRAFT
     after: 'Joining doesn’t create an Understaffed account.',
-    todo: 'TODO: waitlist destination pending',
-    privacyTodo: 'TODO: privacy notice pending',
+    // DRAFT
+    privacy: 'Your email goes to our inbox and we only use it to tell you when you can install Understaffed. To leave the list, write to {email}.',
+    // DRAFT
+    noJs: 'This form needs JavaScript. Without it, write to {email} and we’ll add you.',
+    sending: 'Sending…',
+    errors: {
+      // DRAFT
+      empty: 'Enter your email to join the list.',
+      // DRAFT
+      invalid: 'That email doesn’t look right. Check it: it should look like name@example.com.',
+      // DRAFT
+      limited: 'There are too many attempts from your connection. Wait a while and try again.',
+      // DRAFT
+      failed: 'We couldn’t add you. Try again or write to {email}.',
+    },
     // DRAFT
     thanksTitle: 'You’re on the list.',
     // DRAFT

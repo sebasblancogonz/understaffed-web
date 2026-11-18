@@ -331,7 +331,7 @@ Los botones son grandes píldoras firmes, y se hunden un poco al pulsarlos.
 - **Banda de la lista de espera:** cobalto fijo en los dos temas (`band`), texto blanco, contenido centrado, esquina de 32 px y cuatro etiquetas de rol en las esquinas desde 64rem.
 
 ### Inputs / Fields
-- **Marketing (lista de espera):** campo blanco sin borde, de 3.5rem de alto y en píldora (`rounded.pill`). El foco es un contorno blanco de 3 px. El botón de envío, también en píldora y de 3.5rem, es tinta sobre la banda y queda deshabilitado mientras no haya destino.
+- **Marketing (lista de espera):** campo blanco sin borde, de 3.5rem de alto y en píldora (`rounded.pill`). El foco es un contorno blanco de 3 px. El botón de envío, también en píldora y de 3.5rem, es tinta sobre la banda. Solo se deshabilita mientras envía: dice «Enviando…», pasa a tinta al 35 % con texto `on-band-muted` y conserva su ancho. El error va con texto bajo el campo, en `on-band-danger` y 600, y el campo lleva un contorno de 3 px del mismo color solo cuando el problema es lo escrito; en una columna, el error queda entre el campo y el botón. Al apuntarse, el título y la frase de la banda pasan a ser la confirmación y el formulario desaparece. Los enlaces de la banda van en blanco y subrayados, con foco de contorno blanco.
 - **Dentro de `data-ui`:**
   - Los campos llevan borde de 1 px en `field-border` y esquina `rounded.ui`, con 2.25rem de alto y letra de 0.875rem.
   - El interruptor es una píldora de 2.25 × 1.25rem que pasa a `brand` al activarse.

@@ -1,10 +1,12 @@
-/** Datos configurables que el equipo aún no ha definido. */
+/** Datos configurables de la web. */
 export const config = {
-  // TODO: destino de la lista de espera (URL a la que el formulario envía por POST).
-  // Mientras esté vacío, el formulario no se puede enviar y muestra un TODO. Si el
-  // servicio permite redirigir tras apuntarse, configúralo para volver a `/#thanks`
-  // (o `/en/#thanks`): la portada muestra entonces la confirmación sin JavaScript.
-  waitlistUrl: '',
+  // La ruta de la lista de espera del servidor de Understaffed (`POST /v2/waitlist`, con
+  // `{ email, language }` en JSON): responde 202 y avisa por correo a `waitlistEmail`. El servidor
+  // tiene que arrancar con `--waitlist-to`. Sin esta URL el build falla. Para probar contra un
+  // servidor local: `PUBLIC_WAITLIST_URL=http://127.0.0.1:8787/v2/waitlist pnpm dev`.
+  waitlistUrl: (import.meta.env.PUBLIC_WAITLIST_URL as string | undefined) ?? 'https://handoff.understaffed.app/v2/waitlist',
+  // El buzón de la lista de espera: recibe cada alta y es el contacto para salir de ella.
+  waitlistEmail: 'waitlist@understaffed.app',
   // TODO: imagen Open Graph (1200×630) aportada por el equipo en public/og.png.
   ogImagePath: '/og.png',
 } as const;

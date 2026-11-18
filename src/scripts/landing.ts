@@ -1,6 +1,6 @@
 /**
  * El único script de la portada. Todo lo que hace mejora una página que ya está completa sin él:
- * la demostración del hero, el contador del editor de roles y las entradas de las secciones. Las cadenas vienen del HTML, no de aquí.
+ * la demostración del hero, el contador del editor de roles, el envío de la lista de espera y las entradas de las secciones. Las cadenas vienen del HTML, no de aquí.
  */
 
 (window as unknown as { __landingReady: boolean }).__landingReady = true;
@@ -181,6 +181,94 @@ function initCounter() {
 }
 
 /** Entradas de sección: una vez, al entrar en pantalla. */
+interface WaitlistStrings {
+  sending: string;
+  errors: { empty: string; invalid: string; limited: string; failed: string };
+  thanksTitle: string;
+  thanks: string;
+}
+
+/** Lo más que se espera al servidor antes de dar el envío por fallido. */
+const WAITLIST_TIMEOUT_MS = 15_000;
+
+/**
+ * La lista de espera: envía el email al servidor y dice qué ha pasado. Un error se escribe bajo el
+ * campo, que conserva lo escrito; al apuntarse, el título y la frase de la banda pasan a ser la
+ * confirmación y el formulario desaparece.
+ */
+function initWaitlist() {
+  const root = document.querySelector<HTMLElement>('[data-waitlist]');
+  const form = root?.querySelector<HTMLFormElement>('form');
+  if (!root || !form || !root.dataset.strings || !root.dataset.endpoint) return;
+  const s = JSON.parse(root.dataset.strings) as WaitlistStrings;
+  const endpoint = root.dataset.endpoint;
+  const field = form.querySelector<HTMLInputElement>('input[type="email"]')!;
+  const language = form.querySelector<HTMLInputElement>('input[name="lang"]')?.value;
+  const submit = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
+  const error = form.querySelector<HTMLElement>('[role="alert"]')!;
+  const title = root.querySelector<HTMLElement>('[data-title]')!;
+  const lead = root.querySelector<HTMLElement>('[data-lead]')!;
+  const label = submit.textContent;
+  // Los errores los escribe este script, con su texto: no el globo del navegador.
+  form.noValidate = true;
+
+  /** Escribe el error bajo el campo. `invalid` marca el campo cuando el problema es lo escrito. */
+  const fail = (message: string, invalid = false) => {
+    error.textContent = message;
+    if (invalid) field.setAttribute('aria-invalid', 'true');
+    field.focus();
+  };
+  const clear = () => {
+    error.textContent = '';
+    field.removeAttribute('aria-invalid');
+  };
+  const sending = (on: boolean) => {
+    // El botón conserva su ancho aunque cambie su texto.
+    submit.style.minWidth = on ? `${submit.offsetWidth}px` : '';
+    form.setAttribute('aria-busy', String(on));
+    field.readOnly = on;
+    submit.disabled = on;
+    submit.textContent = on ? s.sending : label;
+  };
+
+  field.addEventListener('input', clear);
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    if (submit.disabled) return;
+    clear();
+    field.value = field.value.trim();
+    if (field.validity.valueMissing) return fail(s.errors.empty, true);
+    if (!field.validity.valid) return fail(s.errors.invalid, true);
+
+    sending(true);
+    const abort = new AbortController();
+    const timer = setTimeout(() => abort.abort(), WAITLIST_TIMEOUT_MS);
+    let status = 0;
+    try {
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: field.value, language }),
+        signal: abort.signal,
+      });
+      status = response.status;
+    } catch {
+      // Sin red, cortado o fuera de tiempo: se trata como un fallo del envío.
+    }
+    clearTimeout(timer);
+    sending(false);
+
+    if (status === 202) {
+      title.textContent = s.thanksTitle;
+      lead.textContent = s.thanks;
+      form.hidden = true;
+      title.focus();
+    } else if (status === 400) fail(s.errors.invalid, true);
+    else if (status === 429) fail(s.errors.limited);
+    else fail(s.errors.failed);
+  });
+}
+
 function initReveal() {
   const els = document.querySelectorAll<HTMLElement>('[data-reveal]');
   if (!('IntersectionObserver' in window)) {
@@ -202,4 +290,5 @@ function initReveal() {
 
 initReveal();
 initDemo();
+initWaitlist();
 initCounter();

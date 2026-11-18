@@ -104,21 +104,6 @@ Cada captura de la app SHALL mostrarse en la variante que corresponde al tema de
 - **WHEN** las dos variantes de una captura tienen las mismas dimensiones y se cambia el tema del sistema
 - **THEN** la imagen declara las mismas proporciones y el CLS sigue siendo 0,1 o menos
 
-### Requirement: Formulario accesible sin JavaScript
-El formulario de la lista de espera SHALL funcionar sin JavaScript, con etiqueta visible y foco visible, validar el formato del email con la validación nativa del navegador y mostrar el borde del campo con un contraste de 3:1 o más frente a su fondo en ambos temas.
-
-#### Scenario: Validación nativa
-- **WHEN** el usuario intenta enviar el formulario con un texto que no es un email
-- **THEN** el navegador impide el envío y señala el campo, sin JavaScript de la aplicación
-
-#### Scenario: Contraste del campo
-- **WHEN** se mide el borde del campo de email frente al fondo de la sección, en claro y en oscuro
-- **THEN** la relación de contraste es 3:1 o más
-
-#### Scenario: Botón deshabilitado reconocible
-- **WHEN** el botón de envío está deshabilitado
-- **THEN** se distingue visualmente del habilitado y un texto visible explica por qué
-
 ### Requirement: Carga diferida de capturas
 Todas las capturas SHALL cargarse en diferido (`loading="lazy"`): el hero ya no lleva captura sino un fragmento de interfaz en HTML.
 
@@ -139,3 +124,26 @@ La cabecera SHALL ocupar todo el ancho de la ventana, con la marca pegada al mar
 #### Scenario: Ancho de la cabecera
 - **WHEN** se abre la portada a 1440 y a 1920 px
 - **THEN** la marca empieza a la distancia del margen de página del borde izquierdo y el botón «Pedir acceso» termina a esa misma distancia del borde derecho
+
+### Requirement: Formulario de la lista de espera accesible
+El formulario de la lista de espera SHALL tener etiqueta visible y foco visible, y decir con texto, bajo el campo, cada error: campo vacío, email que no vale, demasiados intentos y fallo del envío. El error MUST anunciarse a los lectores de pantalla, devolver el foco al campo y conservar lo escrito. Ningún estado se comunica solo con color. Sin JavaScript, en lugar del formulario la sección SHALL mostrar cómo apuntarse por correo.
+
+#### Scenario: Email que no vale
+- **WHEN** el usuario envía el formulario vacío o con un texto que no es un email
+- **THEN** no se hace ninguna petición, bajo el campo aparece un texto en un elemento con `role="alert"` que dice qué pasa y cómo arreglarlo, el campo lleva `aria-invalid="true"` y tiene el foco
+
+#### Scenario: Fallo del envío
+- **WHEN** el servidor no responde, responde con un error o tarda más de 15 segundos
+- **THEN** bajo el campo aparece un texto que lo dice y ofrece el buzón de la lista, el campo conserva el email y no queda marcado como inválido, y el botón vuelve a estar habilitado
+
+#### Scenario: Demasiados intentos
+- **WHEN** el servidor responde `429`
+- **THEN** bajo el campo aparece un texto que pide esperar un rato
+
+#### Scenario: Botón mientras envía
+- **WHEN** el formulario está enviando
+- **THEN** el botón está deshabilitado, dice «Enviando…», se distingue visualmente del habilitado y conserva su ancho
+
+#### Scenario: Sin JavaScript
+- **WHEN** se carga la portada con JavaScript deshabilitado
+- **THEN** en la banda no se ve el formulario y se ve un texto con un enlace `mailto:` al buzón de la lista

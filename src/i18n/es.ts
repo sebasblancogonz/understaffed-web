@@ -277,8 +277,21 @@ export const es: Dict = {
     submit: 'Pedir acceso',
     // DRAFT
     after: 'Apuntarte no crea una cuenta en Understaffed.',
-    todo: 'TODO: destino de la lista de espera pendiente',
-    privacyTodo: 'TODO: aviso de privacidad pendiente',
+    // DRAFT
+    privacy: 'Tu email llega a nuestro buzón y solo lo usamos para avisarte de cuándo puedes instalar Understaffed. Para salir de la lista, escribe a {email}.',
+    // DRAFT
+    noJs: 'Este formulario necesita JavaScript. Sin él, escribe a {email} y te apuntamos.',
+    sending: 'Enviando…',
+    errors: {
+      // DRAFT
+      empty: 'Escribe tu email para apuntarte.',
+      // DRAFT
+      invalid: 'Ese email no parece válido. Revísalo: tiene que ser como nombre@ejemplo.com.',
+      // DRAFT
+      limited: 'Hay demasiados intentos desde tu conexión. Espera un rato y vuelve a probar.',
+      // DRAFT
+      failed: 'No hemos podido apuntarte. Vuelve a intentarlo o escribe a {email}.',
+    },
     // DRAFT
     thanksTitle: 'Estás en la lista.',
     // DRAFT
