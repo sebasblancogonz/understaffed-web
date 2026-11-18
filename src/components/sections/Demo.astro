@@ -3,7 +3,7 @@ import Mark from '../ui/Mark.astro';
 import type { Card, Dict } from '../../i18n/types';
 
 /**
- * Ventana de la app con el tablero completo y la tarea de demostración #4, que lleva sus acciones en
+ * Ventana de la app con el tablero completo y la tarea de demostración #6, que lleva sus acciones en
  * la propia tarjeta y solo avanza cuando el visitante las pulsa. Sin JavaScript se ve la tarjeta
  * esperando aprobación y los pasos escritos. Dentro de `data-ui` rigen las convenciones de la app.
  */
@@ -135,6 +135,7 @@ const chipFor = (state: Card['state']) =>
   </div>
   <div class="below">
     <p class="hint" data-hint>{d.hints[0]}</p>
+    <p class="next" data-next hidden><a class="button" href={`#${t.waitlist.id}`}>{t.hero.cta}</a></p>
     <p class="caption">{d.caption}</p>
     <div class="fallback">
       <p>{d.fallbackTitle}</p>
@@ -373,7 +374,7 @@ const chipFor = (state: Card['state']) =>
     border-color: var(--brand);
   }
   [data-ui] .task {
-    box-shadow: 0 8px 24px -8px rgb(47 91 234 / 0.35);
+    box-shadow: 0 8px 24px -8px color-mix(in srgb, var(--brand) 35%, transparent);
   }
   [data-ui] .state {
     margin-bottom: 0.45rem;
@@ -484,6 +485,12 @@ const chipFor = (state: Card['state']) =>
     cursor: pointer;
     transition: transform var(--t-press) var(--ease-out), background-color var(--t-hover) ease;
   }
+  /* Con el dedo, las acciones de la tarea tienen la altura de un botón táctil. */
+  @media (pointer: coarse) {
+    [data-ui] .btn {
+      min-height: 2.75rem;
+    }
+  }
   [data-ui] .btn:active {
     transform: scale(0.97);
   }
@@ -532,6 +539,12 @@ const chipFor = (state: Card['state']) =>
     color: var(--ink);
     font-size: var(--step-small);
     font-weight: 500;
+  }
+  .next {
+    margin-block: 0.25rem 1rem;
+  }
+  .next[hidden] {
+    display: none;
   }
   .caption {
     color: var(--muted);

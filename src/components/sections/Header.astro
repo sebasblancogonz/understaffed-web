@@ -29,16 +29,46 @@ const other: Lang = t.lang === 'es' ? 'en' : 'es';
     </nav>
     <div class="end">
       <a class="lang" href={paths[other]} hreflang={other} lang={other} aria-label={t.header.switchLabel}>
-        <span class="full">{t.header.switchText}</span><span class="short" aria-hidden="true">{t.header.switchShort}</span>
+        {t.header.switchText}
       </a>
       <a class="button cta" href={`#${t.waitlist.id}`}>{t.header.cta}</a>
+      <!-- Por debajo de 64rem, las secciones y el idioma van en este menú. -->
+      <details class="menu" data-menu>
+        <summary aria-label={t.header.menu}>
+          <svg viewBox="0 0 20 20" width="20" height="20" aria-hidden="true">
+            <path d="M3 6h14M3 10h14M3 14h14" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" />
+          </svg>
+        </summary>
+        <nav class="sheet" aria-label={t.header.menu}>
+          <ul>
+            {
+              t.header.nav.map((item) => (
+                <li>
+                  <a href={`#${item.id}`}>{item.label}</a>
+                </li>
+              ))
+            }
+            <li class="rule">
+              <a href={paths[other]} hreflang={other} lang={other}>{t.header.switchText}</a>
+            </li>
+          </ul>
+        </nav>
+      </details>
     </div>
   </div>
 </header>
 
 <style>
+  /* Fija arriba: las secciones y «Pedir acceso» acompañan toda la página. */
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: var(--bg);
+  }
   /* A todo el ancho de la ventana, con el margen lateral de la página. */
   .bar {
+    position: relative;
     padding-inline: var(--margin);
     display: flex;
     align-items: center;
@@ -90,16 +120,63 @@ const other: Lang = t.lang === 'es' ? 'en' : 'es';
     padding: 0.5rem 1.125rem;
     font-size: 1rem;
   }
-  .short {
+  /* En pantallas estrechas el idioma va dentro del menú. */
+  .lang {
     display: none;
   }
-  @media (max-width: 24rem) {
-    .full {
-      display: none;
+  .menu summary {
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: var(--radius-pill);
+    box-shadow: inset 0 0 0 2px var(--border);
+    color: var(--ink);
+    cursor: pointer;
+    list-style: none;
+  }
+  .menu summary::-webkit-details-marker {
+    display: none;
+  }
+  .menu[open] summary {
+    background: var(--surface);
+  }
+  .sheet {
+    position: absolute;
+    top: calc(100% - 0.25rem);
+    right: var(--margin);
+    min-width: 15rem;
+    padding: 0.5rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg);
+    box-shadow: var(--shadow-lg);
+  }
+  .sheet ul {
+    display: block;
+  }
+  .sheet a {
+    display: flex;
+    align-items: center;
+    min-height: 2.75rem;
+    padding-inline: 0.875rem;
+    border-radius: var(--radius-sm);
+    color: var(--ink);
+    font-weight: 500;
+    text-decoration: none;
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .sheet a:hover {
+      background: var(--surface);
     }
-    .short {
-      display: inline;
-    }
+  }
+  .sheet .rule {
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--border);
+  }
+  .sheet .rule a {
+    color: var(--muted);
   }
   @media (max-width: 30rem) {
     .word {
@@ -108,9 +185,6 @@ const other: Lang = t.lang === 'es' ? 'en' : 'es';
     .brand {
       --mark: 1.5rem;
       gap: 0.4rem;
-    }
-    .lang {
-      font-size: var(--step-small);
     }
     .cta {
       padding-inline: 0.875rem;
@@ -127,6 +201,12 @@ const other: Lang = t.lang === 'es' ? 'en' : 'es';
     }
     .nav {
       display: block;
+    }
+    .lang {
+      display: inline;
+    }
+    .menu {
+      display: none;
     }
     .end {
       justify-self: end;
