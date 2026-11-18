@@ -82,10 +82,31 @@ const chipFor = (state: Card['state']) =>
                         </span>
                       </p>
                       <p class="logline" data-log hidden />
-                      <p class="result" data-result hidden>
-                        <span>{d.review.files}</span>
-                        {d.review.result && <span>{d.review.result}</span>}
-                      </p>
+                      {/* Lo que se aprueba: los criterios de la spec, y después los archivos que cambió el rol. */}
+                      <div class="detail" data-spec>
+                        <p class="detail-head">{d.spec.head} <span class="count">{d.spec.criteria.length}</span></p>
+                        <ul class="criteria">
+                          {d.spec.criteria.map((c) => <li>{c}</li>)}
+                        </ul>
+                        <p class="valid">
+                          <svg viewBox="0 0 16 16" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="m3.5 8.5 3 3 6-7" /></svg>
+                          {d.spec.valid}
+                        </p>
+                      </div>
+                      <div class="detail" data-result hidden>
+                        <p class="detail-head">{d.code.head} <span class="count">{d.code.files.length}</span></p>
+                        <ul class="files">
+                          {d.code.files.map((f) => (
+                            <li>
+                              <code>{f.name}</code>
+                              <span class="lines-add">+{f.add}</span>
+                              {f.del && <span class="lines-del">−{f.del}</span>}
+                            </li>
+                          ))}
+                        </ul>
+                        <p class="said">{d.code.message}</p>
+                      </div>
+                      <p class="note" data-note hidden />
                       <div class="actions" data-actions>
                         <button type="button" class="btn primary" data-act="approve">{d.actions.approveSpec}</button>
                         <button type="button" class="btn" data-act="request">{d.actions.requestChanges}</button>
@@ -174,6 +195,7 @@ const chipFor = (state: Card['state']) =>
     --ui-chip: #eff2f5;
     --ui-border: #e3e6eb;
     --ui-input: #d8dce3;
+    --ui-add: #1a7f4b;
     --ui-ink: #0d1017;
     --ui-muted: #5b6474;
     --ui-active: #e2e5eb;
@@ -192,6 +214,7 @@ const chipFor = (state: Card['state']) =>
       --ui-chip: #2b3342;
       --ui-border: #262d39;
       --ui-input: #303847;
+      --ui-add: #7fdca3;
       --ui-ink: #eceef2;
       --ui-muted: #9aa3b2;
       --ui-active: #1f2530;
@@ -447,26 +470,90 @@ const chipFor = (state: Card['state']) =>
     height: 0.7rem;
     background: var(--brand);
   }
-  [data-ui] .logline,
-  [data-ui] .result {
+  [data-ui] .logline {
     margin-top: 0.5rem;
     padding-top: 0.5rem;
     border-top: 1px solid var(--ui-border);
     color: var(--ui-muted);
     font-size: 0.75rem;
   }
-  [data-ui] .result {
-    display: flex;
-    flex-direction: column;
-    gap: 0.1rem;
-    white-space: nowrap;
-    color: var(--ui-ink);
+  [data-ui] .logline[hidden],
+  [data-ui] .detail[hidden],
+  [data-ui] .note[hidden] {
+    display: none;
+  }
+  /* Lo que el visitante aprueba, dentro de la tarjeta: criterios de la spec o archivos cambiados. */
+  [data-ui] .detail {
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--ui-border);
+    font-size: 0.75rem;
+  }
+  [data-ui] .detail-head {
+    color: var(--ui-muted);
     font-weight: 500;
+  }
+  [data-ui] .detail-head .count {
+    margin-left: 0.2rem;
+  }
+  [data-ui] .task {
+    min-width: 0;
+  }
+  [data-ui] .criteria,
+  [data-ui] .files {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.2rem;
+    margin-top: 0.3rem;
+  }
+  [data-ui] .criteria li {
+    padding: 0.3rem 0.45rem;
+    border: 1px solid var(--ui-border);
+    border-radius: 6px;
+    font-weight: 600;
+  }
+  [data-ui] .valid,
+  [data-ui] .said {
+    margin-top: 0.4rem;
+    color: var(--ui-muted);
+  }
+  [data-ui] .valid {
+    display: flex;
+    gap: 0.3rem;
+  }
+  [data-ui] .valid svg {
+    flex: none;
+    width: 0.8rem;
+    height: 0.8rem;
+    margin-top: 0.1rem;
+    color: var(--brand);
+  }
+  [data-ui] .files li {
+    display: flex;
+    gap: 0.35rem;
     font-variant-numeric: tabular-nums;
   }
-  [data-ui] .logline[hidden],
-  [data-ui] .result[hidden] {
-    display: none;
+  [data-ui] .files code {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    font-size: inherit;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  [data-ui] .lines-add {
+    color: var(--ui-add);
+  }
+  [data-ui] .lines-del {
+    color: var(--danger);
+  }
+  /* El comentario que acompaña a «Pedir cambios» o «Devolver»: su consecuencia, en la tarjeta. */
+  [data-ui] .note {
+    margin-top: 0.5rem;
+    padding: 0.4rem 0.5rem;
+    border-radius: 6px;
+    background: var(--ui-chip);
+    font-size: 0.75rem;
   }
   [data-ui] .actions {
     display: grid;
@@ -534,8 +621,13 @@ const chipFor = (state: Card['state']) =>
     margin: 1rem auto 0;
     text-align: center;
   }
+  /* Sin el script no hay acciones que pulsar: los pasos escritos hacen de pista. */
+  :global(html:not(.js)) .hint {
+    display: none;
+  }
   .hint {
     min-height: 3em;
+    margin-bottom: 0.5rem;
     color: var(--ink);
     font-size: var(--step-small);
     font-weight: 500;
@@ -547,6 +639,8 @@ const chipFor = (state: Card['state']) =>
     display: none;
   }
   .caption {
+    max-width: 36rem;
+    margin-inline: auto;
     color: var(--muted);
     font-size: var(--step-small);
   }

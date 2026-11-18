@@ -18,7 +18,8 @@ const [noJsBefore, noJsAfter = ''] = around(waitlist.noJs);
 // Lo que escribe el script: el botón mientras envía, los errores y la confirmación.
 const strings = {
   sending: waitlist.sending,
-  errors: { ...waitlist.errors, failed: waitlist.errors.failed.replace('{email}', email) },
+  errors: waitlist.errors,
+  mailbox: email,
   thanksTitle: waitlist.thanksTitle,
   thanks: waitlist.thanks,
 };
@@ -44,6 +45,8 @@ const strings = {
           <p class="after">{waitlist.after}</p>
           <p class="note">{privacyBefore}<a href={`mailto:${email}`}>{email}</a>{privacyAfter}</p>
         </form>
+        <!-- Tras apuntarse: volver al formulario para corregir la dirección o apuntar otra. -->
+        <p class="again" data-again hidden><button type="button" class="link">{waitlist.again}</button></p>
         <!-- El envío lo hace el script. Sin él, en lugar del formulario se ve cómo apuntarse por correo. -->
         <p class="nojs">{noJsBefore}<a href={`mailto:${email}`}>{email}</a>{noJsAfter}</p>
       </div>
@@ -133,11 +136,11 @@ const strings = {
     cursor: pointer;
     transition: transform var(--t-press) var(--ease-out), background-color var(--t-hover) ease;
   }
-  .submit:active:not(:disabled) {
+  .submit:active:not([aria-disabled='true']) {
     transform: scale(0.98);
   }
   @media (hover: hover) and (pointer: fine) {
-    .submit:not(:disabled):hover {
+    .submit:not([aria-disabled='true']):hover {
       background: var(--band-ink-hover);
     }
   }
@@ -145,8 +148,8 @@ const strings = {
     outline: 3px solid var(--on-band);
     outline-offset: 3px;
   }
-  /* Solo mientras se envía. */
-  .submit:disabled {
+  /* Solo mientras se envía. Sigue enfocable, para no perder el foco. */
+  .submit[aria-disabled='true'] {
     background: rgb(13 16 23 / 0.35);
     color: var(--on-band-muted);
     cursor: progress;
@@ -169,8 +172,41 @@ const strings = {
     color: var(--on-band-muted);
   }
   .note {
+    max-width: 34rem;
     margin-top: 0.375rem;
     font-size: var(--step-small);
+  }
+  /* La confirmación conserva el alto de la banda y se centra en él. */
+  .inner[data-done] {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .again {
+    margin-top: 1.5rem;
+  }
+  .again[hidden] {
+    display: none;
+  }
+  .link {
+    min-height: 2.75rem;
+    padding: 0 0.5rem;
+    border: 0;
+    background: none;
+    color: var(--on-band);
+    font: inherit;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+    cursor: pointer;
+  }
+  .link:focus-visible {
+    outline: 3px solid var(--on-band);
+    outline-offset: 3px;
+    border-radius: var(--radius-sm);
+  }
+  .error :global(a) {
+    color: inherit;
   }
   .inner a {
     color: var(--on-band);
