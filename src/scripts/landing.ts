@@ -1,7 +1,6 @@
 /**
  * El único script de la portada. Todo lo que hace mejora una página que ya está completa sin él:
- * la demostración del hero, las pestañas, el panel de Estado, el contador del rol,
- * el vídeo y las entradas de las secciones. Las cadenas vienen del HTML, no de aquí.
+ * la demostración del hero, el contador del editor de roles y las entradas de las secciones. Las cadenas vienen del HTML, no de aquí.
  */
 
 (window as unknown as { __landingReady: boolean }).__landingReady = true;
@@ -21,48 +20,47 @@ interface DemoStrings {
   total: number;
 }
 
+/** Copia el atributo de ámbito de Astro para que las reglas del componente alcancen lo creado aquí. */
+const scoped = (from: Element, el: Element) => {
+  for (const attr of from.getAttributeNames()) if (attr.startsWith('data-astro-cid')) el.setAttribute(attr, '');
+  return el;
+};
+
 /** Pasos de la tarea: 0 Backlog esperando aprobación, 1 Por hacer, 2 En curso, 3 En revisión, 4 Integrando, 5 Hecho. */
 function initDemo() {
   const root = document.querySelector<HTMLElement>('[data-demo]');
   if (!root || !root.dataset.strings) return;
+  const scope = root.closest<HTMLElement>('.demo-wrap') ?? root;
   const s = JSON.parse(root.dataset.strings) as DemoStrings;
+  const viewport = root.querySelector<HTMLElement>('.viewport')!;
   const track = root.querySelector<HTMLElement>('[data-track]')!;
   const cols = [...root.querySelectorAll<HTMLElement>('[data-col]')];
   const task = root.querySelector<HTMLElement>('[data-task]')!;
   const state = task.querySelector<HTMLElement>('[data-state]')!;
   const progress = task.querySelector<HTMLElement>('[data-progress]')!;
-  const log = root.querySelector<HTMLOListElement>('[data-log]')!;
-  const result = root.querySelector<HTMLElement>('[data-result]')!;
-  const hint = root.querySelector<HTMLElement>('[data-hint]')!;
-  const live = root.querySelector<HTMLElement>('[data-live]')!;
+  const log = task.querySelector<HTMLElement>('[data-log]')!;
+  const result = task.querySelector<HTMLElement>('[data-result]')!;
+  const hint = scope.querySelector<HTMLElement>('[data-hint]')!;
+  const live = scope.querySelector<HTMLElement>('[data-live]')!;
   const buttons = Object.fromEntries(
     [...root.querySelectorAll<HTMLButtonElement>('[data-act]')].map((b) => [b.dataset.act!, b]),
   ) as Record<'request' | 'approve' | 'run' | 'sendback' | 'approvecode' | 'restart', HTMLButtonElement>;
 
   const colOf = [0, 1, 2, 3, 3, 4];
-  const actionsOf: (keyof typeof buttons)[][] = [['request', 'approve'], ['run'], [], ['sendback', 'approvecode'], [], ['restart']];
+  const actionsOf: (keyof typeof buttons)[][] = [['approve', 'request'], ['run'], [], ['approvecode', 'sendback'], [], ['restart']];
   let step = 0;
   let busy = false;
 
   const chip = (text: string, kind: 'pill' | 'running' | 'plain') => {
     state.replaceChildren();
-    const el = document.createElement('span');
+    const el = scoped(state, document.createElement('span')) as HTMLElement;
     if (kind === 'pill') {
       el.className = 'chip';
       el.textContent = text;
-    } else if (kind === 'plain') {
-      el.className = 'running';
-      el.textContent = text;
     } else {
       el.className = 'running';
-      const spin = document.createElement('span');
-      spin.className = 'spin';
-      el.append(spin, text);
-    }
-    // Las reglas de Astro van con el atributo de ámbito del componente: se copia del padre.
-    for (const attr of state.getAttributeNames()) if (attr.startsWith('data-astro-cid')) {
-      el.setAttribute(attr, '');
-      el.firstElementChild?.setAttribute(attr, '');
+      if (kind === 'running') el.append(scoped(state, Object.assign(document.createElement('span'), { className: 'spin' })));
+      el.append(text);
     }
     state.append(el);
     state.hidden = false;
@@ -77,13 +75,11 @@ function initDemo() {
       void task.offsetWidth;
       task.classList.add('arrive');
     }
-    // La cámara sigue a la tarea: su columna queda a la izquierda del recorte.
-    const max = track.scrollWidth - track.parentElement!.clientWidth + 12;
-    track.style.transform = `translateX(${-Math.min(col.offsetLeft, Math.max(0, max))}px)`;
-    cols.forEach((c) => {
-      const n = c.querySelectorAll('.card').length;
-      c.querySelector('[data-count]')!.textContent = String(n);
-    });
+    // Si las cinco columnas caben, no hay cámara; si no, su columna queda a la izquierda del recorte.
+    const room = track.scrollWidth - viewport.clientWidth;
+    const left = col.offsetLeft - cols[0].offsetLeft;
+    track.style.transform = room > 4 ? `translateX(${-Math.min(left, room)}px)` : '';
+    cols.forEach((c) => (c.querySelector('[data-count]')!.textContent = String(c.querySelectorAll('.card').length)));
   };
 
   const announce = () => {
@@ -107,14 +103,13 @@ function initDemo() {
     if (step <= 1) progress.textContent = `0/${s.total}`;
     if (step >= 3) progress.textContent = `${s.total}/${s.total}`;
     hint.textContent = s.hints[Math.min(step, 4)];
-    hint.classList.remove('has-note');
     log.hidden = step !== 2;
     result.hidden = step !== 3;
     for (const [name, button] of Object.entries(buttons)) button.hidden = !actionsOf[step].includes(name as keyof typeof buttons);
     place();
     announce();
     if (focus) {
-      const next = actionsOf[step].map((n) => buttons[n]).find((b) => b.classList.contains('primary')) ?? buttons[actionsOf[step][0]];
+      const next = actionsOf[step].map((n) => buttons[n])[0];
       (next ?? root).focus({ preventScroll: true });
     }
   };
@@ -122,14 +117,11 @@ function initDemo() {
   const runTask = async () => {
     busy = true;
     step = 2;
-    log.replaceChildren();
+    log.textContent = '';
     render();
     for (let i = 0; i < s.log.length; i++) {
       await wait(i === 0 ? 450 : 750);
-      const li = document.createElement('li');
-      for (const attr of log.getAttributeNames()) if (attr.startsWith('data-astro-cid')) li.setAttribute(attr, '');
-      li.textContent = s.log[i];
-      log.append(li);
+      log.textContent = s.log[i];
       progress.textContent = `${Math.min(s.total, Math.round(((i + 1) / s.log.length) * s.total))}/${s.total}`;
     }
     await wait(600);
@@ -140,7 +132,6 @@ function initDemo() {
 
   buttons.request.addEventListener('click', () => {
     hint.textContent = s.notes.requestChanges;
-    hint.classList.add('has-note');
   });
   buttons.approve.addEventListener('click', () => {
     if (busy) return;
@@ -155,7 +146,6 @@ function initDemo() {
     busy = true;
     buttons.sendback.disabled = buttons.approvecode.disabled = true;
     hint.textContent = s.notes.sendBack;
-    hint.classList.add('has-note');
     await wait(1200);
     buttons.sendback.disabled = buttons.approvecode.disabled = false;
     void runTask();
@@ -180,96 +170,13 @@ function initDemo() {
   live.textContent = '';
 }
 
-/** Pestañas de «local y cuenta» con el patrón de la ARIA APG: flechas, Inicio y Fin. */
-function initTabs() {
-  const list = document.querySelector<HTMLElement>('[data-tabs]');
-  if (!list) return;
-  list.hidden = false;
-  const tabs = [...list.querySelectorAll<HTMLButtonElement>('[role="tab"]')];
-  const panels = tabs.map((t) => document.getElementById(t.getAttribute('aria-controls')!)!);
-  const select = (i: number, focus = false) => {
-    tabs.forEach((t, j) => {
-      const on = i === j;
-      t.setAttribute('aria-selected', String(on));
-      t.tabIndex = on ? 0 : -1;
-      panels[j].hidden = !on;
-      if (on) panels[j].querySelectorAll('[data-reveal]').forEach((el) => el.classList.add('is-in'));
-    });
-    if (focus) tabs[i].focus();
-    syncVideos();
-  };
-  tabs.forEach((t, i) => {
-    t.addEventListener('click', () => select(i));
-    t.addEventListener('keydown', (e) => {
-      const keys: Record<string, number> = { ArrowDown: i + 1, ArrowRight: i + 1, ArrowUp: i - 1, ArrowLeft: i - 1, Home: 0, End: tabs.length - 1 };
-      if (!(e.key in keys)) return;
-      e.preventDefault();
-      select((keys[e.key] + tabs.length) % tabs.length, true);
-    });
-  });
-  select(0);
-}
-
-/** El panel de Estado: una fila abierta cada vez. */
-function initBoard() {
-  const board = document.querySelector<HTMLElement>('[data-board]');
-  if (!board) return;
-  const rows = [...board.querySelectorAll<HTMLElement>('[data-row]')];
-  rows.forEach((row) => {
-    row.querySelector('button')!.addEventListener('click', () => {
-      rows.forEach((r) => {
-        const on = r === row;
-        r.classList.toggle('is-open', on);
-        r.querySelector('button')!.setAttribute('aria-expanded', String(on));
-      });
-    });
-  });
-}
-
+/** Contador de caracteres de las instrucciones en el editor de roles. */
 function initCounter() {
   const area = document.querySelector<HTMLTextAreaElement>('[data-prompt]');
   const count = document.querySelector<HTMLElement>('[data-count][data-template]');
   if (!area || !count) return;
   area.addEventListener('input', () => {
     count.textContent = count.dataset.template!.replace('{used}', String(area.value.length)).replace('{max}', count.dataset.max!);
-  });
-}
-
-/** El vídeo de demostración: se descarga y suena solo a la vista, en su pestaña y sin movimiento reducido. */
-const videos = new Set<HTMLVideoElement>();
-const visible = new WeakSet<HTMLVideoElement>();
-function syncVideos() {
-  for (const video of videos) {
-    const shown = visible.has(video) && !video.closest('[hidden]') && !reduced();
-    if (shown) {
-      if (!video.dataset.loaded) {
-        video.querySelectorAll<HTMLSourceElement>('source[data-src]').forEach((s) => (s.src = s.dataset.src!));
-        video.dataset.loaded = '1';
-        video.load();
-        video.addEventListener('playing', () => video.classList.add('is-playing'), { once: true });
-      }
-      void video.play().catch(() => {});
-    } else if (!video.paused) {
-      video.pause();
-    }
-  }
-}
-function initVideos() {
-  const io = new IntersectionObserver((entries) => {
-    for (const e of entries) {
-      const v = e.target as HTMLVideoElement;
-      if (e.isIntersecting) visible.add(v);
-      else visible.delete(v);
-    }
-    syncVideos();
-  });
-  document.querySelectorAll<HTMLVideoElement>('[data-video]').forEach((v) => {
-    videos.add(v);
-    io.observe(v);
-  });
-  document.addEventListener('visibilitychange', () => {
-    if (document.hidden) videos.forEach((v) => v.pause());
-    else syncVideos();
   });
 }
 
@@ -295,7 +202,4 @@ function initReveal() {
 
 initReveal();
 initDemo();
-initTabs();
-initBoard();
 initCounter();
-initVideos();

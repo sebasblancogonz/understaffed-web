@@ -16,39 +16,12 @@ export interface Card {
   state?: 'awaiting' | 'running' | 'awaitingReview';
 }
 
-/** Fila del panel de Estado del grupo. */
-export interface BoardRow {
-  repo: string;
-  num: string;
-  title: string;
-  role: string;
-  fact: string;
-  status: string;
-  kind: 'run' | 'decision' | 'done';
-  detail: [string, string];
-}
+/** Colores de rol de la paleta del comp aprobado. */
+export type Tone = 'lilac' | 'orange' | 'green' | 'pink' | 'yellow';
 
-export interface Band {
-  label: string;
-  title: string;
-  text: string;
-  who?: string;
-  marks?: ('person' | 'agent')[];
-}
-
-export interface Tab {
+export interface Link {
   id: string;
-  title: string;
-  sub: string;
-  bands: Band[];
-  media: { kind: 'video'; alt: string } | { kind: 'shot'; shot: Shot };
-}
-
-export interface Note {
-  /** Parte del editor a la que se refiere. */
-  part: 'name' | 'prompt' | 'model' | 'bash' | 'tools' | 'templates';
-  title: string;
-  text: string;
+  label: string;
 }
 
 export interface Dict {
@@ -56,15 +29,28 @@ export interface Dict {
   ogLocale: string;
   meta: { title: string; description: string; ogImageAlt: string };
   skip: string;
-  header: { home: string; switchText: string; switchLabel: string };
+  header: { home: string; navLabel: string; nav: Link[]; cta: string; switchText: string; switchShort: string; switchLabel: string };
   hero: {
-    title: string;
+    title: [string, string];
     lead: string;
     cta: string;
-    note: string;
+    secondary: string;
+    tags: { label: string; tone: Tone }[];
     demo: {
       label: string;
       caption: string;
+      app: {
+        projects: string;
+        project: string;
+        tabs: [string, string, string];
+        path: string;
+        noAccount: string;
+        signIn: string;
+        send: string;
+        receive: string;
+        settings: string;
+        addTask: string;
+      };
       columns: [string, string, string, string, string];
       task: { num: string; title: string; prio: string; role: string; total: number };
       /** Las demás tarjetas de cada columna, de Backlog a Hecho. */
@@ -92,28 +78,28 @@ export interface Dict {
   how: {
     id: string;
     title: string;
-    one: { lead: string; label: string; value: string; role: string; tree: string; shot: Shot };
-    two: { lead: string; buttons: [string, string]; intro: string; command: string };
-    three: { lead: string; option: string; hint: string; button: string; shot: Shot };
-  };
-  requirements: {
-    id: string;
-    title: string;
-    text: string;
-    tiles: { name: string; text: string }[];
+    lead: string;
+    cards: {
+      tone: Tone;
+      title: string;
+      text: string;
+      shot?: Shot;
+      code?: { label: string; text: string };
+    }[];
   };
   status: {
     id: string;
     title: string;
-    intro: string;
-    rows: BoardRow[];
-    open: string;
+    lead: string;
     cost: string;
-    shots: (Shot & { caption: string })[];
+    /** `strip`: un recorte apaisado (una franja de la app), no una ventana entera. */
+    shots: (Shot & { title: string; caption: string; strip?: boolean })[];
   };
   roles: {
     id: string;
     title: string;
+    lead: string;
+    templates: { name: string; text: string; tone: Tone }[];
     dialog: {
       title: string;
       hint: string;
@@ -132,19 +118,30 @@ export interface Dict {
       back: string;
       confirm: string;
     };
-    notes: Note[];
   };
   local: {
     id: string;
-    title: [string, string];
-    cta: string;
-    tabsLabel: string;
-    tabs: Tab[];
+    title: string;
+    lead: string;
+    cards: {
+      title: string;
+      sub: string;
+      tone: Tone;
+      points: string[];
+      media: { kind: 'shot'; shot: Shot };
+    }[];
+  };
+  requirements: {
+    id: string;
+    title: string;
+    text: string;
+    tiles: { name: string; text: string }[];
   };
   waitlist: {
     id: string;
     title: string;
-    before: string;
+    lead: string;
+    label: string;
     submit: string;
     after: string;
     todo: string;
@@ -154,9 +151,9 @@ export interface Dict {
   };
   footer: {
     text: string;
-    navLabel: string;
-    nav: { id: string; label: string }[];
-    year: string;
+    productLabel: string;
+    languageLabel: string;
+    copyright: string;
   };
   placeholder: { label: string };
 }

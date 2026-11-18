@@ -6,132 +6,129 @@ interface Props {
   t: Dict;
 }
 const { t } = Astro.props;
-// La acción principal lleva al único formulario de la página, en la sección de cierre.
-const href = `#${t.waitlist.id}`;
-// El titular sube línea a línea desde su línea base (movimiento propio de la dirección).
-const words = t.hero.title.split(' ');
-const cut = Math.ceil(words.length / 2);
-const lines = [words.slice(0, cut).join(' '), words.slice(cut).join(' ')];
+const { hero } = t;
+// Posición de cada etiqueta alrededor del titular, como en el comp aprobado: tres a la izquierda y
+// dos a la derecha, cada una con su giro.
+const spots = ['l1', 'l2', 'l3', 'r1', 'r2'];
 ---
 
 <section class="hero" aria-labelledby="hero-title">
-  <div class="copy">
-    <div class="bottom">
-      <h1 id="hero-title" class="lines">
+  <div class="wrap">
+    <div class="intro">
+      <h1 id="hero-title">
+        <span class="line">{hero.title[0]}</span>
+        <span class="line">{hero.title[1]}</span>
+      </h1>
+      <p class="lead">{hero.lead}</p>
+      <div class="actions">
+        <a class="button large" href={`#${t.waitlist.id}`}>{hero.cta}</a>
+        <a class="button large secondary" href={`#${t.how.id}`}>{hero.secondary}</a>
+      </div>
+      <ul class="tags" aria-hidden="true">
         {
-          lines.map((line, i) => (
-            <span class="line">
-              <span data-line style={`--i:${i}`}>{line}</span>
-            </span>
+          hero.tags.map((tag, i) => (
+            <li class={`tag tone-${tag.tone} ${spots[i]}`} style={`--i:${i}`}>
+              {tag.label}
+            </li>
           ))
         }
-      </h1>
-      <p class="lead" data-rise style="--i:2">{t.hero.lead}</p>
-      <div class="actions" data-rise style="--i:2">
-        <a class="button" href={href}>{t.hero.cta}</a>
-      </div>
-      <p class="note" data-rise style="--i:3">{t.hero.note}</p>
+      </ul>
     </div>
-  </div>
-  <div class="stage">
     <Demo t={t} />
   </div>
 </section>
 
 <style>
   .hero {
-    display: grid;
+    padding-top: clamp(0.75rem, 0.25rem + 1.2vw, 1.25rem);
+    overflow: hidden;
   }
-  .copy {
-    display: flex;
-    align-items: flex-end;
-    padding: var(--margin);
-    padding-top: 1.5rem;
-  }
-  .bottom {
-    max-width: 34rem;
+  .intro {
+    position: relative;
+    text-align: center;
   }
   h1 {
-    font-size: var(--step-lead);
-    font-weight: 500;
-    letter-spacing: -0.015em;
-    line-height: 1.15;
+    font-size: var(--step-display);
+    font-weight: 850;
+    letter-spacing: -0.02em;
+    line-height: 1.04;
   }
-  .lines .line {
-    display: block;
-    overflow: hidden;
-    padding-bottom: 0.08em;
-    margin-bottom: -0.08em;
-  }
-  .lines [data-line] {
+  .line {
     display: block;
   }
   .lead {
-    margin-top: 1rem;
-    max-width: 44ch;
-    color: var(--ink);
+    max-width: 40rem;
+    margin: 1rem auto 0;
+    color: var(--muted);
+    font-size: var(--step-lead);
   }
   .actions {
-    margin-top: 1.75rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem 1rem;
+    margin-top: 1.5rem;
   }
-  .note {
-    margin-top: 1rem;
-    max-width: 44ch;
-    color: var(--muted);
+  /* Etiquetas de roles: en móvil, una fila bajo los botones; en escritorio, flotando alrededor. */
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1.75rem;
     font-size: var(--step-small);
   }
-  .stage {
-    display: grid;
-    place-items: center;
-    order: -1;
-    padding: 4.5rem 1rem 1.5rem;
-    background: var(--surface);
-  }
-
-  @media (min-width: 60rem) {
-    .hero {
-      grid-template-columns: 1fr 1fr;
-      min-height: 100svh;
-    }
-    .copy {
-      padding: var(--margin);
-    }
-    .lines .line {
-      display: inline-block;
-      vertical-align: top;
-    }
-    .lines .line + .line {
-      margin-left: 0.25em;
-    }
-    .stage {
-      order: 0;
-      min-height: 100svh;
-      padding: 5rem var(--margin);
+  @media (max-width: 30rem) {
+    .actions .button {
+      flex: 1 1 100%;
     }
   }
-
+  @media (min-width: 72rem) {
+    .tags {
+      position: absolute;
+      inset: 0;
+      margin: 0;
+      pointer-events: none;
+      font-size: 1.375rem;
+    }
+    .tags .tag {
+      position: absolute;
+      padding: 0.55rem 1.2rem 0.55rem 1rem;
+      transform: rotate(var(--r, 0deg));
+    }
+    .l1 { --r: -5deg; top: 8%; left: 5%; }
+    .l2 { --r: 3deg; top: 36%; left: 1.5%; }
+    .l3 { --r: -6deg; top: 62%; left: 3.5%; }
+    .r1 { --r: 0deg; top: 16%; right: 5%; }
+    .r2 { --r: -9deg; top: 47%; right: 1.5%; }
+  }
   @media (prefers-reduced-motion: no-preference) {
-    :global(.js) .lines [data-line] {
-      transform: translateY(105%);
-      animation: line-up 900ms var(--ease-out) forwards;
-      animation-delay: calc(var(--i) * 110ms + 150ms);
+    :global(.js) .hero h1,
+    :global(.js) .hero .lead,
+    :global(.js) .hero .actions {
+      animation: rise 800ms var(--ease-out) both;
     }
-    :global(.js) [data-rise] {
-      opacity: 0;
-      transform: translateY(18px);
-      animation: rise var(--t-reveal) var(--ease-out) forwards;
-      animation-delay: calc(var(--i, 0) * 90ms + 200ms);
+    :global(.js) .hero .lead {
+      animation-delay: 90ms;
     }
-  }
-  @keyframes line-up {
-    to {
-      transform: none;
+    :global(.js) .hero .actions {
+      animation-delay: 180ms;
+    }
+    :global(.js) .hero .tag {
+      animation: pop 700ms var(--ease-out) both;
+      animation-delay: calc(350ms + var(--i) * 90ms);
     }
   }
   @keyframes rise {
-    to {
-      opacity: 1;
-      transform: none;
+    from {
+      opacity: 0;
+      transform: translateY(18px);
+    }
+  }
+  @keyframes pop {
+    from {
+      opacity: 0;
+      transform: translateY(12px) rotate(var(--r, 0deg)) scale(0.9);
     }
   }
 </style>

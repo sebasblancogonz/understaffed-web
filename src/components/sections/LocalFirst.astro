@@ -8,101 +8,34 @@ interface Props {
 const { t } = Astro.props;
 const { local } = t;
 
-// Vídeo de demostración del tablero, en el tema y el idioma de la página. No se descarga hasta que
-// su pestaña está a la vista (el script le pone la fuente); sin JavaScript se ve su fotograma.
-const video = `/video/understaffed-demo-${t.lang}`;
-const sources = [
-  { scheme: 'light', file: `${video}-light` },
-  { scheme: 'dark', file: video },
-];
-const href = `#${t.waitlist.id}`;
 ---
 
-<!-- Pestañas como una agenda por bandas: a la izquierda las pestañas apiladas, a la derecha las
-     bandas de la elegida y su vídeo o captura. -->
 <section id={local.id} class="local" aria-labelledby="local-title" tabindex="-1">
   <div class="wrap">
-    <div class="top">
-      <h2 id="local-title" data-reveal>
-        <span class="soft">{local.title[0]}</span>
-        <span>{local.title[1]}</span>
-      </h2>
-      <a class="button" href={href} data-reveal style="--i:1">{local.cta}</a>
-    </div>
-
-    <div class="agenda">
-      <div class="tabs" role="tablist" aria-label={local.tabsLabel} data-tabs hidden>
-        {
-          local.tabs.map((tab, i) => (
-            <button
-              type="button"
-              role="tab"
-              class="tab"
-              id={`${tab.id}-tab`}
-              aria-controls={tab.id}
-              aria-selected={i === 0 ? 'true' : 'false'}
-              tabindex={i === 0 ? 0 : -1}
-            >
-              <span class="tab-title">{tab.title}</span>
-              <span class="tab-sub">{tab.sub}</span>
-            </button>
-          ))
-        }
-      </div>
-
-      <div class="panels">
-        {
-          local.tabs.map((tab, i) => (
-            <div class="panel" id={tab.id} role="tabpanel" aria-labelledby={`${tab.id}-tab`} data-panel data-index={i}>
-              <h3 class="panel-title">
-                {tab.title} <span>{tab.sub}</span>
-              </h3>
-              <ul class="bands">
-                {tab.bands.map((band, j) => (
-                  <li class="band" data-reveal style={`--i:${j}; --rise: 16px`}>
-                    <p class="label">{band.label}</p>
-                    <div class="what">
-                      <p class="band-title">{band.title}</p>
-                      <p class="band-text">{band.text}</p>
-                    </div>
-                    {band.who && (
-                      <p class="who">
-                        <span>{band.who}</span>
-                        {band.marks && (
-                          <span class="marks" aria-hidden="true">
-                            {band.marks.map((m) => (
-                              <span class={m}></span>
-                            ))}
-                          </span>
-                        )}
-                      </p>
-                    )}
-                  </li>
-                ))}
-              </ul>
-              <div class="media" data-reveal style="--i:2">
-                {tab.media.kind === 'video' ? (
-                  <div class="video">
-                    <picture>
-                      <source media="(prefers-color-scheme: dark)" srcset={`${video}-poster.jpg`} />
-                      <img src={`${video}-light-poster.jpg`} width="1920" height="1200" alt={tab.media.alt} loading="lazy" decoding="async" />
-                    </picture>
-                    <video muted loop playsinline disablepictureinpicture preload="none" tabindex="-1" aria-hidden="true" data-video>
-                      {sources.flatMap(({ scheme, file }) => [
-                        <source data-src={`${file}.webm`} type="video/webm" media={`(prefers-color-scheme: ${scheme})`} />,
-                        <source data-src={`${file}.mp4`} type="video/mp4" media={`(prefers-color-scheme: ${scheme})`} />,
-                      ])}
-                    </video>
-                  </div>
-                ) : (
-                  <Shot lang={t.lang} file={tab.media.shot.file} alt={tab.media.shot.alt} label={t.placeholder.label} ratio="1360 / 1640" sizes="(min-width: 60rem) 26rem, 100vw" />
-                )}
-              </div>
+    <header class="section-head" data-reveal>
+      <h2 id="local-title">{local.title}</h2>
+      <p>{local.lead}</p>
+    </header>
+    <ul class="cards">
+      {
+        local.cards.map((card, i) => (
+          <li class={`card tone-${card.tone}`} data-reveal style={`--i:${i}`}>
+            <p class="top">
+              <span class="tag">{card.title}</span>
+              <span class="sub">{card.sub}</span>
+            </p>
+            <ul class="points">
+              {card.points.map((point) => (
+                <li>{point}</li>
+              ))}
+            </ul>
+            <div class="frame">
+              <Shot lang={t.lang} file={card.media.shot.file} alt={card.media.shot.alt} label={t.placeholder.label} ratio="4 / 3" sizes="(min-width: 64rem) 24rem, 100vw" />
             </div>
-          ))
-        }
-      </div>
-    </div>
+          </li>
+        ))
+      }
+    </ul>
   </div>
 </section>
 
@@ -110,216 +43,73 @@ const href = `#${t.waitlist.id}`;
   .local {
     padding-block: var(--section);
   }
+  .cards {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.25rem;
+    margin-top: clamp(2.5rem, 1.5rem + 3vw, 4rem);
+  }
+  .card {
+    display: flex;
+    flex-direction: column;
+    padding: clamp(1.5rem, 1rem + 1.5vw, 2rem);
+    border-radius: var(--radius-lg);
+    background: var(--tone-soft);
+  }
   .top {
     display: flex;
     flex-wrap: wrap;
-    align-items: end;
-    justify-content: space-between;
-    gap: 1.5rem;
-  }
-  h2 {
-    font-size: var(--step-head);
-  }
-  h2 span {
-    display: block;
-  }
-  .soft {
-    color: var(--muted);
-  }
-  .agenda {
-    margin-top: 3.5rem;
-  }
-  .tabs {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 0.375rem;
-  }
-  :global(.js) .tabs[hidden] {
-    display: grid;
-  }
-  .tab {
-    display: grid;
-    align-content: center;
-    gap: 0.125rem;
-    min-height: 4rem;
-    padding: 0.5rem 0.75rem;
-    border: 0;
-    background: var(--surface);
-    text-align: left;
-    cursor: pointer;
-    transition: background-color var(--t-hover) ease, color var(--t-hover) ease;
-  }
-  .tab-title {
-    font-size: var(--step-body);
-    font-weight: 500;
-    line-height: 1.2;
-  }
-  .tab-sub {
-    color: var(--muted);
-    font-size: var(--step-small);
-  }
-  .tab[aria-selected='true'] {
-    background: var(--ink);
-    color: var(--bg);
-  }
-  .tab[aria-selected='true'] .tab-sub {
-    color: color-mix(in srgb, var(--bg) 80%, var(--ink));
-  }
-  @media (hover: hover) and (pointer: fine) {
-    .tab[aria-selected='false']:hover {
-      background: var(--surface-2);
-    }
-  }
-  .panels {
-    margin-top: 1rem;
-  }
-  .panel + .panel {
-    margin-top: 3rem;
-  }
-  :global(.js) .panel + .panel {
-    margin-top: 0;
-  }
-  :global(.js) .panel[hidden] {
-    display: none;
-  }
-  .panel-title {
-    margin-bottom: 1rem;
-    font-size: var(--step-lead);
-  }
-  .panel-title span {
-    color: var(--muted);
-  }
-  /* taste-skill-ignore: título oculto a la vista (lo dicen las pestañas), no es un filete */
-  :global(.js) .panel-title {
-    position: absolute;
-    width: 1px; /* taste-skill-ignore */
-    height: 1px; /* taste-skill-ignore */
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-  }
-  .bands {
-    display: grid;
-    gap: 4px;
-  }
-  .band {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: 0.25rem;
-    padding: 1rem;
-    background: var(--surface);
-  }
-  .band:nth-child(even) {
-    background: var(--surface-2);
-  }
-  .label {
-    font-size: var(--step-lead);
-    font-weight: 500;
-    line-height: 1.2;
-  }
-  .band-title {
-    font-weight: 600;
-  }
-  .band-text {
-    margin-top: 0.125rem;
-  }
-  .who {
-    display: flex;
     align-items: center;
+    gap: 0.5rem 0.75rem;
+  }
+  .tag {
+    font-size: var(--step-title);
+  }
+  .sub {
+    color: var(--muted);
+    font-weight: 500;
+  }
+  .points {
+    display: grid;
+    gap: 0.75rem;
+    margin-top: 1.25rem;
+  }
+  .points li {
+    display: flex;
     gap: 0.625rem;
-    font-size: var(--step-small);
   }
-  .marks {
-    display: inline-flex;
+  .points li::before {
+    content: '';
+    flex: none;
+    width: 0.6em;
+    height: 0.6em;
+    margin-top: 0.5em;
+    background: var(--tone-ink);
   }
-  .marks span {
+  .frame {
+    margin-top: auto;
+    padding-top: 1.75rem;
+  }
+  .frame > :global(*) {
     display: block;
-    width: 1.5rem;
-    height: 1.5rem;
-    border: 2px solid var(--bg);
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    border-radius: var(--radius);
+    background: var(--bg);
+    box-shadow: var(--shadow-sm);
   }
-  .marks span + span {
-    margin-left: -0.375rem;
-  }
-  .marks .person {
-    border-radius: 50%;
-    background: var(--ink);
-  }
-  .marks .agent {
-    background: var(--accent);
-  }
-  .media {
-    margin-top: 1rem;
-    background: var(--surface);
-    padding: clamp(0.75rem, 2vw, 1.5rem);
-  }
-  .video {
-    position: relative;
-  }
-  .video img,
-  .video video {
-    display: block;
+  .frame :global(picture),
+  .frame :global(img) {
     width: 100%;
-    height: auto;
-  }
-  .video video {
-    position: absolute;
-    inset: 0;
     height: 100%;
+  }
+  .frame :global(img) {
     object-fit: cover;
-    transition: opacity 600ms var(--ease-soft);
+    object-position: left top;
   }
-  /* Sin JavaScript el vídeo no tiene fuente: se queda el fotograma. Con él, aparece al reproducirse. */
-  :global(html:not(.js)) .video video {
-    display: none;
-  }
-  :global(.js) .video video {
-    opacity: 0;
-  }
-  .video video.is-playing {
-    opacity: 1;
-  }
-
-  @media (min-width: 60rem) {
-    .agenda {
-      display: grid;
-      grid-template-columns: 10rem minmax(0, 1fr);
-      gap: 2.5rem;
-      align-items: start;
-    }
-    :global(html:not(.js)) .agenda {
-      grid-template-columns: minmax(0, 1fr);
-    }
-    .tabs {
-      grid-template-columns: minmax(0, 1fr);
-      position: sticky;
-      top: 1.5rem;
-    }
-    .panels {
-      margin-top: 0;
-    }
-    .panel {
-      display: grid;
-      grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
-      gap: 1.5rem;
-      align-items: start;
-    }
-    .panel-title {
-      grid-column: 1 / -1;
-    }
-    .band {
-      grid-template-columns: 8rem minmax(0, 1fr) auto;
-      align-items: center;
-      gap: 1.25rem;
-      min-height: 5.5rem;
-      padding: 1rem 1.25rem;
-    }
-    .who {
-      justify-content: flex-end;
-      text-align: right;
-    }
-    .media {
-      margin-top: 0;
+  @media (min-width: 64rem) {
+    .cards {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
     }
   }
 </style>

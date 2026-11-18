@@ -1,5 +1,5 @@
 ---
-import type { Dict, Note } from '../../i18n/types';
+import type { Dict } from '../../i18n/types';
 
 interface Props {
   t: Dict;
@@ -9,40 +9,49 @@ const { roles } = t;
 const d = roles.dialog;
 const MAX = 8000;
 const count = d.count.replace('{used}', String(d.promptValue.length)).replace('{max}', String(MAX));
-const note = (part: Note['part']) => roles.notes.find((n) => n.part === part)!;
-const left = ['name', 'prompt', 'model'] as const;
-const right = ['bash', 'tools', 'templates'] as const;
 ---
 
-<!-- El editor de un rol a tamaño real, como una lámina de manual con notas en los dos márgenes. Cada
-     nota queda a la altura de la parte que explica (subgrid). -->
 <section id={roles.id} class="roles" aria-labelledby="roles-title" tabindex="-1">
   <div class="wrap">
-    <div class="plate">
-      <h2 id="roles-title" class="title" data-reveal>{roles.title}</h2>
+    <header class="section-head" data-reveal>
+      <h2 id="roles-title">{roles.title}</h2>
+      <p>{roles.lead}</p>
+    </header>
+    <div class="layout">
+      <ul class="templates">
+        {
+          roles.templates.map((tpl, i) => (
+            <li class={`template tone-${tpl.tone}`} data-reveal style={`--i:${i}`}>
+              <span class="tag">{tpl.name}</span>
+              <p>{tpl.text}</p>
+            </li>
+          ))
+        }
+      </ul>
 
-      <div class="panel" data-ui data-reveal style="--i:1">
-        <div class="part head" data-part="head">
+      <!-- El editor de un rol de la app, a tamaño real y con sus textos. -->
+      <div class="panel window" data-ui data-reveal style="--i:2">
+        <div class="part head">
           <p class="dialog-title">{d.title}</p>
           <p class="muted">{d.hint}</p>
         </div>
-        <div class="part" data-part="name">
+        <div class="part">
           <label for="role-name">{d.name}</label>
           <input id="role-name" type="text" value={d.nameValue} autocomplete="off" />
         </div>
-        <div class="part" data-part="prompt">
+        <div class="part">
           <p class="label-row">
             <label for="role-prompt">{d.prompt}</label>
             <span class="muted" data-count data-template={d.count} data-max={MAX}>{count}</span>
           </p>
-          <textarea id="role-prompt" rows="9" maxlength={MAX} data-prompt>{d.promptValue}</textarea>
+          <textarea id="role-prompt" rows="7" maxlength={MAX} data-prompt>{d.promptValue}</textarea>
         </div>
-        <div class="part" data-part="model">
+        <div class="part">
           <label for="role-model">{d.model}</label>
           <input id="role-model" type="text" placeholder={d.modelPlaceholder} autocomplete="off" />
           <p class="muted small">{d.modelHint}</p>
         </div>
-        <fieldset class="part" data-part="bash">
+        <fieldset class="part">
           <legend>{d.permissions}</legend>
           <div class="switch-row">
             <input id="role-bash" type="checkbox" role="switch" class="switch" />
@@ -52,23 +61,14 @@ const right = ['bash', 'tools', 'templates'] as const;
             </div>
           </div>
         </fieldset>
-        <div class="part" data-part="tools">
+        <div class="part">
           <p class="muted small">{d.toolsLine}</p>
         </div>
-        <div class="part foot" data-part="templates">
+        <div class="part foot">
           <span class="ui-btn">{d.back}</span>
           <span class="ui-btn primary">{d.confirm}</span>
         </div>
       </div>
-
-      {
-        [...left, ...right].map((part, i) => (
-          <div class:list={['note', left.includes(part as never) ? 'left' : 'right']} data-note={part} data-reveal style={`--i:${(i % 3) + 2}`}>
-            <h3>{note(part).title}</h3>
-            <p>{note(part).text}</p>
-          </div>
-        ))
-      }
     </div>
   </div>
 </section>
@@ -77,37 +77,45 @@ const right = ['bash', 'tools', 'templates'] as const;
   .roles {
     padding-block: var(--section);
   }
-  h2 {
-    font-size: var(--step-head);
+  .layout {
+    display: grid;
+    gap: 1.5rem;
+    align-items: start;
+    margin-top: clamp(2.5rem, 1.5rem + 3vw, 4rem);
   }
-  .note h3 {
-    font-size: var(--step-body);
-    font-weight: 600;
-    letter-spacing: 0;
+  .templates {
+    display: grid;
+    gap: 1rem;
   }
-  .note p {
-    margin-top: 0.25rem;
+  .template {
+    padding: 1.5rem;
+    border-radius: var(--radius-lg);
+    background: var(--tone-soft);
+  }
+  .template .tag {
+    font-size: 1rem;
+  }
+  .template p {
+    margin-top: 0.875rem;
+    color: var(--ink);
   }
 
-  /* El panel: convenciones de la app (radios pequeños, bordes de 1 px). */
+  /* El editor: convenciones de la app (radios pequeños, bordes de 1 px). */
   [data-ui].panel {
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 10px;
     font-size: var(--step-small);
   }
   [data-ui] .part {
     margin: 0;
-    padding: 0.75rem 1.25rem;
+    padding: 0.75rem 1.5rem;
     border: 0;
     min-width: 0;
   }
   [data-ui] .part.head {
-    padding-top: 1.25rem;
+    padding-top: 1.5rem;
   }
   [data-ui] .dialog-title {
-    font-size: var(--step-body);
-    font-weight: 600;
+    font-size: 1.125rem;
+    font-weight: 650;
     letter-spacing: -0.02em;
   }
   [data-ui] .muted {
@@ -127,9 +135,6 @@ const right = ['bash', 'tools', 'templates'] as const;
     display: flex;
     justify-content: space-between;
     gap: 1rem;
-  }
-  [data-ui] .label-row label {
-    margin-bottom: 0.375rem;
   }
   [data-ui] input[type='text'],
   [data-ui] textarea {
@@ -179,21 +184,19 @@ const right = ['bash', 'tools', 'templates'] as const;
     height: 1rem;
     border-radius: 50%;
     background: var(--bg);
-    transition: transform var(--t-ui) var(--ease-out);
+    transition: transform 240ms var(--ease-out);
   }
   [data-ui] .switch:checked {
-    background: var(--accent);
+    background: var(--brand);
   }
   [data-ui] .switch:checked::after {
     transform: translateX(1rem);
   }
   [data-ui] .foot {
     display: flex;
-    align-items: flex-start;
-    align-self: start;
     justify-content: space-between;
     gap: 0.5rem;
-    padding-block: 1rem 1.25rem;
+    padding-block: 1rem 1.5rem;
     border-top: 1px solid var(--border);
   }
   [data-ui] .ui-btn {
@@ -206,131 +209,20 @@ const right = ['bash', 'tools', 'templates'] as const;
     font-weight: 500;
   }
   [data-ui] .ui-btn.primary {
-    border-color: var(--accent);
-    background: var(--accent);
-    color: var(--on-accent);
+    border-color: var(--brand);
+    background: var(--brand);
+    color: var(--on-brand);
   }
-  /* Pasar por una nota marca su parte del panel con el acento; el resto no se atenúa. */
-  [data-ui] .part {
-    transition: outline-color var(--t-hover) ease;
-    outline: 2px solid transparent;
-    outline-offset: -2px;
-  }
-  .plate:has([data-note='name']:hover) [data-part='name'],
-  .plate:has([data-note='prompt']:hover) [data-part='prompt'],
-  .plate:has([data-note='model']:hover) [data-part='model'],
-  .plate:has([data-note='bash']:hover) [data-part='bash'],
-  .plate:has([data-note='tools']:hover) [data-part='tools'],
-  .plate:has([data-note='templates']:hover) [data-part='templates'] {
-    outline-color: var(--accent);
-  }
-
-  /* Móvil: el panel en tres porciones, cada una con sus dos notas debajo, lado a lado. */
-  .plate {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    column-gap: 1rem;
-  }
-  .title {
-    grid-column: 1 / -1;
-    margin-bottom: 2rem;
-  }
-  .panel {
-    display: contents;
-  }
-  [data-ui] .part {
-    grid-column: 1 / -1;
-    background: var(--bg);
-    border-inline: 1px solid var(--border);
-  }
-  [data-ui] .part.head,
-  [data-ui] [data-part='model'],
-  [data-ui] [data-part='tools'] {
-    border-top: 1px solid var(--border);
-    border-radius: 10px 10px 0 0;
-  }
-  [data-ui] [data-part='prompt'],
-  [data-ui] [data-part='bash'],
-  [data-ui] .part.foot {
-    border-bottom: 1px solid var(--border);
-    border-radius: 0 0 10px 10px;
-  }
-  [data-ui] .part.foot {
-    border-top: 1px solid var(--border);
-    border-radius: 0 0 10px 10px;
-  }
-  .note {
-    margin: 1.25rem 0 3.5rem;
-  }
-  [data-part='head'] { grid-row: 2; }
-  [data-part='name'] { grid-row: 3; }
-  [data-part='prompt'] { grid-row: 4; }
-  [data-note='name'] { grid-row: 5; grid-column: 1; }
-  [data-note='prompt'] { grid-row: 5; grid-column: 2; }
-  [data-part='model'] { grid-row: 6; }
-  [data-part='bash'] { grid-row: 7; }
-  [data-note='model'] { grid-row: 8; grid-column: 1; }
-  [data-note='bash'] { grid-row: 8; grid-column: 2; }
-  [data-part='tools'] { grid-row: 9; }
-  [data-part='templates'] { grid-row: 10; }
-  [data-note='tools'] { grid-row: 11; grid-column: 1; }
-  [data-note='templates'] { grid-row: 11; grid-column: 2; }
-
-  /* Escritorio: el panel en el centro y las notas a los lados, cada una a la altura de su parte. */
-  @media (min-width: 60rem) {
-    .plate {
-      grid-template-columns: minmax(0, 1fr) 25rem minmax(0, 1fr);
-      grid-template-rows: repeat(7, auto);
-      column-gap: 3rem;
+  @media (min-width: 64rem) {
+    .layout {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 27rem);
+      gap: 2rem;
     }
-    .title {
-      grid-column: 1;
-      grid-row: 1;
-      margin: 0;
-      text-align: right;
+    .templates {
+      gap: 1.25rem;
     }
-    .panel {
-      display: grid;
-      grid-column: 2;
-      grid-row: 1 / span 7;
-      grid-template-rows: subgrid;
+    .template {
+      padding: 1.75rem 2rem;
     }
-    [data-ui] .part,
-    [data-ui] .part.head,
-    [data-ui] [data-part='model'],
-    [data-ui] [data-part='tools'],
-    [data-ui] [data-part='prompt'],
-    [data-ui] [data-part='bash'] {
-      grid-row: auto;
-      border: 0;
-      border-radius: 0;
-      background: none;
-    }
-    [data-ui] .part.foot {
-      border: 0;
-      border-top: 1px solid var(--border);
-      border-radius: 0;
-    }
-    .note {
-      align-self: start;
-      max-width: 30ch;
-      margin: 0;
-      padding-top: 0.75rem;
-    }
-    .note.left {
-      grid-column: 1;
-      justify-self: end;
-      text-align: right;
-    }
-    .note.right {
-      grid-column: 3;
-      justify-self: start;
-    }
-    [data-note='name'] { grid-row: 2; }
-    [data-note='prompt'] { grid-row: 3; }
-    [data-note='model'] { grid-row: 4; }
-    [data-note='bash'] { grid-row: 5; }
-    [data-note='tools'] { grid-row: 6; }
-    [data-note='templates'] { grid-row: 7; }
   }
 </style>

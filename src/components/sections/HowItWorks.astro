@@ -9,207 +9,117 @@ const { t } = Astro.props;
 const { how } = t;
 ---
 
-<!-- Lo que das y lo que vuelve: tres intercambios en una columna estrecha. -->
 <section id={how.id} class="how" aria-labelledby="how-title" tabindex="-1">
   <div class="wrap">
-    <div class="column">
-      <h2 id="how-title" data-reveal>{how.title}</h2>
-
-      <div class="exchange">
-        <p class="say" data-reveal>{how.one.lead}</p>
-        <div class="call" data-reveal style="--i:1">
-          <div class="quick" data-ui>
-            <label for="how-task">{how.one.label}</label>
-            <div class="quick-row">
-              <input id="how-task" type="text" value={how.one.value} readonly />
-              <span class="role">{how.one.role}<span class="agent"></span></span>
+    <header class="section-head" data-reveal>
+      <h2 id="how-title">{how.title}</h2>
+      <p>{how.lead}</p>
+    </header>
+    <ol class="cards">
+      {
+        how.cards.map((card, i) => (
+          <li class={`card tone-${card.tone}`} data-reveal style={`--i:${i}`}>
+            <h3>{card.title}</h3>
+            <p class="text">{card.text}</p>
+            <div class="media">
+              {card.shot ? (
+                <div class="frame">
+                  <Shot lang={t.lang} file={card.shot.file} alt={card.shot.alt} label={t.placeholder.label} ratio="16 / 10" sizes="(min-width: 64rem) 24rem, 100vw" />
+                </div>
+              ) : card.code ? (
+                <div class="frame code">
+                  <p>{card.code.label}</p>
+                  <pre><code>{card.code.text}</code></pre>
+                </div>
+              ) : null}
             </div>
-          </div>
-        </div>
-        <div class="response" data-reveal style="--i:2">
-          <pre><code>{how.one.tree}</code></pre>
-          <div class="crop">
-            <Shot lang={t.lang} file={how.one.shot.file} alt={how.one.shot.alt} label={t.placeholder.label} ratio="1360 / 1640" sizes="(min-width: 60rem) 32rem, 100vw" />
-          </div>
-        </div>
-      </div>
-
-      <div class="exchange">
-        <p class="say" data-reveal>{how.two.lead}</p>
-        <div class="call" data-reveal style="--i:1">
-          <p class="buttons" data-ui>
-            {how.two.buttons.map((label, i) => <span class:list={['ui-btn', { primary: i > 0 }]}>{label}</span>)}
-          </p>
-        </div>
-        <div class="response" data-reveal style="--i:2">
-          <p class="intro">{how.two.intro}</p>
-          <pre><code>{how.two.command}</code></pre>
-        </div>
-      </div>
-
-      <div class="exchange">
-        <p class="say" data-reveal>{how.three.lead}</p>
-        <div class="call" data-reveal style="--i:1">
-          <div class="choice" data-ui>
-            <p class="option"><span class="radio" aria-hidden="true"></span><span><strong>{how.three.option}</strong><span class="hint">{how.three.hint}</span></span></p>
-            <span class="ui-btn primary">{how.three.button}</span>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="result" data-reveal>
-      <Shot lang={t.lang} file={how.three.shot.file} alt={how.three.shot.alt} label={t.placeholder.label} sizes="(min-width: 60rem) 64rem, 100vw" />
-    </div>
+          </li>
+        ))
+      }
+    </ol>
   </div>
 </section>
 
 <style>
   .how {
-    padding-block: var(--section) 0;
+    padding-block: var(--section);
   }
-  .column {
-    max-width: 35rem;
-  }
-  h2 {
-    font-size: var(--step-head);
-  }
-  .exchange {
-    margin-top: 3.5rem;
-  }
-  .exchange + .exchange {
-    margin-top: 5.5rem;
-  }
-  .say {
-    font-size: var(--step-lead);
-    font-weight: 500;
-    line-height: 1.25;
-  }
-  .call {
-    margin-top: 1rem;
-    padding: 1.25rem;
-    background: var(--surface);
-  }
-  .response {
+  .cards {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
     gap: 1.25rem;
-    margin-top: 1.5rem;
+    margin-top: clamp(2.5rem, 1.5rem + 3vw, 4rem);
   }
-  .intro {
-    color: var(--ink);
+  .card {
+    display: flex;
+    flex-direction: column;
+    padding: clamp(1.5rem, 1rem + 1.5vw, 2rem);
+    border-radius: var(--radius-lg);
+    background: var(--tone-soft);
   }
+  /* El color del paso va en el cuadrado del título (el agente de la marca), no en una etiqueta. */
+  h3 {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: var(--step-title);
+    font-weight: 750;
+  }
+  h3::before {
+    content: '';
+    flex: none;
+    width: 0.7em;
+    height: 0.7em;
+    background: var(--tone-ink);
+  }
+  .text {
+    margin-top: 0.625rem;
+    color: var(--muted);
+  }
+  .media {
+    margin-top: auto;
+    padding-top: 1.5rem;
+  }
+  .frame {
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    border-radius: var(--radius);
+    background: var(--bg);
+    box-shadow: var(--shadow-sm);
+  }
+  /* Cada captura es un recorte de la región que prueba la afirmación, ya en la proporción del marco.
+     `!important`: la regla con ámbito de Shot (`.shot img { height: auto }`) pesa más. */
+  .frame :global(picture),
+  .frame :global(img) {
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+  }
+  .frame :global(img) {
+    object-fit: cover;
+  }
+  /* El bloque de código mide lo mismo que los recortes y crece si su contenido no cabe. */
+  .frame.code {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    overflow: visible;
+    padding: 1rem 1.25rem;
+    font-size: var(--step-small);
+  }
+  .frame.code p {
+    color: var(--muted);
+  }
+  /* El comando se parte solo en sus saltos de línea; si no cabe, se desplaza dentro del bloque. */
   pre {
     margin: 0;
-    padding: 1.25rem;
-    background: var(--surface);
-    font-size: var(--step-small);
-    line-height: 1.6;
     overflow-x: auto;
+    font-size: 0.8125rem;
+    line-height: 1.5;
   }
-  .crop {
-    aspect-ratio: 1360 / 1100;
-    overflow: hidden;
-    background: var(--surface);
-  }
-  .result {
-    margin-top: 3rem;
-    padding: clamp(1rem, 3vw, 2.5rem);
-    background: var(--surface);
-  }
-
-  /* Fragmentos de la app: sus convenciones (radios pequeños, bordes de 1 px). */
-  [data-ui].quick label {
-    display: block;
-    margin-bottom: 0.375rem;
-    font-size: var(--step-small);
-    font-weight: 500;
-  }
-  [data-ui] .quick-row {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-  }
-  [data-ui] input {
-    flex: 1;
-    min-width: 0;
-    height: 2.5rem;
-    padding: 0 0.75rem;
-    border: 1px solid var(--field-border);
-    border-radius: 6px;
-    background: var(--bg);
-    font-size: var(--step-small);
-  }
-  [data-ui] .role {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.375rem;
-    color: var(--muted);
-    font-size: var(--step-small);
-  }
-  [data-ui] .agent {
-    display: inline-block;
-    width: 0.75rem;
-    height: 0.75rem;
-    background: var(--accent);
-  }
-  [data-ui].buttons {
-    display: flex;
-    justify-content: flex-end;
-    gap: 0.5rem;
-  }
-  [data-ui] .ui-btn {
-    display: inline-flex;
-    align-items: center;
-    min-height: 2.25rem;
-    padding: 0.5rem 1rem;
-    border: 1px solid var(--field-border);
-    border-radius: 6px;
-    background: var(--bg);
-    font-size: var(--step-small);
-    font-weight: 500;
-  }
-  [data-ui] .ui-btn.primary {
-    border-color: var(--accent);
-    background: var(--accent);
-    color: var(--on-accent);
-  }
-  [data-ui].choice {
-    display: grid;
-    gap: 1rem;
-    justify-items: end;
-  }
-  [data-ui] .option {
-    display: flex;
-    gap: 0.75rem;
-    justify-self: stretch;
-    padding: 0.75rem;
-    border: 1px solid var(--accent);
-    border-radius: 8px;
-    background: var(--bg);
-    font-size: var(--step-small);
-  }
-  [data-ui] .radio {
-    flex: none;
-    width: 1rem;
-    height: 1rem;
-    margin-top: 0.125rem;
-    border: 5px solid var(--accent);
-    border-radius: 50%;
-  }
-  [data-ui] .option .hint {
-    display: block;
-    color: var(--muted);
-  }
-
-  @media (min-width: 60rem) {
-    .column {
-      margin-left: 25%;
-    }
-    .response {
-      margin-left: 3.5rem;
-    }
-    .result {
-      margin-left: 25%;
+  @media (min-width: 64rem) {
+    .cards {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
     }
   }
 </style>
