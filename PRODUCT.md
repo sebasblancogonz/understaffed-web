@@ -154,6 +154,17 @@ listón de acabado es el de esas webs. Eso significa:
 En el hero va la demostración interactiva del tablero. Siguen fijos el nombre, la marca, la voz y
 el tema claro y oscuro. La app mantiene su estándar sobrio.
 
+**Revisión (2026-11-18):** las referencias marcan el listón, no el aspecto. La primera versión se
+parecía demasiado a la portada de Notion, y la web toma un estilo propio:
+
+- Etiquetas de rol en colores pastel, con un círculo en lugar del cuadrado. El cuadrado sigue en
+  la marca y en los fragmentos de la app.
+- Bricolage Grotesque en los titulares, Inter en el texto.
+- Botones en píldora.
+- Encabezados de sección a la izquierda, con la entradilla a su derecha.
+- La demostración sobre una franja pastel de lado a lado.
+- Cabecera a todo el ancho de la ventana.
+
 - **Nombre:** Understaffed. Es lo único fijo de la identidad.
 - **Voz:** neutra y técnica, de herramienta profesional. El nombre no se explota como chiste y no
   se usa jerga de oficina.

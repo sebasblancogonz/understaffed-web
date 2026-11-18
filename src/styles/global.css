@@ -28,7 +28,9 @@ body {
 }
 
 h1, h2, h3, p, ol, ul, figure { margin: 0; }
-h1, h2, h3 { font-weight: 750; line-height: 1.08; letter-spacing: -0.025em; text-wrap: balance; }
+h1, h2, h3 { font-family: var(--font-display); font-weight: 700; line-height: 1.08; letter-spacing: -0.01em; text-wrap: balance; }
+/* Dentro de los fragmentos de la app rige su tipografía. */
+[data-ui] :is(h1, h2, h3, h4) { font-family: var(--font-sans); }
 p { text-wrap: pretty; }
 ol, ul { padding: 0; list-style: none; }
 img, video { display: block; max-width: 100%; height: auto; }
@@ -83,24 +85,33 @@ main:focus,
 section:focus { outline: none; }
 section[id] { scroll-margin-top: 5rem; }
 
-/* Encabezado de sección centrado, como en las referencias. */
+/* Encabezado de sección a la izquierda; en escritorio, la entradilla a su derecha. */
 .section-head {
-  max-width: 46rem;
-  margin-inline: auto;
-  text-align: center;
+  display: grid;
+  gap: 1rem;
 }
 .section-head h2 {
   font-size: var(--step-head);
   font-weight: 800;
-  letter-spacing: -0.025em;
+  letter-spacing: 0;
 }
 .section-head p {
-  margin-top: 1rem;
+  max-width: 34rem;
   color: var(--muted);
   font-size: var(--step-lead);
 }
+@media (min-width: 64rem) {
+  .section-head {
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    align-items: end;
+    gap: 4rem;
+  }
+  .section-head p {
+    padding-bottom: 0.4rem;
+  }
+}
 
-/* Botones: principal en cobalto, secundario con contorno. */
+/* Botones en píldora: principal en cobalto, secundario con contorno. */
 .button {
   display: inline-flex;
   align-items: center;
@@ -109,7 +120,7 @@ section[id] { scroll-margin-top: 5rem; }
   min-height: 3rem;
   padding: 0.75rem 1.5rem;
   border: 0;
-  border-radius: var(--radius);
+  border-radius: var(--radius-pill);
   background: var(--accent);
   color: var(--on-accent);
   font-weight: 650;
@@ -134,7 +145,7 @@ section[id] { scroll-margin-top: 5rem; }
   font-size: var(--step-action);
 }
 
-/* Etiqueta de rol: píldora de color con su cuadrado (el agente de la marca). */
+/* Etiqueta de rol: píldora pastel con su círculo. */
 .tag {
   display: inline-flex;
   align-items: center;
@@ -148,8 +159,9 @@ section[id] { scroll-margin-top: 5rem; }
 }
 .tag::before {
   content: '';
-  width: 0.85em;
-  height: 0.85em;
+  width: 0.7em;
+  height: 0.7em;
+  border-radius: 50%;
   background: var(--tone-ink, var(--lilac-ink));
 }
 .tone-lilac { --tone: var(--lilac); --tone-ink: var(--lilac-ink); --tone-soft: var(--lilac-soft); }

@@ -7,7 +7,7 @@ interface Props {
 }
 const { t } = Astro.props;
 const { status } = t;
-// Cada pie lleva el cuadrado del agente en un color: el cobalto para lo que espera tu decisión.
+// Cada pie lleva un círculo de color: el cobalto para lo que espera tu decisión.
 const marks = ['var(--accent)', 'var(--green-ink)'];
 ---
 
@@ -65,14 +65,16 @@ const marks = ['var(--accent)', 'var(--green-ink)'];
     gap: 0.6rem;
     color: var(--ink);
     font-size: var(--step-title);
+    font-family: var(--font-display);
     font-weight: 750;
     letter-spacing: -0.02em;
   }
   .cap-title::before {
     content: '';
     flex: none;
-    width: 0.7em;
-    height: 0.7em;
+    width: 0.6em;
+    height: 0.6em;
+    border-radius: 50%;
     background: var(--mark);
   }
   .cost {

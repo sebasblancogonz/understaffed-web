@@ -11,7 +11,7 @@ const other: Lang = t.lang === 'es' ? 'en' : 'es';
 ---
 
 <header class="header">
-  <div class="wrap bar">
+  <div class="bar">
     <a class="brand" href={paths[t.lang]} aria-label={t.header.home}>
       <Mark />
       <span class="word">Understaffed</span>
@@ -37,7 +37,9 @@ const other: Lang = t.lang === 'es' ? 'en' : 'es';
 </header>
 
 <style>
+  /* A todo el ancho de la ventana, con el margen lateral de la página. */
   .bar {
+    padding-inline: var(--margin);
     display: flex;
     align-items: center;
     justify-content: space-between;

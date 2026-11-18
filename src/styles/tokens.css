@@ -23,26 +23,31 @@
   --on-brand: #ffffff;
 
   /* Colores de rol: fondo de etiqueta o tarjeta, y su color fuerte (el cuadrado). */
-  --lilac: #e0bffc;
-  --lilac-ink: #7909dd;
-  --orange: #fecd9f;
-  --orange-ink: #fe6403;
-  --green: #c6fad8;
-  --green-ink: #04b61c;
-  --pink: #fec0de;
-  --pink-ink: #fb0579;
-  --yellow: #fee4a2;
-  --yellow-ink: #fcab01;
+  /* Colores de rol en pastel: el tono es el fondo de la etiqueta, la tinta su círculo y el suave el
+     fondo de las tarjetas. */
+  --lilac: #ecdcff;
+  --lilac-ink: #b48af5;
+  --orange: #ffe3c8;
+  --orange-ink: #f6a15e;
+  --green: #d3f5df;
+  --green-ink: #5cc98a;
+  --pink: #ffdcec;
+  --pink-ink: #ef86b6;
+  --yellow: #fff0bf;
+  --yellow-ink: #efbf3f;
   /* Fondos suaves de tarjeta: el color de rol mezclado con blanco. */
-  --lilac-soft: #f4eafe;
-  --orange-soft: #fff1e4;
-  --green-soft: #e9fdf0;
-  --pink-soft: #ffeef6;
-  --yellow-soft: #fff7e0;
+  --lilac-soft: #f7f1ff;
+  --orange-soft: #fff6ec;
+  --green-soft: #effcf3;
+  --pink-soft: #fff1f7;
+  --yellow-soft: #fffaea;
+  /* Escenario pastel sobre el que se apoya la demostración del hero. */
+  --stage: #e9edff;
 
   --shadow-sm: 0 1px 2px rgb(13 16 23 / 0.06), 0 2px 6px rgb(13 16 23 / 0.04);
   --shadow-lg: 0 2px 4px rgb(13 16 23 / 0.04), 0 24px 60px -12px rgb(13 16 23 / 0.18);
 
+  --font-display: 'Bricolage Grotesque Variable', 'Inter Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-sans: 'Inter Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-mono: 'JetBrains Mono Variable', ui-monospace, 'Cascadia Code', Menlo, monospace;
 
@@ -59,6 +64,7 @@
   --radius: 14px;
   --radius-lg: 24px;
   --radius-xl: 32px;
+  --radius-pill: 999px;
 
   /* La banda de la lista de espera es cobalto en los dos temas; estos son sus colores, sin variante oscura. */
   --band: #0031e6;
@@ -94,21 +100,22 @@
     --brand: #5b7fff;
     --on-brand: #0d1017;
 
-    --lilac: #4b2a86;
-    --lilac-ink: #c99cff;
-    --orange: #7a3912;
-    --orange-ink: #ff9a5a;
-    --green: #14603a;
-    --green-ink: #4ae07a;
-    --pink: #7d1d4d;
-    --pink-ink: #ff6fb1;
-    --yellow: #6e5310;
-    --yellow-ink: #ffc94d;
-    --lilac-soft: #1f1730;
-    --orange-soft: #251a12;
-    --green-soft: #12241a;
-    --pink-soft: #26141d;
-    --yellow-soft: #231e10;
+    --lilac: #3a2f55;
+    --lilac-ink: #c7a6ff;
+    --orange: #4a3424;
+    --orange-ink: #ffb380;
+    --green: #22402f;
+    --green-ink: #7fdca3;
+    --pink: #4a2738;
+    --pink-ink: #ff9fca;
+    --yellow: #453b1e;
+    --yellow-ink: #ffd56b;
+    --lilac-soft: #1c1926;
+    --orange-soft: #211a14;
+    --green-soft: #14211a;
+    --pink-soft: #22151c;
+    --yellow-soft: #211d12;
+    --stage: #1a2140;
 
     --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.4);
     --shadow-lg: 0 2px 4px rgb(0 0 0 / 0.3), 0 24px 60px -12px rgb(0 0 0 / 0.6);

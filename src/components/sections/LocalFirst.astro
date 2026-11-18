@@ -20,10 +20,8 @@ const { local } = t;
       {
         local.cards.map((card, i) => (
           <li class={`card tone-${card.tone}`} data-reveal style={`--i:${i}`}>
-            <p class="top">
-              <span class="tag">{card.title}</span>
-              <span class="sub">{card.sub}</span>
-            </p>
+            <h3>{card.title}</h3>
+            <p class="sub">{card.sub}</p>
             <ul class="points">
               {card.points.map((point) => (
                 <li>{point}</li>
@@ -56,16 +54,24 @@ const { local } = t;
     border-radius: var(--radius-lg);
     background: var(--tone-soft);
   }
-  .top {
+  /* Como en «Cómo funciona»: el color de la tarjeta va en el círculo del título. */
+  h3 {
     display: flex;
-    flex-wrap: wrap;
     align-items: center;
-    gap: 0.5rem 0.75rem;
-  }
-  .tag {
+    gap: 0.6rem;
     font-size: var(--step-title);
+    font-weight: 750;
+  }
+  h3::before {
+    content: '';
+    flex: none;
+    width: 0.6em;
+    height: 0.6em;
+    border-radius: 50%;
+    background: var(--tone-ink);
   }
   .sub {
+    margin-top: 0.25rem;
     color: var(--muted);
     font-weight: 500;
   }
@@ -81,9 +87,10 @@ const { local } = t;
   .points li::before {
     content: '';
     flex: none;
-    width: 0.6em;
-    height: 0.6em;
-    margin-top: 0.5em;
+    width: 0.5em;
+    height: 0.5em;
+    margin-top: 0.55em;
+    border-radius: 50%;
     background: var(--tone-ink);
   }
   .frame {
