@@ -9,19 +9,44 @@ interface Props {
 }
 const { t } = Astro.props;
 const href = config.downloadUrl || `#${t.how.id}`;
+
+// Vídeo de fondo: solo en escritorio y sin movimiento reducido. Las condiciones van en el
+// `media` de cada fuente para que el navegador no descargue nada si no se cumplen, y la
+// variante sigue al tema del sistema, como el resto de la página.
+const video = `/video/understaffed-demo-${t.lang}`;
+const motion = '(min-width: 48rem) and (prefers-reduced-motion: no-preference)';
+const sources = [
+  { scheme: 'light', file: `${video}-light` },
+  { scheme: 'dark', file: video },
+];
+const stills = `--still-light: url(${video}-light-poster.jpg); --still-dark: url(${video}-poster.jpg)`;
 ---
 
 <section class="hero" aria-labelledby="hero-title">
-  <div class="container">
-    <div class="copy">
-      <h1 id="hero-title">{t.hero.title}</h1>
-      <p class="lead">{t.hero.lead}</p>
-      <div class="actions">
-        <Button href={href}>{t.hero.cta}</Button>
-        {!config.downloadUrl && <p class="todo mono">{t.hero.ctaTodo}</p>}
-      </div>
-      <p class="note">{t.hero.note}</p>
+  <div class="stage">
+    <div class="backdrop" aria-hidden="true" style={stills}>
+      <video autoplay muted loop playsinline disablepictureinpicture tabindex="-1">
+        {
+          sources.flatMap(({ scheme, file }) => [
+            <source src={`${file}.webm`} type="video/webm" media={`${motion} and (prefers-color-scheme: ${scheme})`} />,
+            <source src={`${file}.mp4`} type="video/mp4" media={`${motion} and (prefers-color-scheme: ${scheme})`} />,
+          ])
+        }
+      </video>
     </div>
+    <div class="container">
+      <div class="copy">
+        <h1 id="hero-title">{t.hero.title}</h1>
+        <p class="lead">{t.hero.lead}</p>
+        <div class="actions">
+          <Button href={href}>{t.hero.cta}</Button>
+          {!config.downloadUrl && <p class="todo mono">{t.hero.ctaTodo}</p>}
+        </div>
+        <p class="note">{t.hero.note}</p>
+      </div>
+    </div>
+  </div>
+  <div class="container">
     <div class="visual">
       <Placeholder file={t.hero.shot.file} alt={t.hero.shot.alt} label={t.placeholder.label} />
     </div>
@@ -30,7 +55,15 @@ const href = config.downloadUrl || `#${t.how.id}`;
 
 <style>
   .hero {
-    padding-block: 3.5rem 2rem;
+    padding-block: 0 2rem;
+  }
+  .stage {
+    position: relative;
+    isolation: isolate;
+    padding-block: 3.5rem 0;
+  }
+  .backdrop {
+    display: none;
   }
   .copy {
     display: flex;
@@ -68,9 +101,54 @@ const href = config.downloadUrl || `#${t.how.id}`;
   .visual {
     margin-top: 3rem;
   }
+
   @media (min-width: 48rem) {
-    .hero {
-      padding-block: 6rem 3rem;
+    .stage {
+      padding-block: 6rem 5rem;
+      overflow: hidden;
+    }
+    .visual {
+      margin-top: 1rem;
+    }
+    .backdrop {
+      display: block;
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      overflow: hidden;
+      /* Fotograma fijo: se ve mientras carga el vídeo y en su lugar con movimiento reducido. */
+      background: var(--still-light) center / cover no-repeat;
+      /* Desenfoque leve: los textos del vídeo no compiten con los del hero. */
+      filter: blur(2px);
+    }
+    video {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    /* Velo con el color de fondo: al 88 % detrás del texto (contraste AA de --text-secondary
+       en el peor píxel del vídeo, en ambos temas), más ligero a los lados y opaco abajo
+       para fundirse con la página antes de la captura. */
+    .backdrop::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      --veil: color-mix(in srgb, var(--bg) 88%, transparent);
+      --side: color-mix(in srgb, var(--bg) 55%, transparent);
+      background:
+        linear-gradient(to bottom, color-mix(in srgb, var(--bg) 40%, transparent), transparent 18%, transparent 62%, var(--bg)),
+        linear-gradient(to right, var(--side), var(--veil) calc(50% - 26rem), var(--veil) calc(50% + 26rem), var(--side));
+    }
+  }
+  @media (min-width: 48rem) and (prefers-color-scheme: dark) {
+    .backdrop {
+      background-image: var(--still-dark);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    video {
+      display: none;
     }
   }
 </style>
