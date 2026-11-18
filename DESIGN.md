@@ -277,7 +277,7 @@ La regla base de h1, h2 y h3 es Bricolage 700 con -0.01em, pero cada titular de 
   - Desde 64rem, Roles reparte `1fr` y `27rem` entre las plantillas y el editor.
   - Desde 64rem, Estado reparte `1.45fr` y `1fr` entre sus dos figuras.
   - Requisitos usa dos columnas y pasa a cinco desde 48rem.
-- **Hero:** el titular, la frase y los botones van centrados. Las cinco etiquetas de rol forman una fila bajo los botones; desde 72rem flotan alrededor del titular, tres a la izquierda y dos a la derecha, giradas entre -9° y 3°. La ventana del tablero va debajo a todo el ancho del contenedor, sobre una franja `stage` que empieza `clamp(5rem, 3rem + 8vw, 12rem)` por debajo del borde superior de la demo, llega de lado a lado de la ventana del navegador y deja 2 a 3rem de franja bajo la ventana. El hero recorta lo que sobresale con `overflow: hidden`, así que no hay desplazamiento lateral.
+- **Hero:** el titular, la frase y los botones van centrados. Las cinco etiquetas de rol forman una fila bajo los botones; desde 72rem flotan alrededor del titular, tres a la izquierda y dos a la derecha, giradas entre -9° y 3°. El bloque arranca `clamp(2.5rem, 1rem + 4vw, 5rem)` por debajo de la cabecera. La ventana del tablero va `clamp(3rem, 1.5rem + 4vw, 5.5rem)` por debajo de los botones, a todo el ancho del contenedor, sobre una franja `stage` que empieza `clamp(5rem, 3rem + 8vw, 12rem)` por debajo del borde superior de la demo, llega de lado a lado de la ventana del navegador y deja 2 a 3rem de franja bajo la ventana. El hero recorta lo que sobresale con `overflow: hidden`, así que no hay desplazamiento lateral.
 - **Demo del tablero:**
   - La barra lateral aparece desde 60rem.
   - La altura es fija: 25rem en móvil y 28rem desde 60rem.

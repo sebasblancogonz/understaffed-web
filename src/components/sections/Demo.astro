@@ -152,7 +152,8 @@ const chipFor = (state: Card['state']) =>
   .demo-wrap {
     position: relative;
     isolation: isolate;
-    margin-top: clamp(1.75rem, 1rem + 1.5vw, 2.25rem);
+    /* Aire entre los botones del hero y la ventana. */
+    margin-top: clamp(3rem, 1.5rem + 4vw, 5.5rem);
     padding-bottom: clamp(2rem, 1.5rem + 2vw, 3rem);
   }
   .demo-wrap::before {
