@@ -1,72 +1,117 @@
 /*
- * Tokens de la web. Colores del tema según `site-presentation` (los de la app); proporciones de la
- * dirección «el producto actúa»: fondo neutro, tinta casi negra, un solo color saturado (cobalto)
- * en la acción y como campo entero de la lista de espera.
+ * Tokens de la web, tomados del comp aprobado (.impeccable/mocks/comp-a-centrado.png), muestreados
+ * de sus píxeles: fondo blanco, cobalto intenso para la acción principal y cinco colores de rol
+ * (lila, naranja, verde, rosa y amarillo) para etiquetas y tarjetas. Referencias: Craft, Notion,
+ * Dub y monday.com.
  */
 :root {
   color-scheme: light dark;
 
   --bg: #ffffff;
   --surface: #f1f4f6;
-  --surface-2: #e4e8ec;
+  --surface-2: #e9ecf0;
   --ink: #0d1017;
   --muted: #5b6474;
   --border: #e3e6eb;
-  /* Borde de campos dentro de los fragmentos: 3:1 o más frente al fondo (WCAG 1.4.11). */
   --field-border: #7c8494;
   --danger: #d92d20;
-  --accent: #2f5bea;
+  --accent: #0031e6;
+  --accent-hover: #0028bd;
   --on-accent: #ffffff;
-  /* El campo cobalto de la lista de espera es el mismo en los dos temas. */
-  --field: #2f5bea;
-  --on-field: #ffffff;
-  --on-field-soft: #e3e9ff;
-  /* Banda oscura del panel de Estado (tablero de salidas), en los dos temas. */
-  --board: #0d1017;
-  --board-row: #1a1f29;
-  --board-row-2: #232937;
-  --on-board: #eceef2;
-  --on-board-soft: #a9b1bf;
+  /* Cobalto de la app, dentro de los fragmentos de interfaz. */
+  --brand: #2f5bea;
+  --on-brand: #ffffff;
+
+  /* Colores de rol: fondo de etiqueta o tarjeta, y su color fuerte (el cuadrado). */
+  --lilac: #e0bffc;
+  --lilac-ink: #7909dd;
+  --orange: #fecd9f;
+  --orange-ink: #fe6403;
+  --green: #c6fad8;
+  --green-ink: #04b61c;
+  --pink: #fec0de;
+  --pink-ink: #fb0579;
+  --yellow: #fee4a2;
+  --yellow-ink: #fcab01;
+  /* Fondos suaves de tarjeta: el color de rol mezclado con blanco. */
+  --lilac-soft: #f4eafe;
+  --orange-soft: #fff1e4;
+  --green-soft: #e9fdf0;
+  --pink-soft: #ffeef6;
+  --yellow-soft: #fff7e0;
+
+  --shadow-sm: 0 1px 2px rgb(13 16 23 / 0.06), 0 2px 6px rgb(13 16 23 / 0.04);
+  --shadow-lg: 0 2px 4px rgb(13 16 23 / 0.04), 0 24px 60px -12px rgb(13 16 23 / 0.18);
 
   --font-sans: 'Inter Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  /* taste-skill-ignore: solo dentro de code y pre (rutas, comandos y el árbol de archivos). */
-  --font-mono: 'JetBrains Mono Variable', ui-monospace, 'Cascadia Code', Menlo, monospace; /* taste-skill-ignore */
+  --font-mono: 'JetBrains Mono Variable', ui-monospace, 'Cascadia Code', Menlo, monospace;
 
-  /* Cinco tamaños: pequeño, texto, entrada, título y pantalla. */
   --step-small: 0.875rem;
-  --step-body: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
-  --step-lead: clamp(1.25rem, 1.1rem + 0.7vw, 1.625rem);
-  --step-head: clamp(2rem, 1.3rem + 3.2vw, 4rem);
-  --step-display: clamp(2.25rem, 0.6rem + 6vw, 6.25rem);
+  --step-body: clamp(1rem, 0.95rem + 0.2vw, 1.125rem);
+  --step-lead: clamp(1.125rem, 1rem + 0.5vw, 1.375rem);
+  --step-title: clamp(1.25rem, 1.1rem + 0.5vw, 1.5rem);
+  --step-head: clamp(2rem, 1.1rem + 3.2vw, 3.75rem);
+  --step-display: clamp(2.75rem, 1rem + 4.15vw, 4.75rem);
+  /* Texto de los botones grandes (hero y lista de espera), como en el comp. */
+  --step-action: 1.1875rem;
 
-  --margin: clamp(1.25rem, 0.5rem + 2.4vw, 2.5rem);
-  --container: 90rem;
-  --section: clamp(6rem, 3rem + 9vw, 12rem);
+  --radius-sm: 10px;
+  --radius: 14px;
+  --radius-lg: 24px;
+  --radius-xl: 32px;
+
+  /* La banda de la lista de espera es cobalto en los dos temas; estos son sus colores, sin variante oscura. */
+  --band: #0031e6;
+  --on-band: #ffffff;
+  --on-band-muted: #dfe6ff;
+  --on-band-danger: #ffb4ab;
+  --band-ink: #0d1017;
+  --band-ink-hover: #232937;
+  --margin: clamp(1rem, 0.4rem + 2.4vw, 2.5rem);
+  --container: 80rem;
+  --section: clamp(5rem, 3rem + 6vw, 9rem);
 
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-in-out: cubic-bezier(0.76, 0, 0.24, 1);
-  --ease-soft: cubic-bezier(0.33, 1, 0.68, 1);
   --t-press: 140ms;
   --t-hover: 180ms;
-  --t-ui: 240ms;
-  --t-reveal: 800ms;
+  --t-reveal: 700ms;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --bg: #0d1017;
-    --surface: #1f2430;
-    --surface-2: #262d39;
+    --surface: #161a22;
+    --surface-2: #1f2430;
     --ink: #eceef2;
     --muted: #9aa3b2;
     --border: #262d39;
     --field-border: #6b7383;
     --danger: #f97066;
     --accent: #5b7fff;
+    --accent-hover: #7895ff;
     --on-accent: #0d1017;
-    --board: #161a22;
-    --board-row: #1f2430;
-    --board-row-2: #272e3b;
+    --brand: #5b7fff;
+    --on-brand: #0d1017;
+
+    --lilac: #4b2a86;
+    --lilac-ink: #c99cff;
+    --orange: #7a3912;
+    --orange-ink: #ff9a5a;
+    --green: #14603a;
+    --green-ink: #4ae07a;
+    --pink: #7d1d4d;
+    --pink-ink: #ff6fb1;
+    --yellow: #6e5310;
+    --yellow-ink: #ffc94d;
+    --lilac-soft: #1f1730;
+    --orange-soft: #251a12;
+    --green-soft: #12241a;
+    --pink-soft: #26141d;
+    --yellow-soft: #231e10;
+
+    --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.4);
+    --shadow-lg: 0 2px 4px rgb(0 0 0 / 0.3), 0 24px 60px -12px rgb(0 0 0 / 0.6);
   }
 }
 

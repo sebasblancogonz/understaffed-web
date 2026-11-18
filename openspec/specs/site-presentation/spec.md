@@ -17,11 +17,11 @@ La web SHALL adoptar el tema claro u oscuro según `prefers-color-scheme`, con l
 - **THEN** el fondo calculado es `#ffffff` y el texto `#0d1017`
 
 ### Requirement: Acento único
-La web SHALL usar un único color de acento, `#2f5bea` en claro y `#5b7fff` en oscuro, con texto `#ffffff` y `#0d1017` encima respectivamente, solo para la acción principal y el elemento que se debe mirar primero.
+La web SHALL usar el cobalto como único color principal (`#0031e6` en claro y `#5b7fff` en oscuro) para la acción principal, la marca y lo que espera la decisión del usuario. Para etiquetas y tarjetas usa una paleta de cinco colores de rol, tomada del comp aprobado: lila, naranja, verde, rosa y amarillo. Ningún color se usa en degradado de neón ni en cristal esmerilado.
 
 #### Scenario: Acento acotado
-- **WHEN** se revisan los usos del color de acento en ambos temas
-- **THEN** solo aparece en la acción principal y en un elemento de énfasis por sección, nunca como decoración, y no hay degradados de neón ni cristal esmerilado
+- **WHEN** se revisan los usos de color en ambos temas
+- **THEN** el cobalto aparece en la acción principal, la marca, los botones de la demostración y la banda de la lista de espera, los colores de rol solo en etiquetas y tarjetas, y no hay degradados de neón ni cristal esmerilado
 
 ### Requirement: Tipografías alojadas
 El texto SHALL usar Inter Variable y el código, comandos y rutas JetBrains Mono, servidas desde el propio sitio, sin peticiones a CDN de fuentes, con la fuente principal precargada.
@@ -56,15 +56,15 @@ La web SHALL ser legible desde 360 px de ancho sin desplazamiento horizontal.
 - **THEN** el ancho del documento no supera el de la ventana y no hay contenido recortado
 
 ### Requirement: Rendimiento y JavaScript
-La portada SHALL obtener 95 o más en Lighthouse de rendimiento, accesibilidad, buenas prácticas y SEO, sin saltos de diseño, y SHALL enviar cero JavaScript al cliente salvo que una función concreta lo requiera.
+La portada SHALL obtener 95 o más en Lighthouse de rendimiento, accesibilidad, buenas prácticas y SEO, sin saltos de diseño, y SHALL limitar el JavaScript de cliente a un único script pequeño para la demostración del hero, las pestañas, el panel de Estado y las entradas de las secciones. Sin JavaScript, la página MUST mostrar todo su contenido.
 
 #### Scenario: Puntuaciones Lighthouse
 - **WHEN** se ejecuta Lighthouse sobre `/` y `/en/` del build en móvil
 - **THEN** las cuatro categorías puntúan 95 o más y el CLS es 0,1 o menos
 
 #### Scenario: Portada sin JavaScript
-- **WHEN** se revisa el HTML generado de la portada
-- **THEN** no incluye etiquetas `script` de la aplicación
+- **WHEN** se carga la portada con JavaScript desactivado
+- **THEN** todo el texto, las capturas y el formulario son visibles y ningún elemento queda con opacidad cero
 
 ### Requirement: Comprobaciones de entrega
 El proyecto SHALL superar `pnpm astro check` y `pnpm build` sin avisos nuevos.
@@ -112,8 +112,15 @@ El formulario de la lista de espera SHALL funcionar sin JavaScript, con etiqueta
 - **THEN** se distingue visualmente del habilitado y un texto visible explica por qué
 
 ### Requirement: Carga diferida de capturas
-Las capturas que no están en el hero SHALL cargarse en diferido (`loading="lazy"`), y la del hero SHALL cargarse de inmediato.
+Todas las capturas SHALL cargarse en diferido (`loading="lazy"`): el hero ya no lleva captura sino un fragmento de interfaz en HTML.
 
 #### Scenario: Atributo de carga
 - **WHEN** se inspeccionan las `img` del HTML generado
-- **THEN** la captura del hero no tiene `loading="lazy"` y todas las demás sí
+- **THEN** todas tienen `loading="lazy"`
+
+### Requirement: Fragmentos de interfaz
+Los fragmentos de la app construidos en HTML SHALL llevar el atributo `data-ui` en su raíz, usar las etiquetas reales de la app y los datos de demostración de las capturas, y marcar como demostración lo que simula un comportamiento.
+
+#### Scenario: Datos de demostración
+- **WHEN** se revisan los fragmentos
+- **THEN** los proyectos, tareas, personas, ordenadores y servidores son los de las capturas (storefront, «Tienda online», Marta Ruiz, sync.example.com) y no aparecen datos de personas reales

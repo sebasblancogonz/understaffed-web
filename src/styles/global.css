@@ -22,23 +22,24 @@ body {
   color: var(--ink);
   font-family: var(--font-sans);
   font-size: var(--step-body);
-  line-height: 1.5;
+  line-height: 1.55;
   overflow-wrap: break-word;
+  -webkit-font-smoothing: antialiased;
 }
 
 h1, h2, h3, p, ol, ul, figure { margin: 0; }
-h1, h2, h3 { font-weight: 500; line-height: 1.05; letter-spacing: -0.022em; text-wrap: balance; }
+h1, h2, h3 { font-weight: 750; line-height: 1.08; letter-spacing: -0.025em; text-wrap: balance; }
 p { text-wrap: pretty; }
 ol, ul { padding: 0; list-style: none; }
 img, video { display: block; max-width: 100%; height: auto; }
 button, input, textarea { font: inherit; color: inherit; }
 
-a { color: inherit; text-underline-offset: 0.2em; text-decoration-thickness: 0.07em; }
+a { color: inherit; text-underline-offset: 0.2em; }
 
 code, pre { font-family: var(--font-mono); font-size: 0.875em; }
 pre code { font-size: 1em; }
 
-::selection { background: color-mix(in srgb, var(--accent) 24%, transparent); }
+::selection { background: color-mix(in srgb, var(--accent) 22%, transparent); }
 input, textarea { caret-color: var(--accent); }
 
 :focus-visible {
@@ -50,8 +51,9 @@ input, textarea { caret-color: var(--accent); }
   position: absolute;
   left: var(--margin);
   top: 0.5rem;
-  z-index: 20;
+  z-index: 50;
   padding: 0.6rem 1rem;
+  border-radius: var(--radius-sm);
   background: var(--ink);
   color: var(--bg);
   transform: translateY(-200%);
@@ -79,44 +81,103 @@ input, textarea { caret-color: var(--accent); }
 
 main:focus,
 section:focus { outline: none; }
-section[id] { scroll-margin-top: 1rem; }
+section[id] { scroll-margin-top: 5rem; }
 
-/* La acción principal: bloque plano de esquinas cuadradas (el cuadrado es el agente de la marca). */
+/* Encabezado de sección centrado, como en las referencias. */
+.section-head {
+  max-width: 46rem;
+  margin-inline: auto;
+  text-align: center;
+}
+.section-head h2 {
+  font-size: var(--step-head);
+  font-weight: 800;
+  letter-spacing: -0.025em;
+}
+.section-head p {
+  margin-top: 1rem;
+  color: var(--muted);
+  font-size: var(--step-lead);
+}
+
+/* Botones: principal en cobalto, secundario con contorno. */
 .button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 0.5rem;
   min-height: 3rem;
   padding: 0.75rem 1.5rem;
   border: 0;
+  border-radius: var(--radius);
   background: var(--accent);
   color: var(--on-accent);
-  font-weight: 600;
+  font-weight: 650;
   text-decoration: none;
   white-space: nowrap;
   cursor: pointer;
-  transition: transform var(--t-press) var(--ease-out), background-color var(--t-hover) ease;
+  transition: transform var(--t-press) var(--ease-out), background-color var(--t-hover) ease, border-color var(--t-hover) ease;
 }
 .button:active { transform: scale(0.97); }
-@media (hover: hover) and (pointer: fine) {
-  .button:hover { background-color: color-mix(in srgb, var(--accent) 86%, var(--ink)); }
-}
-
-.link {
-  text-decoration: underline;
-  text-decoration-color: transparent;
-  transition: text-decoration-color var(--t-hover) ease;
+.button.secondary {
+  background: var(--bg);
+  color: var(--ink);
+  box-shadow: inset 0 0 0 2px var(--border);
 }
 @media (hover: hover) and (pointer: fine) {
-  .link:hover { text-decoration-color: currentColor; }
+  .button:hover { background-color: var(--accent-hover); }
+  .button.secondary:hover { background-color: var(--surface); }
+}
+.button.large {
+  min-height: 3.0625rem;
+  padding-inline: 1.75rem;
+  font-size: var(--step-action);
 }
 
-/* Entradas de sección: solo con JavaScript y sin movimiento reducido; el contenido nunca queda oculto si el script falla. */
+/* Etiqueta de rol: píldora de color con su cuadrado (el agente de la marca). */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.9rem 0.4rem 0.7rem;
+  border-radius: 999px;
+  background: var(--tone, var(--lilac));
+  color: var(--ink);
+  font-weight: 700;
+  white-space: nowrap;
+}
+.tag::before {
+  content: '';
+  width: 0.85em;
+  height: 0.85em;
+  background: var(--tone-ink, var(--lilac-ink));
+}
+.tone-lilac { --tone: var(--lilac); --tone-ink: var(--lilac-ink); --tone-soft: var(--lilac-soft); }
+.tone-orange { --tone: var(--orange); --tone-ink: var(--orange-ink); --tone-soft: var(--orange-soft); }
+.tone-green { --tone: var(--green); --tone-ink: var(--green-ink); --tone-soft: var(--green-soft); }
+.tone-pink { --tone: var(--pink); --tone-ink: var(--pink-ink); --tone-soft: var(--pink-soft); }
+.tone-yellow { --tone: var(--yellow); --tone-ink: var(--yellow-ink); --tone-soft: var(--yellow-soft); }
+
+/* Ventana de la app: marco blanco redondeado con sombra suave, como en el comp. */
+.window {
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--bg);
+  box-shadow: var(--shadow-lg);
+}
+.window > picture img,
+.window > img {
+  width: 100%;
+}
+
+/* Entradas de sección: solo con JavaScript y sin movimiento reducido; nunca ocultan contenido si el
+   script falla (el inline de Base.astro quita la clase `js` si el script no llega). */
 @media (prefers-reduced-motion: no-preference) {
   .js [data-reveal] {
     opacity: 0;
-    transform: translateY(var(--rise, 24px));
-    transition: opacity 700ms var(--ease-out), transform 900ms var(--ease-out);
+    transform: translateY(var(--rise, 20px));
+    transition: opacity 600ms var(--ease-out), transform 800ms var(--ease-out);
     transition-delay: calc(var(--i, 0) * 80ms);
   }
   .js [data-reveal].is-in {

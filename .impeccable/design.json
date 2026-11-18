@@ -1,0 +1,157 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-18T15:00:00Z",
+  "title": "Design System: Understaffed (web)",
+  "extensions": {
+    "colorMeta": {
+      "accent": { "role": "primary", "displayName": "Cobalto de acción", "canonical": "#0031e6", "tonalRamp": ["#0d1017", "#0028bd", "#0031e6", "#2f5bea", "#5b7fff", "#7895ff", "#e9ecf0", "#ffffff"] },
+      "brand": { "role": "primary", "displayName": "Cobalto de la app (solo data-ui)", "canonical": "#2f5bea", "tonalRamp": ["#0d1017", "#0028bd", "#0031e6", "#2f5bea", "#5b7fff", "#7895ff", "#e9ecf0", "#ffffff"] },
+      "lilac": { "role": "secondary", "displayName": "Lila de rol", "canonical": "#e0bffc", "tonalRamp": ["#1f1730", "#4b2a86", "#7909dd", "#c99cff", "#e0bffc", "#f4eafe"] },
+      "orange": { "role": "secondary", "displayName": "Naranja de rol", "canonical": "#fecd9f", "tonalRamp": ["#251a12", "#7a3912", "#fe6403", "#ff9a5a", "#fecd9f", "#fff1e4"] },
+      "green": { "role": "secondary", "displayName": "Verde de rol", "canonical": "#c6fad8", "tonalRamp": ["#12241a", "#14603a", "#04b61c", "#4ae07a", "#c6fad8", "#e9fdf0"] },
+      "pink": { "role": "secondary", "displayName": "Rosa de rol", "canonical": "#fec0de", "tonalRamp": ["#26141d", "#7d1d4d", "#fb0579", "#ff6fb1", "#fec0de", "#ffeef6"] },
+      "yellow": { "role": "secondary", "displayName": "Amarillo de rol", "canonical": "#fee4a2", "tonalRamp": ["#231e10", "#6e5310", "#fcab01", "#ffc94d", "#fee4a2", "#fff7e0"] },
+      "ink": { "role": "neutral", "displayName": "Tinta", "canonical": "#0d1017", "tonalRamp": ["#0d1017", "#161a22", "#1f2430", "#262d39", "#5b6474", "#9aa3b2", "#e3e6eb", "#f1f4f6", "#ffffff"] },
+      "muted": { "role": "neutral", "displayName": "Gris pizarra", "canonical": "#5b6474" },
+      "bg": { "role": "neutral", "displayName": "Blanco papel", "canonical": "#ffffff" },
+      "surface": { "role": "neutral", "displayName": "Gris niebla", "canonical": "#f1f4f6" },
+      "surface-2": { "role": "neutral", "displayName": "Gris niebla profundo", "canonical": "#e9ecf0" },
+      "border": { "role": "neutral", "displayName": "Línea", "canonical": "#e3e6eb" },
+      "field-border": { "role": "neutral", "displayName": "Línea de campo", "canonical": "#7c8494" }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Solo el h1 del hero, en dos líneas." },
+      "headline": { "displayName": "Headline", "purpose": "El h2 de cada sección, centrado." },
+      "title": { "displayName": "Title", "purpose": "Títulos de tarjeta, pies de figura y fichas." },
+      "lead": { "displayName": "Lead", "purpose": "Frase gris bajo el h1 y bajo cada h2." },
+      "body": { "displayName": "Body", "purpose": "Texto corrido." },
+      "label": { "displayName": "Label", "purpose": "Leyendas, textos secundarios y el interior de data-ui." },
+      "mono": { "displayName": "Mono", "purpose": "Rutas, comandos y código." }
+    },
+    "shadows": [
+      { "name": "shadow-lg", "value": "0 2px 4px rgb(13 16 23 / 0.04), 0 24px 60px -12px rgb(13 16 23 / 0.18)", "purpose": "Ventanas de la app: demo del hero, editor de rol, capturas de Estado." },
+      { "name": "shadow-lg-dark", "value": "0 2px 4px rgb(0 0 0 / 0.3), 0 24px 60px -12px rgb(0 0 0 / 0.6)", "purpose": "La misma sombra en tema oscuro." },
+      { "name": "shadow-sm", "value": "0 1px 2px rgb(13 16 23 / 0.06), 0 2px 6px rgb(13 16 23 / 0.04)", "purpose": "Marcos de captura dentro de tarjetas y fichas de requisitos." },
+      { "name": "shadow-sm-dark", "value": "0 1px 2px rgb(0 0 0 / 0.4)", "purpose": "La misma sombra en tema oscuro." }
+    ],
+    "motion": [
+      { "name": "ease-out", "value": "cubic-bezier(0.22, 1, 0.36, 1)", "purpose": "Pulsación, entradas y aparición de piezas." },
+      { "name": "ease-in-out", "value": "cubic-bezier(0.76, 0, 0.24, 1)", "purpose": "Desplazamiento de la pista del tablero (650 ms)." },
+      { "name": "t-press", "value": "140ms", "purpose": "Botón que se hunde a scale(0.97)." },
+      { "name": "t-hover", "value": "180ms", "purpose": "Cambio de color al pasar el ratón." },
+      { "name": "reveal", "value": "opacity 600ms, transform 800ms, 80ms por índice, sube 20px", "purpose": "Entradas de [data-reveal], solo con la clase js y sin movimiento reducido." }
+    ],
+    "breakpoints": [
+      { "name": "xs", "value": "24rem" },
+      { "name": "sm", "value": "30rem" },
+      { "name": "md", "value": "48rem" },
+      { "name": "demo-side", "value": "60rem" },
+      { "name": "lg", "value": "64rem" },
+      { "name": "xl", "value": "72rem" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Botón principal",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "La acción principal en cobalto de acción.",
+      "html": "<a class=\"ds-button\" href=\"#\">Pedir acceso</a>",
+      "css": ".ds-button { display: inline-flex; align-items: center; justify-content: center; min-height: 3rem; padding: 0.75rem 1.5rem; border: 0; border-radius: var(--radius, 14px); background: var(--accent, #0031e6); color: var(--on-accent, #fff); font-family: var(--font-sans, Inter, sans-serif); font-weight: 650; text-decoration: none; cursor: pointer; transition: transform 140ms cubic-bezier(0.22, 1, 0.36, 1), background-color 180ms ease; } .ds-button:hover { background: var(--accent-hover, #0028bd); } .ds-button:active { transform: scale(0.97); } .ds-button:focus-visible { outline: 3px solid var(--accent, #0031e6); outline-offset: 3px; }"
+    },
+    {
+      "name": "Botón secundario",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Acción secundaria con contorno interior de 2 px.",
+      "html": "<a class=\"ds-button-secondary\" href=\"#\">Ver cómo funciona</a>",
+      "css": ".ds-button-secondary { display: inline-flex; align-items: center; justify-content: center; min-height: 3rem; padding: 0.75rem 1.5rem; border: 0; border-radius: var(--radius, 14px); background: var(--bg, #fff); color: var(--ink, #0d1017); box-shadow: inset 0 0 0 2px var(--border, #e3e6eb); font-family: var(--font-sans, Inter, sans-serif); font-weight: 650; text-decoration: none; cursor: pointer; transition: transform 140ms cubic-bezier(0.22, 1, 0.36, 1), background-color 180ms ease; } .ds-button-secondary:hover { background: var(--surface, #f1f4f6); } .ds-button-secondary:active { transform: scale(0.97); } .ds-button-secondary:focus-visible { outline: 3px solid var(--accent, #0031e6); outline-offset: 3px; }"
+    },
+    {
+      "name": "Etiqueta de rol",
+      "kind": "chip",
+      "refersTo": "tag-role",
+      "description": "Píldora del color de rol con el cuadrado del agente; nombra un rol.",
+      "html": "<span class=\"ds-tag ds-tone-lilac\">Backend</span> <span class=\"ds-tag ds-tone-orange\">Frontend</span> <span class=\"ds-tag ds-tone-green\">QA</span>",
+      "css": ".ds-tag { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.4rem 0.9rem 0.4rem 0.7rem; border-radius: 999px; background: var(--tone); color: var(--ink, #0d1017); font-family: var(--font-sans, Inter, sans-serif); font-weight: 700; white-space: nowrap; } .ds-tag::before { content: ''; width: 0.85em; height: 0.85em; background: var(--tone-ink); } .ds-tone-lilac { --tone: var(--lilac, #e0bffc); --tone-ink: var(--lilac-ink, #7909dd); } .ds-tone-orange { --tone: var(--orange, #fecd9f); --tone-ink: var(--orange-ink, #fe6403); } .ds-tone-green { --tone: var(--green, #c6fad8); --tone-ink: var(--green-ink, #04b61c); }"
+    },
+    {
+      "name": "Tarjeta de color",
+      "kind": "card",
+      "refersTo": "card-tone",
+      "description": "Tarjeta plana de fondo suave; el color va en el cuadrado antes del título.",
+      "html": "<div class=\"ds-card\"><h3>Contratas un rol</h3><p>Lo eliges de una plantilla y le das instrucciones.</p></div>",
+      "css": ".ds-card { --tone-soft: var(--lilac-soft, #f4eafe); --tone-ink: var(--lilac-ink, #7909dd); max-width: 24rem; padding: clamp(1.5rem, 1rem + 1.5vw, 2rem); border-radius: var(--radius-lg, 24px); background: var(--tone-soft); color: var(--ink, #0d1017); font-family: var(--font-sans, Inter, sans-serif); } .ds-card h3 { display: flex; align-items: center; gap: 0.6rem; margin: 0; font-size: clamp(1.25rem, 1.1rem + 0.5vw, 1.5rem); font-weight: 750; letter-spacing: -0.02em; line-height: 1.08; } .ds-card h3::before { content: ''; flex: none; width: 0.7em; height: 0.7em; background: var(--tone-ink); } .ds-card p { margin: 0.625rem 0 0; color: var(--muted, #5b6474); }"
+    },
+    {
+      "name": "Ventana de la app",
+      "kind": "card",
+      "refersTo": "window",
+      "description": "Marco blanco redondeado con sombra de ventana que contiene la app.",
+      "html": "<div class=\"ds-window\"><div class=\"ds-window-body\">storefront</div></div>",
+      "css": ".ds-window { overflow: hidden; border: 1px solid var(--border, #e3e6eb); border-radius: var(--radius-lg, 24px); background: var(--bg, #fff); box-shadow: var(--shadow-lg, 0 2px 4px rgb(13 16 23 / 0.04), 0 24px 60px -12px rgb(13 16 23 / 0.18)); } .ds-window-body { padding: 1rem 1.25rem; min-height: 8rem; font-family: var(--font-sans, Inter, sans-serif); font-size: 1.25rem; font-weight: 650; letter-spacing: -0.02em; color: var(--ink, #0d1017); }"
+    },
+    {
+      "name": "Tarjeta del tablero (data-ui)",
+      "kind": "custom",
+      "refersTo": "ui-button-primary",
+      "description": "Tarjeta de tarea de la app esperando aprobación, con sus acciones en la tarjeta.",
+      "html": "<div class=\"ds-ui-card\"><span class=\"ds-ui-chip\">Espera tu aprobación</span><p class=\"ds-ui-title\">Modo oscuro en el panel de administración</p><p class=\"ds-ui-meta\"><span>#6</span><span class=\"ds-ui-prio\">Media</span><span class=\"ds-ui-role\">Frontend<span class=\"ds-ui-agent\"></span></span></p><button class=\"ds-ui-btn ds-ui-primary\">Aprobar spec</button><button class=\"ds-ui-btn\">Pedir cambios</button></div>",
+      "css": ".ds-ui-card { display: grid; gap: 0.35rem; width: 15rem; padding: 0.55rem; border: 1px solid var(--brand, #2f5bea); border-radius: 10px; background: var(--bg, #fff); color: var(--ink, #0d1017); box-shadow: 0 8px 24px -8px rgb(47 91 234 / 0.35); font-family: var(--font-sans, Inter, sans-serif); font-size: 0.875rem; line-height: 1.35; } .ds-ui-chip { justify-self: start; padding: 0.1rem 0.5rem; border-radius: 999px; background: var(--brand, #2f5bea); color: var(--on-brand, #fff); font-size: 0.75rem; font-weight: 600; } .ds-ui-title { margin: 0; font-size: 0.8125rem; font-weight: 600; } .ds-ui-meta { display: flex; align-items: center; gap: 0.4rem; margin: 0; color: var(--muted, #5b6474); font-size: 0.75rem; font-variant-numeric: tabular-nums; } .ds-ui-prio { padding: 0.05rem 0.45rem; border-radius: 999px; background: #eff2f5; color: var(--ink, #0d1017); font-weight: 500; } .ds-ui-role { display: inline-flex; align-items: center; gap: 0.3rem; margin-left: auto; } .ds-ui-agent { width: 0.7rem; height: 0.7rem; background: var(--brand, #2f5bea); } .ds-ui-btn { min-height: 1.875rem; padding: 0.3rem 0.6rem; border: 1px solid #d8dce3; border-radius: 6px; background: var(--bg, #fff); color: var(--ink, #0d1017); font: inherit; font-size: 0.8125rem; font-weight: 500; cursor: pointer; transition: transform 140ms cubic-bezier(0.22, 1, 0.36, 1), background-color 180ms ease; } .ds-ui-btn:hover { background: #f2f4f6; } .ds-ui-btn:active { transform: scale(0.97); } .ds-ui-btn:focus-visible { outline: 3px solid var(--accent, #0031e6); outline-offset: 3px; } .ds-ui-primary { border-color: var(--brand, #2f5bea); background: var(--brand, #2f5bea); color: var(--on-brand, #fff); } .ds-ui-primary:hover { background: color-mix(in srgb, var(--brand, #2f5bea) 86%, #0d1017); }"
+    },
+    {
+      "name": "Campo de la app (data-ui)",
+      "kind": "input",
+      "refersTo": "ui-field",
+      "description": "Campo de texto con las convenciones de la app, como en el editor de rol.",
+      "html": "<label class=\"ds-ui-label\" for=\"ds-role\">Nombre</label><input id=\"ds-role\" class=\"ds-ui-field\" type=\"text\" value=\"Desarrollador frontend\">",
+      "css": ".ds-ui-label { display: block; margin-bottom: 0.375rem; font-family: var(--font-sans, Inter, sans-serif); font-size: 0.875rem; font-weight: 500; color: var(--ink, #0d1017); } .ds-ui-field { display: block; width: 100%; max-width: 24rem; height: 2.25rem; padding: 0.5rem 0.75rem; border: 1px solid var(--field-border, #7c8494); border-radius: 6px; background: var(--bg, #fff); color: var(--ink, #0d1017); font-family: var(--font-sans, Inter, sans-serif); font-size: 0.875rem; caret-color: var(--accent, #0031e6); } .ds-ui-field:focus-visible { outline: 3px solid var(--accent, #0031e6); outline-offset: 3px; }"
+    },
+    {
+      "name": "Cabecera",
+      "kind": "nav",
+      "refersTo": "button-primary",
+      "description": "Marca, enlaces grises centrados, idioma y Pedir acceso.",
+      "html": "<header class=\"ds-nav\"><span class=\"ds-nav-brand\"><svg viewBox=\"0 0 24 32\" aria-hidden=\"true\"><g fill=\"currentColor\"><circle cx=\"4\" cy=\"4\" r=\"3.6\"/><circle cx=\"4\" cy=\"12\" r=\"3.6\"/><circle cx=\"4\" cy=\"20\" r=\"3.6\"/><circle cx=\"12\" cy=\"28\" r=\"3.6\"/><circle cx=\"20\" cy=\"12\" r=\"3.6\"/><circle cx=\"20\" cy=\"20\" r=\"3.6\"/></g><rect x=\"16.4\" y=\"0.4\" width=\"7.2\" height=\"7.2\" fill=\"#0031e6\"/></svg>Understaffed</span><nav class=\"ds-nav-links\"><a href=\"#\">Cómo funciona</a><a href=\"#\">Estado</a><a href=\"#\">Roles</a><a href=\"#\">Requisitos</a></nav><span class=\"ds-nav-end\"><a href=\"#\">English</a><a class=\"ds-nav-cta\" href=\"#\">Pedir acceso</a></span></header>",
+      "css": ".ds-nav { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 1rem; min-height: 4.5rem; padding-inline: 1.5rem; font-family: var(--font-sans, Inter, sans-serif); color: var(--ink, #0d1017); } .ds-nav-brand { display: flex; align-items: center; gap: 0.625rem; font-size: 1.4rem; font-weight: 750; letter-spacing: -0.03em; } .ds-nav-brand svg { height: 2rem; width: auto; } .ds-nav-links { display: flex; gap: 2.25rem; } .ds-nav a { color: var(--muted, #5b6474); font-size: 1.0625rem; font-weight: 500; text-decoration: none; transition: color 180ms ease; } .ds-nav a:hover { color: var(--ink, #0d1017); } .ds-nav a:focus-visible { outline: 3px solid var(--accent, #0031e6); outline-offset: 3px; } .ds-nav-end { justify-self: end; display: flex; align-items: center; gap: 1.75rem; } .ds-nav .ds-nav-cta { display: inline-flex; align-items: center; min-height: 2.75rem; padding: 0.5rem 1.125rem; border-radius: var(--radius, 14px); background: var(--accent, #0031e6); color: var(--on-accent, #fff); font-size: 1rem; font-weight: 650; } .ds-nav .ds-nav-cta:hover { background: var(--accent-hover, #0028bd); color: var(--on-accent, #fff); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "El tablero a la vista",
+    "overview": "La web es la portada de un producto SaaS en la línea de Craft, Notion, Dub y monday.com: fondo blanco, mucho aire, titulares de Inter muy pesada y centrados, y el producto enseñado a lo grande dentro de ventanas blancas redondeadas con sombra suave. No describe el producto, lo demuestra. En el hero, el tablero de la app es interactivo: la tarea #6 espera tu aprobación en Backlog y solo avanza cuando el visitante pulsa. (El contrato de dirección habla de la tarea #4; en el build la #4 está quieta en «En revisión» con «Espera tu revisión» y la tarea interactiva es la #6.)\n\nEl color es doble y está repartido con intención. El cobalto (`accent`) es la acción: botones principales, foco, selección, la banda de la lista de espera. Los cinco colores de rol (lila, naranja, verde, rosa y amarillo) son la parte amable y colorida: etiquetas de rol en forma de píldora con su cuadrado de agente, y tarjetas de fondo suave. El cuadrado viene de la marca (siete puestos en U: seis círculos son personas y el cuadrado es el agente) y es el motivo gráfico que se repite en todo el sistema.\n\nHay dos lenguajes en la página. Fuera de los fragmentos de interfaz rige el lenguaje de marketing: esquinas de 14 a 24 px, botones grandes, colores de rol. Dentro de los fragmentos marcados con `data-ui` rigen las convenciones de la app: su cobalto propio (`brand`), radios pequeños (6 a 12 px), bordes de 1 px, sus textos reales y sus datos de demostración (proyecto storefront). La densidad general es baja y la página sigue completa sin JavaScript.",
+    "keyCharacteristics": [
+      "Hero centrado con titular en dos líneas, frase gris, dos botones y la ventana de la app debajo, casi a todo el ancho y cortada por el borde inferior.",
+      "Cobalto para la acción; cinco colores de rol para etiquetas y tarjetas.",
+      "El cuadrado del agente como marcador: en la etiqueta, antes del título de tarjeta, en las viñetas y en los pies de figura.",
+      "Capturas reales de la app, en el idioma y el tema de la página.",
+      "Tema claro y oscuro por `prefers-color-scheme`, sin conmutador.",
+      "Las entradas y la demostración solo mejoran una página que ya está completa."
+    ],
+    "rules": [
+      { "name": "La regla de las dos voces", "body": "El cobalto de acción pide algo al visitante; los colores de rol nombran o agrupan. Un color de rol nunca es un botón, y el cobalto nunca es el fondo de una tarjeta de contenido.", "section": "colors" },
+      { "name": "La regla del cobalto propio", "body": "Dentro de `data-ui` el azul es `brand`, nunca `accent`. Así un fragmento de la app se ve igual que en la app.", "section": "colors" },
+      { "name": "La regla del trío", "body": "Un color de rol nunca se usa suelto: tono, tinta y suave van juntos por su clase `tone-*`.", "section": "colors" },
+      { "name": "La regla del peso", "body": "Los titulares de marketing nunca bajan de 750. Los títulos dentro de `data-ui` usan los pesos de la app (600 y 650), no los de la web.", "section": "typography" },
+      { "name": "La regla de la monoespaciada", "body": "JetBrains Mono solo aparece en rutas, comandos y código, nunca como tono decorativo.", "section": "typography" },
+      { "name": "La regla de la tarjeta plana", "body": "Una tarjeta de color nunca lleva sombra; la sombra es para lo que enseña la app.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do pon la acción principal en cobalto de acción (`accent`) y las secundarias con el contorno interior de 2 px.",
+      "Do aplica los colores de rol con su clase `tone-*`, que define tono, tinta y suave a la vez.",
+      "Do marca con el cuadrado del agente: dentro de la píldora para nombrar un rol, y delante del título o como viñeta en una tarjeta.",
+      "Do enseña el producto con capturas reales en el idioma y el tema de la página, a través de `Shot`. Si una afirmación necesita un detalle, recorta la captura completa en las cuatro variantes y ajusta el marco a la proporción del recorte.",
+      "Do marca con `data-ui` todo fragmento que imite la app y usa dentro sus convenciones: `brand`, radios de 6 a 12 px, bordes de 1 px y sus textos y datos reales.",
+      "Do haz que cada mejora con JavaScript dependa de la clase `js`, con respaldo escrito y respeto a `prefers-reduced-motion`.",
+      "Do centra los encabezados de sección y mantén los h2 en 800."
+    ],
+    "donts": [
+      "Don't pintes con `accent` fondos, bordes o píldoras dentro de un fragmento `data-ui`, ni uses `brand` fuera de él; el contorno de foco global es la única excepción.",
+      "Don't amplíes una captura con CSS para destacar un detalle; usa un recorte rasterizado.",
+      "Don't pongas sombra a una tarjeta de color; la sombra es de las ventanas, los marcos y las fichas.",
+      "Don't redondees el cuadrado del agente ni lo cambies por otra forma o un icono.",
+      "Don't pongas una píldora de color sobre el título de una tarjeta a modo de antetítulo; en las tarjetas, el color va en el cuadrado.",
+      "Don't escondas contenido a la espera de un script: sin JavaScript la página tiene que estar completa.",
+      "Don't inventes datos de demostración; los de la app son el proyecto storefront, el grupo «Tienda online» y las cuentas @example.com."
+    ]
+  }
+}

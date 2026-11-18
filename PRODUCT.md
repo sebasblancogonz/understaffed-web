@@ -141,15 +141,25 @@ hay enlace de descarga público.
 
 Estos compromisos vienen del PRODUCT.md de la app.
 
-**Decisión para la web (2026-11-18):** el usuario eligió rediseñar la web con taste-skill y dejar en
-ella el estándar visual de la categoría. La app lo mantiene. En la web siguen fijos el nombre, la
-marca, el cobalto como único color saturado, la voz y el tema claro y oscuro.
+**Decisión para la web (2026-11-18, sustituye a la de la versión con taste-skill):** la web se
+inspira en las webs de producto de Craft (craft.do), Notion, Dub (dub.co) y monday.com, y su
+listón de acabado es el de esas webs. Eso significa:
+
+- Hero centrado con un titular grande y el producto enseñado a lo grande en una ventana.
+- Bloques de funciones con imágenes del producto.
+- Esquinas redondeadas y un tono amable.
+- Colorido, al estilo de monday y Craft: varios colores vivos y suaves, con el cobalto como color
+  principal.
+
+En el hero va la demostración interactiva del tablero. Siguen fijos el nombre, la marca, la voz y
+el tema claro y oscuro. La app mantiene su estándar sobrio.
 
 - **Nombre:** Understaffed. Es lo único fijo de la identidad.
 - **Voz:** neutra y técnica, de herramienta profesional. El nombre no se explota como chiste y no
   se usa jerga de oficina.
 - **Nivel:** la app sigue el estándar de su categoría, sin ironía ni rarezas, y tiene que poder
-  ponerse junto a Linear, GitHub Projects y Height o Plane. La web no (ver la decisión de arriba).
+  ponerse junto a Linear, GitHub Projects y Height o Plane. La web sigue sus propias referencias
+  (ver la decisión de arriba).
 - **Identidad:**
   - La marca son siete puntos en forma de U: seis círculos son personas y el cuadrado es el
     agente.

@@ -1,4 +1,6 @@
 ---
+import Mark from '../ui/Mark.astro';
+import { paths, type Lang } from '../../config';
 import type { Dict } from '../../i18n/types';
 
 interface Props {
@@ -6,61 +8,88 @@ interface Props {
 }
 const { t } = Astro.props;
 const { footer } = t;
+const other: Lang = t.lang === 'es' ? 'en' : 'es';
 ---
 
-<!-- Una sola línea tranquila tras un tramo de fondo vacío: qué es, los enlaces y el año. -->
 <footer class="footer">
-  <div class="wrap line">
-    <p class="what">{footer.text}</p>
-    <nav aria-label={footer.navLabel}>
-      <ul>
-        {
-          footer.nav.map((item) => (
-            <li>
-              <a class="link" href={`#${item.id}`}>
-                {item.label}
-              </a>
-            </li>
-          ))
-        }
-      </ul>
-    </nav>
-    <p class="year">{footer.year}</p>
+  <div class="wrap">
+    <div class="grid">
+      <div class="brand">
+        <p class="logo"><Mark /><span>Understaffed</span></p>
+        <p class="text">{footer.text}</p>
+      </div>
+      <nav aria-label={footer.productLabel}>
+        <p class="label">{footer.productLabel}</p>
+        <ul>
+          {
+            t.header.nav.map((item) => (
+              <li>
+                <a href={`#${item.id}`}>{item.label}</a>
+              </li>
+            ))
+          }
+          <li><a href={`#${t.waitlist.id}`}>{t.header.cta}</a></li>
+        </ul>
+      </nav>
+      <div>
+        <p class="label">{footer.languageLabel}</p>
+        <ul>
+          <li><a href={paths[other]} hreflang={other} lang={other}>{t.header.switchText}</a></li>
+        </ul>
+      </div>
+    </div>
+    <p class="copy">{footer.copyright}</p>
   </div>
 </footer>
 
 <style>
   .footer {
-    padding-top: 30svh;
-    padding-bottom: 1.875rem;
+    padding-block: 4rem 2.5rem;
+    border-top: 1px solid var(--border);
     font-size: var(--step-small);
   }
-  .line {
+  .grid {
+    display: grid;
+    gap: 2.5rem;
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.25rem;
+    font-weight: 750;
+    letter-spacing: -0.03em;
+  }
+  .text {
+    max-width: 22rem;
+    margin-top: 0.75rem;
+    color: var(--muted);
+  }
+  .label {
+    margin-bottom: 0.75rem;
+    font-weight: 650;
+  }
+  ul {
     display: grid;
     gap: 0.5rem;
   }
-  .what,
-  .year {
+  a {
+    color: var(--muted);
+    text-decoration: none;
+    transition: color var(--t-hover) ease;
+  }
+  @media (hover: hover) and (pointer: fine) {
+    a:hover {
+      color: var(--ink);
+    }
+  }
+  .copy {
+    margin-top: 3rem;
     color: var(--muted);
   }
-  ul {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.25rem 1.5rem;
-  }
-  a {
-    display: inline-block;
-    padding-block: 0.25rem;
-    color: var(--ink);
-  }
-  @media (min-width: 60rem) {
-    .line {
-      grid-template-columns: 1fr auto 1fr;
-      align-items: baseline;
-      gap: 2rem;
-    }
-    .year {
-      text-align: right;
+  @media (min-width: 48rem) {
+    .grid {
+      grid-template-columns: 2fr 1fr 1fr;
     }
   }
 </style>

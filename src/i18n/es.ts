@@ -15,26 +15,60 @@ export const es: Dict = {
     ogImageAlt: 'Understaffed, gestión de proyectos de software con agentes de IA',
   },
   skip: 'Saltar al contenido',
-  header: { home: 'Understaffed, inicio', switchText: 'English', switchLabel: 'Cambiar a inglés' },
+  header: {
+    home: 'Understaffed, inicio',
+    navLabel: 'Principal',
+    nav: [
+      { id: 'how', label: 'Cómo funciona' },
+      { id: 'status', label: 'Estado' },
+      { id: 'roles', label: 'Roles' },
+      { id: 'requirements', label: 'Requisitos' },
+    ],
+    cta: 'Pedir acceso',
+    switchText: 'English',
+    switchShort: 'EN',
+    switchLabel: 'Cambiar a inglés',
+  },
   hero: {
     // DRAFT
-    title: 'Tu equipo de agentes de IA',
+    title: ['Tu equipo de', 'agentes de IA'],
     // DRAFT
     lead: 'Contratas roles, les das tareas desde un tablero y nada llega a tu rama sin que apruebes la spec y después el código.',
     cta: 'Pedir acceso',
     // DRAFT
-    note: 'Lanza Claude Code, el CLI que ya tienes y ya pagas. No guarda claves.',
+    secondary: 'Ver cómo funciona',
+    // app (roles del proyecto de demostración y la plantilla Tester)
+    tags: [
+      { label: 'Backend', tone: 'lilac' },
+      { label: 'QA', tone: 'green' },
+      { label: 'Tester', tone: 'yellow' },
+      { label: 'Frontend', tone: 'orange' },
+      { label: 'Full-stack', tone: 'pink' },
+    ],
     demo: {
-      label: 'Demostración del tablero de Understaffed con la tarea #4',
+      label: 'Demostración del tablero de Understaffed con la tarea #6',
       // DRAFT
-      caption: 'Demostración con el proyecto de ejemplo storefront. La ejecución está simulada.',
+      caption: 'Demostración con el proyecto de ejemplo storefront. Pulsa las acciones de la tarea #6; la ejecución está simulada.',
+      // app
+      app: {
+        projects: 'Proyectos',
+        project: 'storefront',
+        tabs: ['Tablero', 'Equipo', 'Estado'],
+        path: 'E:\\dev\\storefront',
+        noAccount: 'Sin cuenta',
+        signIn: 'Entra en Ajustes',
+        send: 'Enviar',
+        receive: 'Recibir',
+        settings: 'Ajustes',
+        addTask: 'Añadir tarea',
+      },
       // app
       columns: ['Backlog', 'Por hacer', 'En curso', 'En revisión', 'Hecho'],
-      task: { num: '#4', title: 'Exportar pedidos a CSV', prio: 'Alta', role: 'Backend', total: 5 },
+      task: { num: '#6', title: 'Modo oscuro en el panel de administración', prio: 'Media', role: 'Frontend', total: 8 },
       others: [
         [
-          { num: '#6', title: 'Modo oscuro en el panel de administración', prio: 'Media', progress: '0/8', role: 'Frontend', state: 'awaiting' },
           { num: '#9', title: 'Búsqueda de productos con filtros', prio: 'Media', role: 'Frontend' },
+          { num: '#10', title: 'Pruebas de extremo a extremo del checkout', prio: 'Media', role: 'QA' },
           { num: '#11', title: 'Servir las imágenes de producto en WebP', prio: 'Baja' },
         ],
         [
@@ -42,10 +76,11 @@ export const es: Dict = {
           { num: '#8', title: 'Aviso por email de stock bajo', prio: 'Baja', progress: '0/2', role: 'Backend' },
         ],
         [{ num: '#5', title: 'Límite de intentos en el inicio de sesión', prio: 'Urgente', progress: '3/4', role: 'Backend', state: 'running' }],
-        [],
+        [{ num: '#4', title: 'Exportar pedidos a CSV', prio: 'Alta', progress: '5/5', role: 'Backend', state: 'awaitingReview' }],
         [
           { num: '#1', title: 'Paginación en el listado de pedidos', prio: 'Alta', progress: '4/4', role: 'Backend' },
           { num: '#2', title: 'Validar el email al registrarse', prio: 'Media', progress: '3/3', role: 'Backend' },
+          { num: '#3', title: 'Redondeo del IVA en el carrito', prio: 'Urgente', progress: '2/2', role: 'Backend' },
         ],
       ],
       chips: { awaiting: 'Espera tu aprobación', running: 'En marcha', awaitingReview: 'Espera tu revisión', integrating: 'Integrando' },
@@ -71,12 +106,12 @@ export const es: Dict = {
       },
       // app (textos del log); el hash 9c41e7a es de muestra, inventado para la demostración
       log: [
-        'Espacio de trabajo creado en la rama understaffed/exportar-pedidos-a-csv.',
+        'Espacio de trabajo creado en la rama understaffed/modo-oscuro-en-el-panel.',
         'Sesión iniciada',
         'Trabajo guardado en la rama de la tarea (9c41e7a).',
         'Terminó bien',
       ],
-      review: { files: '4 archivos · +70 −1', result: '12 min · 1,38 $', message: 'Hecho. Todas las tareas están marcadas y las pruebas pasan.' },
+      review: { files: '8 de 8 tareas hechas', result: '', message: '' },
       done: 'Integrada en main · Un commit',
       // DRAFT
       live: '{title}: {column}.',
@@ -93,78 +128,68 @@ export const es: Dict = {
   how: {
     id: 'how',
     // DRAFT
-    title: 'En tu repositorio',
-    one: {
-      // DRAFT
-      lead: 'Primero, anotas la tarea y su rol redacta la spec.',
-      label: 'Título de la tarea',
-      value: 'Modo oscuro en el panel de administración',
-      role: 'Frontend',
-      tree: 'openspec/changes/modo-oscuro-en-el-panel/\n├── proposal.md\n├── design.md\n├── tasks.md\n└── specs/admin-theme/spec.md',
-      shot: { file: 'aprobacion', alt: 'Spec de la tarea #6 con sus criterios de aceptación, esperando tu aprobación' },
-    },
-    two: {
-      // DRAFT
-      lead: 'Después, apruebas la spec y la ejecutas.',
-      buttons: ['Aprobar spec', 'Ejecutar'],
-      // app (README)
-      intro: 'Cada ejecución lanza Claude Code así (abreviado), en el espacio de trabajo de la tarea y con el encargo por la entrada estándar:',
-      command:
-        'claude -p --output-format stream-json --verbose\n       --permission-mode acceptEdits --permission-prompts none\n       --tools Read,Glob,Grep,Edit,Write,Agent,Skill\n       --append-system-prompt-file <instrucciones del rol>',
-    },
-    three: {
-      // DRAFT
-      lead: 'Al final, revisas el diff y apruebas el código.',
-      option: 'Un commit',
-      hint: 'Todo el trabajo de la tarea en un único commit sobre tu rama, con tus hooks y tu firma.',
-      button: 'Aprobar',
-      shot: { file: 'revision', alt: 'Revisión de la tarea #4 con el diff, el resultado de la ejecución y el último mensaje del rol' },
-    },
-  },
-  requirements: {
-    id: 'requirements',
+    title: 'Cada tarea pasa por ti dos veces',
     // DRAFT
-    title: 'Lo que ya tienes',
-    // DRAFT
-    text: 'Understaffed no instala git ni Claude Code, pero te explica cómo hacerlo cuando faltan.',
-    // DRAFT
-    tiles: [
-      { name: 'Claude Code', text: 'Instalado y con la sesión iniciada. La app lo lanza; no guarda claves.' },
-      { name: 'Git', text: '2.30 o posterior, para los espacios de trabajo de las tareas.' },
-      { name: 'OpenSpec', text: 'Va incluido en la app. Cada tarea es un cambio en tu repositorio.' },
-      { name: 'Windows', text: 'App de escritorio.' },
-      { name: 'macOS', text: 'App de escritorio.' },
-      { name: 'Tu configuración', text: 'Tu CLAUDE.md, tus hooks, tus subagentes y tus comandos, como en tu terminal.' },
+    lead: 'La spec, antes de que se escriba código. El código, antes de llegar a tu rama.',
+    cards: [
+      {
+        tone: 'lilac',
+        // DRAFT
+        title: 'Primero, la spec',
+        // DRAFT
+        text: 'Anotas la tarea y su rol redacta el cambio de OpenSpec en tu repositorio: propuesta, requisitos con escenarios, diseño y tareas. Lo apruebas o pides cambios.',
+        shot: { file: 'aprobacion-spec', alt: 'Spec de la tarea #6 con sus criterios de aceptación, esperando tu aprobación' },
+      },
+      {
+        tone: 'orange',
+        // DRAFT
+        title: 'Después, el trabajo',
+        // DRAFT
+        text: 'El rol trabaja en una rama propia con Claude Code, el CLI que ya tienes y ya pagas. Understaffed no guarda claves.',
+        // app (README), abreviado
+        code: {
+          label: 'Así lanza cada ejecución (abreviado):',
+          text: 'claude -p\n  --output-format stream-json\n  --permission-mode acceptEdits\n  --tools Read,Glob,Grep,Edit,\n          Write,Agent,Skill\n  --append-system-prompt-file\n      <instrucciones del rol>',
+        },
+      },
+      {
+        tone: 'green',
+        // DRAFT
+        title: 'Al final, el código',
+        // DRAFT
+        text: 'Revisas el diff y lo apruebas, lo devuelves con un comentario o lo descartas. Aprobar lo integra en tu rama en un commit, con tus hooks y tu firma.',
+        shot: { file: 'revision-acciones', alt: 'Revisión de la tarea #4 con los botones Descartar la implementación, Devolver y Aprobar, y el coste y el progreso de la ejecución' },
+      },
     ],
   },
   status: {
     id: 'status',
-    title: 'Estado',
     // DRAFT
-    intro: 'Lo que espera tu decisión en los tres repositorios de «Tienda online».',
-    // app (capturas de Estado)
-    rows: [
-      { repo: 'storefront', num: '#5', title: 'Límite de intentos en el inicio de sesión', role: 'Backend', fact: 'Ejecutar · 0:59', status: 'En marcha', kind: 'run', detail: ['Ejecutar · Backend · lleva 0:59', 'Especificar · Backend · Correcta · 3 min · 0,24 $'] },
-      { repo: 'storefront', num: '#4', title: 'Exportar pedidos a CSV', role: 'Backend', fact: '12 min · 1,38 $', status: 'Espera tu revisión', kind: 'decision', detail: ['Ejecutar · Backend · Correcta · 12 min · 1,38 $', 'Hecho. Todas las tareas están marcadas y las pruebas pasan.'] },
-      { repo: 'storefront', num: '#6', title: 'Modo oscuro en el panel de administración', role: 'Frontend', fact: '4 min · 0,31 $', status: 'Espera tu aprobación', kind: 'decision', detail: ['Especificar · Frontend · Correcta · 4 min · 0,31 $', 'La spec pasa la validación de OpenSpec.'] },
-      { repo: 'storefront-web', num: '#1', title: 'Galería de fotos en la ficha de producto', role: 'Frontend', fact: '5 min · 0,24 $', status: 'Espera tu aprobación', kind: 'decision', detail: ['Especificar · Frontend · Correcta · 5 min · 0,24 $', 'La spec pasa la validación de OpenSpec.'] },
-      { repo: 'storefront-web', num: '#2', title: 'Recordar el carrito entre visitas', role: 'Frontend', fact: '8 min · 0,92 $', status: 'Espera tu revisión', kind: 'decision', detail: ['Ejecutar · Frontend · Correcta · 8 min · 0,92 $', 'Especificar · Frontend · Correcta · 3 min · 0,19 $'] },
-      { repo: 'storefront-admin', num: '#2', title: 'Registrar devoluciones desde el pedido', role: 'Full-stack', fact: '6 min · 0,31 $', status: 'Espera tu aprobación', kind: 'decision', detail: ['Especificar · Full-stack · Correcta · 6 min · 0,31 $', 'La spec pasa la validación de OpenSpec.'] },
-      { repo: 'storefront-admin', num: '#1', title: 'Filtrar pedidos por estado', role: 'Frontend', fact: 'main · 47143e3', status: 'Integrada', kind: 'done', detail: ['Integrada en main · 47143e3 · Un commit', 'Ejecutar · Frontend · Correcta · 8 min · 0,58 $'] },
-      { repo: 'storefront', num: '#3', title: 'Redondeo del IVA en el carrito', role: 'Backend', fact: 'main · 6e333ea', status: 'Integrada', kind: 'done', detail: ['Integrada en main · 6e333ea · Un commit', 'Ejecutar · Backend · Correcta · 5 min · 0,41 $'] },
-      { repo: 'storefront', num: '#2', title: 'Validar el email al registrarse', role: 'Backend', fact: 'main · 5a1d035', status: 'Integrada', kind: 'done', detail: ['Integrada en main · 5a1d035 · Un commit', 'Ejecutar · Backend · Correcta · 7 min · 0,52 $'] },
-    ],
-    open: 'Ver el detalle de',
+    title: 'Lo que espera tu decisión, de un vistazo',
+    // DRAFT
+    lead: 'La vista Estado reúne lo que espera tu aprobación, lo que está en marcha, la actividad y el coste por rol. En un grupo, el de todos sus repositorios.',
+    // app
     cost: 'Coste que informa el proveedor; con suscripción es una estimación.',
     shots: [
-      { file: 'grupos', alt: 'Estado conjunto del grupo Tienda online, con cinco tareas que esperan tu decisión y la actividad reciente', caption: 'El Estado conjunto de «Tienda online».' },
-      { file: 'estado', alt: 'Estado del proyecto storefront, con lo que espera tu decisión, la actividad reciente y el coste por rol', caption: 'El Estado de storefront, con el coste por rol.' },
+      // DRAFT (títulos y pies)
+      { file: 'grupos', alt: 'Estado conjunto del grupo Tienda online, con cinco tareas que esperan tu decisión y la actividad reciente', title: 'Espera tu decisión y En marcha', caption: 'Las specs y el código que esperan tu aprobación en los tres repositorios de «Tienda online», y lo que se está ejecutando, qué rol lo hace y desde cuándo.' },
+      { file: 'estado-coste', alt: 'Coste y tiempo de los últimos 30 días por rol en el proyecto storefront: Backend, Full-stack y Frontend', title: 'Coste por rol', caption: 'Lo que han costado las ejecuciones de cada rol en los últimos 30 días.', strip: true },
     ],
   },
   roles: {
     id: 'roles',
     // DRAFT
-    title: 'Contrata los roles',
+    title: 'Contrata los roles que necesitas',
+    // DRAFT
+    lead: 'Empieza por una plantilla o por un rol en blanco. Cada rol lleva sus instrucciones, su modelo y su permiso para ejecutar comandos.',
+    // app (catálogo de plantillas: nombre y primera frase de sus instrucciones)
+    templates: [
+      { name: 'Analista de producto', text: 'Tu fuerte es entender el problema antes que la solución: qué necesita el usuario, por qué y cómo se sabrá que está resuelto.', tone: 'green' },
+      { name: 'Desarrollador full-stack', text: 'Trabajas de punta a punta: datos, lógica, interfaz y pruebas.', tone: 'pink' },
+      { name: 'Desarrollador frontend', text: 'Construyes interfaces claras, accesibles y coherentes con el sistema de diseño del proyecto.', tone: 'orange' },
+      { name: 'Desarrollador backend', text: 'Te ocupas de los datos, las API, la lógica de negocio y su fiabilidad.', tone: 'lilac' },
+      { name: 'Tester', text: 'Tu objetivo es que lo que se entrega haga lo que dice la spec, también en los casos límite.', tone: 'yellow' },
+    ],
     // app (RoleForm, locales y catálogo de plantillas)
     dialog: {
       title: 'Contratar: Desarrollador backend',
@@ -186,68 +211,72 @@ export const es: Dict = {
       back: 'Plantillas',
       confirm: 'Contratar',
     },
-    // DRAFT
-    notes: [
-      { part: 'name', title: 'Nombre', text: 'Así aparece en el tablero, junto al cuadrado del agente, en las tareas que le asignas.' },
-      { part: 'prompt', title: 'Instrucciones', text: 'Cómo trabaja el rol: en qué se fija, qué prioriza y qué evita. Hasta 8000 caracteres.' },
-      { part: 'model', title: 'Modelo', text: 'Vacío usa el modelo por defecto de Claude Code. También vale un alias, como opus o sonnet.' },
-      { part: 'bash', title: 'Ejecutar comandos', text: 'Para instalar dependencias o pasar los tests en su espacio de trabajo. Especificar nunca ejecuta comandos.' },
-      { part: 'tools', title: 'Herramientas', text: 'Plugins, skills, servidores MCP y la web se activan por proyecto o grupo. Lo que no actives se deniega.' },
-      { part: 'templates', title: 'Plantillas', text: 'Analista de producto, Desarrollador full-stack, frontend o backend, y Tester. Editar el rol no cambia la plantilla.' },
-    ],
   },
   local: {
     id: 'local',
     // DRAFT
-    title: ['Primero, en local.', 'Después, en equipo.'],
-    cta: 'Pedir acceso',
-    tabsLabel: 'Cómo se usa Understaffed',
+    title: 'Primero en tu ordenador. Después, con tu equipo.',
     // DRAFT
-    tabs: [
+    lead: 'La cuenta es opcional: solo la necesitas para sincronizar tus ordenadores y colaborar con otras personas.',
+    // DRAFT
+    cards: [
       {
-        id: 'local-sin-cuenta',
         title: 'Sin cuenta',
         sub: 'Este ordenador',
-        bands: [
-          { label: 'Red', title: 'Ninguna petición', text: 'Sin una cuenta abierta, la app no se conecta con ningún servidor.' },
-          { label: 'Código', title: 'Una rama por tarea', text: 'Cada rol trabaja en un espacio de trabajo propio; aprobar lleva el trabajo a tu rama en un commit.', who: 'Tus roles', marks: ['agent', 'agent'] },
-          { label: 'Decisión', title: 'Siempre tuya', text: 'Nada se ejecuta sin una acción tuya: especificar, ejecutar y aprobar.', who: 'Tú', marks: ['person'] },
+        tone: 'yellow',
+        points: [
+          'Sin una cuenta abierta, la app no se conecta con ningún servidor.',
+          'Cada rol trabaja en una rama propia; aprobar lleva el trabajo a tu rama en un commit.',
         ],
-        media: { kind: 'video', alt: 'El tablero de storefront en Understaffed, sin cuenta, mientras las tareas avanzan' },
+        media: { kind: 'shot', shot: { file: 'tablero-sin-cuenta', alt: 'Barra lateral del tablero de Understaffed sin cuenta: Sin cuenta, Entra en Ajustes, Enviar y Recibir' } },
       },
       {
-        id: 'local-con-cuenta',
         title: 'Con cuenta',
         sub: 'Tus ordenadores',
-        bands: [
-          { label: 'Entrar', title: 'Email y un código', text: 'Te llega un código por correo. Sin contraseñas ni tokens que copiar.', who: 'Marta Ruiz', marks: ['person'] },
-          { label: 'Enviar', title: 'Todo el estado', text: 'Tareas, roles, ajustes y las ramas de las tareas, de un ordenador a otro.', who: 'Portátil de Marta' },
-          { label: 'Recibir', title: 'Solo lo que choca', text: 'La fusión es por elemento: solo te pregunta por lo que cambió en los dos lados.', who: 'Sobremesa de la oficina' },
+        tone: 'pink',
+        points: [
+          'Entras con tu email y un código que te llega por correo, sin contraseñas.',
+          'Enviar y Recibir llevan todo el estado de un ordenador a otro, también las ramas de las tareas, y solo te pregunta por lo que choca.',
         ],
-        media: { kind: 'shot', shot: { file: 'sincronizacion', alt: 'Ajustes de la cuenta de Understaffed con los ordenadores donde está abierta' } },
+        media: { kind: 'shot', shot: { file: 'sincronizacion-ordenadores', alt: 'Tus ordenadores en los ajustes de la cuenta: Portátil de Marta, este ordenador, y Sobremesa de la oficina, con el nombre con que se ve este ordenador en el otro' } },
       },
       {
-        id: 'local-en-equipo',
         title: 'En equipo',
         sub: 'Personas y agentes',
-        bands: [
-          { label: 'Compartir', title: 'Un proyecto o un grupo', text: 'Invitas por email; la invitación espera hasta que la otra persona la acepta.', who: 'Marta Ruiz', marks: ['person'] },
-          { label: 'En vivo', title: 'El mismo tablero', text: 'Lo que cambia llega a los demás mientras la app está abierta.', who: 'Marta y Javier', marks: ['person', 'person'] },
-          { label: 'Tomada', title: 'Una tarea, una persona', text: 'Antes de especificar, ejecutar o aprobar, la app toma la tarea: nunca la trabajan dos a la vez.', who: 'Javier Soto', marks: ['person', 'agent'] },
-          { label: 'Servidor', title: 'El tuyo', text: 'La cuenta funciona con un servidor propio.', who: 'sync.example.com' },
+        tone: 'lilac',
+        points: [
+          'Compartes un proyecto o un grupo e invitas por email.',
+          'El tablero se sincroniza en vivo y una tarea nunca la trabajan dos personas a la vez. La cuenta funciona con un servidor propio.',
         ],
-        media: { kind: 'shot', shot: { file: 'colaboracion', alt: 'Tablero compartido de Understaffed con las personas del equipo' } },
+        media: { kind: 'shot', shot: { file: 'colaboracion-equipo', alt: 'Backlog compartido: la tarea #9 en marcha en el ordenador de Javier Soto y la #10 especificándose para Marta Ruiz' } },
       },
+    ],
+  },
+  requirements: {
+    id: 'requirements',
+    // DRAFT
+    title: 'Funciona con lo que ya usas',
+    // DRAFT
+    text: 'Understaffed no instala git ni Claude Code, pero te explica cómo hacerlo cuando faltan.',
+    // DRAFT
+    tiles: [
+      { name: 'Claude Code', text: 'Instalado y con la sesión iniciada.' },
+      { name: 'Git', text: '2.30 o posterior.' },
+      { name: 'OpenSpec', text: 'Va incluido en la app.' },
+      { name: 'Windows', text: 'App de escritorio.' },
+      { name: 'macOS', text: 'App de escritorio.' },
     ],
   },
   waitlist: {
     id: 'waitlist',
-    title: 'Lista de espera',
     // DRAFT
-    before: 'Mi email es',
+    title: 'Pide acceso anticipado',
+    // DRAFT
+    lead: 'Understaffed está en acceso anticipado para Windows y macOS. Déjanos tu email y te avisaremos cuando puedas instalarlo.',
+    label: 'Tu email',
     submit: 'Pedir acceso',
     // DRAFT
-    after: 'Te escribiremos cuando puedas instalar Understaffed. Apuntarte no crea una cuenta.',
+    after: 'Apuntarte no crea una cuenta en Understaffed.',
     todo: 'TODO: destino de la lista de espera pendiente',
     privacyTodo: 'TODO: aviso de privacidad pendiente',
     // DRAFT
@@ -257,16 +286,10 @@ export const es: Dict = {
   },
   footer: {
     // DRAFT
-    text: 'Understaffed. Proyectos de software con agentes de IA.',
-    navLabel: 'Secciones',
-    nav: [
-      { id: 'how', label: 'Cómo funciona' },
-      { id: 'requirements', label: 'Requisitos' },
-      { id: 'status', label: 'Estado' },
-      { id: 'roles', label: 'Roles' },
-      { id: 'waitlist', label: 'Pedir acceso' },
-    ],
-    year: '2026',
+    text: 'Proyectos de software con un equipo de agentes de IA, y siempre con tu aprobación.',
+    productLabel: 'Producto',
+    languageLabel: 'Idioma',
+    copyright: '© 2026 Understaffed',
   },
   placeholder: { label: 'TODO: captura pendiente' },
 };

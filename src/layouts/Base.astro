@@ -50,6 +50,14 @@ const ogImage = new URL(config.ogImagePath, site).href;
     <meta name="twitter:image:alt" content={t.meta.ogImageAlt} />
   </head>
   <body>
+    <!--
+      THESIS: la portada de un producto SaaS como las de Craft, Notion, Dub y monday.com, colorida y amable, cuyo producto se demuestra en vez de describirse: la tarea #6 solo avanza cuando el visitante aprueba, y la #4 espera su revisión. Rechaza el hero de texto sin producto.
+      OWN-WORLD: fondo blanco, tinta #0d1017, cobalto #0031e6 en la acción; cinco colores de rol (lila, naranja, verde, rosa y amarillo) en etiquetas con su cuadrado de agente y en tarjetas suaves; Inter muy pesada en titulares; esquinas de 10, 14 y 24 px (32 en la banda de la lista de espera) y sombras suaves; las ventanas blancas de la app enseñan el producto.
+      STORY: el visitante entiende que contrata roles de IA, ve que nada llega a su rama sin aprobar la spec y el código, lo prueba en el tablero y pide acceso.
+      FIRST VIEWPORT: barra con marca, cuatro enlaces, English y «Pedir acceso»; titular centrado en dos líneas a unos 80 px, frase gris, «Pedir acceso» en cobalto y «Ver cómo funciona» con contorno; cinco etiquetas de rol giradas alrededor; debajo, la ventana de la app a casi todo el ancho, cortada por el borde inferior.
+      FORM: canon de las referencias del usuario (Craft, Notion, Dub y monday.com; PRODUCT.md, decisión del 2026-11-18), que sustituyen a la tirada de dirección; comp aprobado .impeccable/mocks/comp-a-centrado.png, el A de tres, aprobado el 2026-11-18. Sin clave de tirada.
+      FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance
+    -->
     <a class="skip" href="#main">{t.skip}</a>
     <slot name="header" />
     <main id="main" tabindex="-1">
