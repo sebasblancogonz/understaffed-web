@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-11-18T18:00:00Z",
+  "generatedAt": "2026-11-18T21:30:57Z",
   "title": "Design System: Understaffed (web)",
   "extensions": {
     "colorMeta": {
@@ -30,7 +30,7 @@
       "mono": { "displayName": "Mono", "purpose": "Rutas, comandos y código." }
     },
     "shadows": [
-      { "name": "shadow-lg", "value": "0 2px 4px rgb(13 16 23 / 0.04), 0 24px 60px -12px rgb(13 16 23 / 0.18)", "purpose": "Ventanas de la app: demo del hero, editor de rol, capturas de Estado." },
+      { "name": "shadow-lg", "value": "0 2px 4px rgb(13 16 23 / 0.04), 0 24px 60px -12px rgb(13 16 23 / 0.18)", "purpose": "Ventanas de la app: demo del hero, diálogo de contratar un rol, recortes de Estado." },
       { "name": "shadow-lg-dark", "value": "0 2px 4px rgb(0 0 0 / 0.3), 0 24px 60px -12px rgb(0 0 0 / 0.6)", "purpose": "La misma sombra en tema oscuro." },
       { "name": "shadow-sm", "value": "0 1px 2px rgb(13 16 23 / 0.06), 0 2px 6px rgb(13 16 23 / 0.04)", "purpose": "Marcos de captura dentro de tarjetas y fichas de requisitos." },
       { "name": "shadow-sm-dark", "value": "0 1px 2px rgb(0 0 0 / 0.4)", "purpose": "La misma sombra en tema oscuro." }
@@ -104,7 +104,7 @@
       "name": "Campo de la app (data-ui)",
       "kind": "input",
       "refersTo": "ui-field",
-      "description": "Campo de texto con las convenciones de la app, como en el editor de rol.",
+      "description": "Campo de texto con las convenciones de la app, como en el diálogo de contratar un rol.",
       "html": "<label class=\"ds-ui-label\" for=\"ds-role\">Nombre</label><input id=\"ds-role\" class=\"ds-ui-field\" type=\"text\" value=\"Desarrollador frontend\">",
       "css": ".ds-ui-label { display: block; margin-bottom: 0.375rem; font-family: var(--font-sans, Inter, sans-serif); font-size: 0.875rem; font-weight: 500; color: var(--ink, #0d1017); } .ds-ui-field { display: block; width: 100%; max-width: 24rem; height: 2.25rem; padding: 0.5rem 0.75rem; border: 1px solid var(--field-border, #7c8494); border-radius: 6px; background: var(--bg, #fff); color: var(--ink, #0d1017); font-family: var(--font-sans, Inter, sans-serif); font-size: 0.875rem; caret-color: var(--accent, #0031e6); } .ds-ui-field:focus-visible { outline: 3px solid var(--accent, #0031e6); outline-offset: 3px; }"
     },

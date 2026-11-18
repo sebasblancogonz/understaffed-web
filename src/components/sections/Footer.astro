@@ -83,6 +83,15 @@ const other: Lang = t.lang === 'es' ? 'en' : 'es';
       color: var(--ink);
     }
   }
+  @media (pointer: coarse) {
+    ul {
+      gap: 0;
+    }
+    ul a {
+      display: inline-block;
+      padding-block: 0.75rem;
+    }
+  }
   .copy {
     margin-top: 3rem;
     color: var(--muted);

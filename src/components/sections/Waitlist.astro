@@ -199,9 +199,18 @@ const strings = {
   :global(html:not(.js)) .nojs {
     display: block;
   }
-  /* Etiquetas de roles flotando en las esquinas de la banda. */
+  /* Etiquetas de roles flotando en las esquinas de la banda. Como la banda, no cambian con el tema. */
   .tags {
     display: none;
+    --lilac: #ecdcff;
+    --lilac-ink: #b48af5;
+    --orange: #ffe3c8;
+    --orange-ink: #f6a15e;
+    --green: #d3f5df;
+    --green-ink: #5cc98a;
+    --yellow: #fff0bf;
+    --yellow-ink: #efbf3f;
+    --ink: var(--band-ink);
   }
   @media (min-width: 64rem) {
     .row {

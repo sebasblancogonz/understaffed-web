@@ -58,6 +58,11 @@ colors:
   yellow-ink-dark: "#ffd56b"
   yellow-soft-dark: "#211d12"
   stage-dark: "#1a2140"
+  danger: "#d92d20"
+  danger-dark: "#f97066"
+  ui-input: "#d8dce3"
+  ui-input-dark: "#303847"
+  ui-chip-dark: "#2b3342"
   band: "#0031e6"
   on-band: "#ffffff"
   on-band-muted: "#dfe6ff"
@@ -274,16 +279,16 @@ La regla base de h1, h2 y h3 es Bricolage 700 con -0.01em, pero cada titular de 
 - **Rejillas:** el contenido arranca `clamp(2.5rem, 1.5rem + 3vw, 4rem)` por debajo del encabezado. Las rejillas de tarjetas separan sus elementos 1.25rem.
   - En móvil todo va en una columna.
   - Desde 64rem, Cómo funciona y LocalFirst pasan a tres columnas iguales.
-  - Desde 64rem, Roles reparte `1fr` y `27rem` entre las plantillas y el editor.
-  - Desde 64rem, Estado reparte `1.45fr` y `1fr` entre sus dos figuras.
-  - Requisitos usa dos columnas y pasa a cinco desde 48rem.
+  - Desde 64rem, Roles reparte `1fr` y `27rem` entre las plantillas y el diálogo de contratar.
+  - Desde 64rem, Estado reparte `1.45fr` y `1fr`: la lista «Espera tu decisión» a la izquierda, a toda la altura, y las franjas «En marcha» y «Coste por rol», una sobre otra, a su derecha. Por debajo van en una columna. En pantallas estrechas un recorte no se encoge hasta dejar de leerse: conserva un ancho mínimo (34rem la lista hasta 40rem de ventana, 42rem las franjas hasta 64rem) y su marco se desplaza de lado.
+  - Requisitos usa dos columnas y pasa a cuatro desde 48rem.
 - **Hero:** el titular, la frase y los botones van centrados. Las cinco etiquetas de rol forman una fila bajo los botones; desde 72rem flotan alrededor del titular, tres a la izquierda y dos a la derecha, giradas entre -9° y 3°. El bloque arranca `clamp(2.5rem, 1rem + 4vw, 5rem)` por debajo de la cabecera. La ventana del tablero va `clamp(3rem, 1.5rem + 4vw, 5.5rem)` por debajo de los botones, a todo el ancho del contenedor, sobre una franja `stage` que empieza `clamp(5rem, 3rem + 8vw, 12rem)` por debajo del borde superior de la demo, llega de lado a lado de la ventana del navegador y deja 2 a 3rem de franja bajo la ventana. El hero recorta lo que sobresale con `overflow: hidden`, así que no hay desplazamiento lateral.
 - **Demo del tablero:**
   - La barra lateral aparece desde 60rem.
   - La altura es fija: 25rem en móvil y 28rem desde 60rem.
   - Desde 72rem se ven las cinco columnas; por debajo, la pista se desplaza para seguir a la tarea.
-- **Cabecera:** a todo el ancho de la ventana, sin contenedor, con `margin` como relleno lateral. Desde 64rem, una rejilla `1fr auto 1fr` con la marca, los cuatro enlaces centrados, English y «Pedir acceso». Por debajo, los enlaces se ocultan.
-- **Ancho mínimo:** la página se lee desde 360 px. Por debajo de 30rem, los botones del hero ocupan todo el ancho y el enlace de idioma se acorta a partir de 24rem.
+- **Cabecera:** a todo el ancho de la ventana, sin contenedor, con `margin` como relleno lateral. Queda fija arriba (`position: sticky`) sobre fondo `bg`. Desde 64rem, una rejilla `1fr auto 1fr` con la marca, los cuatro enlaces centrados, English y «Pedir acceso». Por debajo quedan la marca, «Pedir acceso» y el botón del menú de secciones, que despliega los cuatro enlaces y el idioma.
+- **Ancho mínimo:** la página se lee desde 360 px. Por debajo de 30rem, los botones del hero ocupan todo el ancho.
 
 ## Elevation & Depth
 
@@ -325,19 +330,20 @@ Los botones son grandes píldoras firmes, y se hunden un poco al pulsarlos.
 
 ### Cards / Containers
 - **Tarjeta de color:** esquina `rounded.lg`, fondo `--tone-soft`, plana, relleno `clamp(1.5rem, 1rem + 1.5vw, 2rem)`. El título es un h3 en Bricolage precedido del círculo de 0.6em en `--tone-ink`, no de una etiqueta. Las tarjetas de LocalFirst siguen el mismo patrón que las de Cómo funciona: h3 con su círculo, una línea gris en 500 debajo y viñetas circulares de 0.5em. La imagen se ancla al pie con `margin-top: auto`, para que todas las tarjetas de una fila alineen sus capturas.
-- **Ventana:** borde de 1 px en `border`, esquina `rounded.lg`, fondo `bg` y sombra de ventana. Contiene la demo, el editor de rol y las capturas de Estado.
-- **Marco de captura:** esquina `rounded.md`, fondo `bg` y sombra de marco. Su proporción es la del recorte: 16:10 en Cómo funciona, 4:3 en LocalFirst y la natural (1159:186) en la franja del coste.
-- **Ficha de requisito:** borde de 1 px, esquina `rounded.md`, sombra de marco y texto centrado (título y una línea gris).
-- **Banda de la lista de espera:** cobalto fijo en los dos temas (`band`), texto blanco, contenido centrado, esquina de 32 px y cuatro etiquetas de rol en las esquinas desde 64rem.
+- **Ventana:** borde de 1 px en `border`, esquina `rounded.lg`, fondo `bg` y sombra de ventana. Contiene la demo, el diálogo de contratar un rol y los recortes de Estado.
+- **Marco de captura:** esquina `rounded.md`, fondo `bg` y sombra de marco. Su proporción es la del recorte: 16:10 en Cómo funciona, 4:3 en LocalFirst y la natural en los recortes de Estado (1220:844 la lista, 1190:84 la franja «En marcha» y 1159:186 la del coste).
+- **Ficha de requisito:** borde de 1 px, esquina `rounded.md`, sombra de marco y texto centrado (título y una línea gris). El título enlaza a la página de la herramienta cuando la hay, con un subrayado de 2 px en `border` que pasa a `accent` al pasar el ratón.
+- **Banda de la lista de espera:** cobalto fijo en los dos temas (`band`), texto blanco, contenido centrado, esquina de 32 px y cuatro etiquetas de rol en las esquinas desde 64rem, con sus colores claros también en el tema oscuro.
 
 ### Inputs / Fields
 - **Marketing (lista de espera):** campo blanco sin borde, de 3.5rem de alto y en píldora (`rounded.pill`). El foco es un contorno blanco de 3 px. El botón de envío, también en píldora y de 3.5rem, es tinta sobre la banda. Solo se deshabilita mientras envía: dice «Enviando…», pasa a tinta al 35 % con texto `on-band-muted` y conserva su ancho. El error va con texto bajo el campo, en `on-band-danger` y 600, y el campo lleva un contorno de 3 px del mismo color solo cuando el problema es lo escrito; en una columna, el error queda entre el campo y el botón. Al apuntarse, el título y la frase de la banda pasan a ser la confirmación y el formulario desaparece. Los enlaces de la banda van en blanco y subrayados, con foco de contorno blanco.
 - **Dentro de `data-ui`:**
   - Los campos llevan borde de 1 px en `field-border` y esquina `rounded.ui`, con 2.25rem de alto y letra de 0.875rem.
   - El interruptor es una píldora de 2.25 × 1.25rem que pasa a `brand` al activarse.
+  - El diálogo de contratar de Roles es una imagen hecha en HTML (`role="img"`), no un formulario: sus campos, su interruptor y sus botones se dibujan y no se pueden usar. Las instrucciones enseñan su arranque y se desvanecen hacia abajo.
 
 ### Navigation
-- **Cabecera:** a todo el ancho, con la marca (`Mark` más la palabra en Inter 750 y -0.03em), enlaces grises en 500 que pasan a tinta al pasar el ratón, el enlace de idioma y el botón en píldora «Pedir acceso». Los enlaces se ocultan por debajo de 64rem.
+- **Cabecera:** a todo el ancho, con la marca (`Mark` más la palabra en Inter 750 y -0.03em), enlaces grises en 500 que pasan a tinta al pasar el ratón, el enlace de idioma y el botón en píldora «Pedir acceso». Por debajo de 64rem, los enlaces y el idioma pasan al menú de secciones: un botón redondo de 2.75rem con contorno de 2 px en `border` y un panel con borde, esquina `rounded.md` y sombra de ventana, cuyos enlaces miden 2.75rem de alto. Se cierra al elegir, con Escape o al tocar fuera.
 - **Pie:** separado por una línea en `border` y con letra pequeña. Lleva tres columnas desde 48rem: la marca con su frase, la lista de producto y el idioma.
 
 ### Demo del tablero (componente propio)
@@ -346,10 +352,12 @@ Es la ventana de la app con el tablero de storefront, construida en HTML dentro 
 - **Recorrido:** cada acción mueve la tarea por las columnas con una transición de 650 ms en `--ease-in-out` y una entrada de 520 ms.
 - **Accesibilidad:** un texto de ayuda bajo la ventana cambia en cada paso, y una región `aria-live` lo anuncia.
 - **Sin JavaScript:** se ocultan los botones y se muestran los pasos escritos.
+- **Al terminar:** con la tarea en Hecho, bajo la ventana aparece el botón «Pedir acceso», que lleva a la lista de espera.
+- **Con el dedo:** las acciones de la tarea miden 2.75rem de alto (`pointer: coarse`).
 
 ### Captura (`Shot`)
 Es una captura real de la app en `src/assets/{nombre}-{idioma}-{tema}.png`, servida como `<picture>` que elige el tema del sistema. El navegador solo descarga la variante que corresponde.
-- **Recortes de afirmación:** son recortes rasterizados de las capturas completas, en las cuatro variantes, y no un zoom con CSS: `aprobacion-spec`, `revision-acciones`, `estado-coste`, `tablero-sin-cuenta`, `sincronizacion-ordenadores` y `colaboracion-equipo`.
+- **Recortes de afirmación:** son recortes rasterizados de las capturas completas, en las cuatro variantes, y no un zoom con CSS: `aprobacion-spec`, `revision-acciones`, `estado-decision`, `estado-en-marcha`, `estado-coste`, `tablero-sin-cuenta`, `sincronizacion-ordenadores` y `colaboracion-equipo`.
 - **Si falta una variante:** queda un hueco en `surface-2` con el nombre del archivo pendiente.
 
 ### Entradas

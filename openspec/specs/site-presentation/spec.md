@@ -64,7 +64,7 @@ La web SHALL ser legible desde 360 px de ancho sin desplazamiento horizontal.
 - **THEN** el ancho del documento no supera el de la ventana y no hay contenido recortado
 
 ### Requirement: Rendimiento y JavaScript
-La portada SHALL obtener 95 o más en Lighthouse de rendimiento, accesibilidad, buenas prácticas y SEO, sin saltos de diseño, y SHALL limitar el JavaScript de cliente a un único script pequeño para la demostración del hero, las pestañas, el panel de Estado y las entradas de las secciones. Sin JavaScript, la página MUST mostrar todo su contenido.
+La portada SHALL obtener 95 o más en Lighthouse de rendimiento, accesibilidad, buenas prácticas y SEO, sin saltos de diseño, y SHALL limitar el JavaScript de cliente a un único script pequeño para la demostración del hero, el menú de secciones, el envío de la lista de espera y las entradas de las secciones. Sin JavaScript, la página MUST mostrar todo su contenido; en lugar del formulario de la lista de espera muestra cómo apuntarse por correo.
 
 #### Scenario: Puntuaciones Lighthouse
 - **WHEN** se ejecuta Lighthouse sobre `/` y `/en/` del build en móvil
@@ -72,7 +72,7 @@ La portada SHALL obtener 95 o más en Lighthouse de rendimiento, accesibilidad, 
 
 #### Scenario: Portada sin JavaScript
 - **WHEN** se carga la portada con JavaScript desactivado
-- **THEN** todo el texto, las capturas y el formulario son visibles y ningún elemento queda con opacidad cero
+- **THEN** todo el texto y las capturas son visibles, en lugar del formulario se ve cómo apuntarse por correo y ningún elemento queda con opacidad cero
 
 ### Requirement: Comprobaciones de entrega
 El proyecto SHALL superar `pnpm astro check` y `pnpm build` sin avisos nuevos.
@@ -119,11 +119,15 @@ Los fragmentos de la app construidos en HTML SHALL llevar el atributo `data-ui` 
 - **THEN** los proyectos, tareas, personas, ordenadores y servidores son los de las capturas (storefront, «Tienda online», Marta Ruiz, sync.example.com) y no aparecen datos de personas reales
 
 ### Requirement: Cabecera a todo el ancho
-La cabecera SHALL ocupar todo el ancho de la ventana, con la marca pegada al margen izquierdo de la página y la acción «Pedir acceso» al derecho, sin limitarse al ancho del contenido.
+La cabecera SHALL ocupar todo el ancho de la ventana, con la marca pegada al margen izquierdo de la página y la acción «Pedir acceso» al derecho, sin limitarse al ancho del contenido. La cabecera SHALL quedar fija en la parte superior al desplazar la página, para que las secciones y «Pedir acceso» estén siempre a mano.
 
 #### Scenario: Ancho de la cabecera
 - **WHEN** se abre la portada a 1440 y a 1920 px
 - **THEN** la marca empieza a la distancia del margen de página del borde izquierdo y el botón «Pedir acceso» termina a esa misma distancia del borde derecho
+
+#### Scenario: Cabecera fija
+- **WHEN** se desplaza la portada hasta cualquier sección, a 1440 y a 390 px
+- **THEN** la cabecera sigue visible en el borde superior y el título de la sección a la que lleva un enlace no queda tapado por ella
 
 ### Requirement: Formulario de la lista de espera accesible
 El formulario de la lista de espera SHALL tener etiqueta visible y foco visible, y decir con texto, bajo el campo, cada error: campo vacío, email que no vale, demasiados intentos y fallo del envío. El error MUST anunciarse a los lectores de pantalla, devolver el foco al campo y conservar lo escrito. Ningún estado se comunica solo con color. Sin JavaScript, en lugar del formulario la sección SHALL mostrar cómo apuntarse por correo.
@@ -147,3 +151,10 @@ El formulario de la lista de espera SHALL tener etiqueta visible y foco visible,
 #### Scenario: Sin JavaScript
 - **WHEN** se carga la portada con JavaScript deshabilitado
 - **THEN** en la banda no se ve el formulario y se ve un texto con un enlace `mailto:` al buzón de la lista
+
+### Requirement: Controles táctiles
+Los controles de la portada SHALL medir al menos 44 px de alto cuando el puntero es un dedo.
+
+#### Scenario: Altura con puntero grueso
+- **WHEN** se miden, con `pointer: coarse`, las acciones de la tarea de la demostración, el botón del menú y sus enlaces, y los enlaces del pie
+- **THEN** cada uno mide 44 px de alto o más
