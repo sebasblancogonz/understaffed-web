@@ -138,7 +138,7 @@ export const en: Dict = {
       detail: 'You sign in with your email and a code sent to you, with no passwords.',
       shot: {
         file: 'sincronizacion',
-        alt: 'Dialog to send and receive the state of Understaffed between computers',
+        alt: 'Understaffed account settings with the computers where the account is signed in',
       },
     },
     team: {

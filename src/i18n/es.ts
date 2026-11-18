@@ -138,7 +138,7 @@ export const es: Dict = {
       detail: 'Entras con tu email y un código que te llega por correo, sin contraseñas.',
       shot: {
         file: 'sincronizacion',
-        alt: 'Diálogo para enviar y recibir el estado de Understaffed entre ordenadores',
+        alt: 'Ajustes de la cuenta de Understaffed con los ordenadores donde está abierta',
       },
     },
     team: {
