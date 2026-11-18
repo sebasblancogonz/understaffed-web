@@ -47,6 +47,7 @@ export interface Dict {
     shot: Shot;
   };
   local: { id: string; title: string; text: string; account: string };
+  requirements: { id: string; title: string; items: string[]; note: string };
   placeholder: { label: string };
   footer: { text: string };
 }

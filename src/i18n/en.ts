@@ -19,6 +19,7 @@ export const en: Dict = {
       { id: 'how', label: 'How it works' },
       { id: 'approvals', label: 'Approvals' },
       { id: 'local', label: 'Local' },
+      { id: 'requirements', label: 'Requirements' },
     ],
     switchText: 'Español',
     switchLabel: 'Cambiar a español',
@@ -33,7 +34,7 @@ export const en: Dict = {
     note: 'It launches Claude Code, the CLI you already have and already pay for. It stores no keys.',
     ctaTodo: 'TODO: download link pending',
     shot: {
-      file: 'tablero-en.png',
+      file: 'tablero',
       alt: 'Understaffed board with tasks assigned to the roles on the team',
     },
   },
@@ -44,20 +45,22 @@ export const en: Dict = {
     intro: 'You work like a small company: you lead and the roles do the work.',
     steps: [
       // DRAFT
-      { title: 'Hire roles', text: 'Pick the roles your project needs and add them to the team.' },
+      { title: 'Assign a task to a role', text: 'You hire the roles your project needs and assign them tasks from the board. Every task is an OpenSpec change in your repository, and the role starts by writing the spec.' },
       // DRAFT
-      { title: 'Assign tasks from the board', text: 'Every task on the board is an OpenSpec change in your repository.' },
+      { title: 'Approve the spec', text: 'You read the spec and approve it before any code is written.' },
       // DRAFT
-      { title: 'Approve the spec and the code', text: 'The role works the task and you sign off at two points.' },
+      { title: 'The role does the work', text: 'With the spec approved, the role carries out the task.' },
       // DRAFT
-      { title: 'Do the review', text: 'You see the result in the review before accepting it.' },
+      { title: 'Do the review', text: 'You review the result of the task before accepting it.' },
+      // DRAFT
+      { title: 'Approve the code', text: 'After the review, you approve the code. A task is not closed without your approval.' },
     ],
     pathLabel: 'Every task lives in your repository:',
     pathExample: 'openspec/changes/<task>/',
     // DRAFT
     cli: 'Understaffed launches Claude Code, the AI CLI you already have and already pay for. It stores no keys.',
     shot: {
-      file: 'revision-en.png',
+      file: 'revision',
       alt: 'Task review screen in Understaffed',
     },
   },
@@ -73,7 +76,7 @@ export const en: Dict = {
       { title: 'The code', text: 'When the role is done, you approve the code.' },
     ],
     shot: {
-      file: 'aprobacion-en.png',
+      file: 'aprobacion',
       alt: 'Approving a task spec in Understaffed',
     },
   },
@@ -84,6 +87,18 @@ export const en: Dict = {
     text: 'Understaffed works on your machine, on your repository.',
     // DRAFT
     account: 'An account is optional: you only need one to sync and collaborate.',
+  },
+  requirements: {
+    id: 'requirements',
+    title: 'Requirements',
+    // DRAFT
+    items: [
+      'Desktop app for Windows and macOS.',
+      'git 2.30 or later.',
+      'Claude Code installed and signed in.',
+    ],
+    // DRAFT
+    note: 'Understaffed does not install git or Claude Code, but it explains how to when they are missing.',
   },
   placeholder: { label: 'TODO: screenshot pending' },
   footer: {

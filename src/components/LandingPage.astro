@@ -5,6 +5,7 @@ import Hero from './sections/Hero.astro';
 import HowItWorks from './sections/HowItWorks.astro';
 import Approvals from './sections/Approvals.astro';
 import LocalFirst from './sections/LocalFirst.astro';
+import Requirements from './sections/Requirements.astro';
 import Footer from './sections/Footer.astro';
 import { getDict } from '../i18n';
 import type { Lang } from '../config';
@@ -22,5 +23,6 @@ const t = getDict(lang);
   <HowItWorks t={t} />
   <Approvals t={t} />
   <LocalFirst t={t} />
+  <Requirements t={t} />
   <Footer slot="footer" t={t} />
 </Base>

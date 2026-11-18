@@ -19,6 +19,7 @@ export const es: Dict = {
       { id: 'how', label: 'Cómo funciona' },
       { id: 'approvals', label: 'Aprobaciones' },
       { id: 'local', label: 'En local' },
+      { id: 'requirements', label: 'Requisitos' },
     ],
     switchText: 'English',
     switchLabel: 'Cambiar a inglés',
@@ -33,7 +34,7 @@ export const es: Dict = {
     note: 'Lanza Claude Code, el CLI que ya tienes y ya pagas. No guarda tus claves.',
     ctaTodo: 'TODO: enlace de descarga pendiente',
     shot: {
-      file: 'tablero.png',
+      file: 'tablero',
       alt: 'Tablero de Understaffed con las tareas asignadas a los roles del equipo',
     },
   },
@@ -44,20 +45,22 @@ export const es: Dict = {
     intro: 'Trabajas como en una empresa pequeña: tú diriges y los roles hacen.',
     steps: [
       // DRAFT
-      { title: 'Contrata roles', text: 'Eliges los roles que necesita tu proyecto y los sumas al equipo.' },
+      { title: 'Asigna una tarea a un rol', text: 'Contratas los roles que necesita tu proyecto y les asignas tareas del tablero. Cada tarea es un cambio de OpenSpec en tu repositorio, y el rol empieza por redactar la spec.' },
       // DRAFT
-      { title: 'Asigna tareas del tablero', text: 'Cada tarea del tablero es un cambio de OpenSpec en tu repositorio.' },
+      { title: 'Aprueba la spec', text: 'Lees la spec y la apruebas antes de que se escriba una línea de código.' },
       // DRAFT
-      { title: 'Aprueba la spec y el código', text: 'El rol trabaja la tarea y tú das el visto bueno en dos momentos.' },
+      { title: 'El rol ejecuta', text: 'Con la spec aprobada, el rol hace la tarea.' },
       // DRAFT
-      { title: 'Haz la revisión', text: 'Ves el resultado en la revisión antes de darlo por bueno.' },
+      { title: 'Haz la revisión', text: 'Revisas el resultado de la tarea antes de darlo por bueno.' },
+      // DRAFT
+      { title: 'Aprueba el código', text: 'Tras la revisión, apruebas el código. La tarea no se da por cerrada sin tu aprobación.' },
     ],
     pathLabel: 'Cada tarea vive en tu repositorio:',
     pathExample: 'openspec/changes/<tarea>/',
     // DRAFT
     cli: 'Understaffed lanza Claude Code, el CLI de IA que ya tienes y ya pagas. No guarda ninguna clave.',
     shot: {
-      file: 'revision.png',
+      file: 'revision',
       alt: 'Pantalla de revisión de una tarea en Understaffed',
     },
   },
@@ -73,7 +76,7 @@ export const es: Dict = {
       { title: 'El código', text: 'Cuando el rol termina, apruebas el código.' },
     ],
     shot: {
-      file: 'aprobacion.png',
+      file: 'aprobacion',
       alt: 'Aprobación de la spec de una tarea en Understaffed',
     },
   },
@@ -84,6 +87,18 @@ export const es: Dict = {
     text: 'Understaffed trabaja en tu equipo, sobre tu repositorio.',
     // DRAFT
     account: 'La cuenta es opcional: solo la necesitas para sincronizar y colaborar.',
+  },
+  requirements: {
+    id: 'requirements',
+    title: 'Requisitos',
+    // DRAFT
+    items: [
+      'App de escritorio para Windows y macOS.',
+      'git 2.30 o posterior.',
+      'Claude Code instalado y con la sesión iniciada.',
+    ],
+    // DRAFT
+    note: 'Understaffed no instala git ni Claude Code, pero te explica cómo hacerlo cuando faltan.',
   },
   placeholder: { label: 'TODO: captura pendiente' },
   footer: {
