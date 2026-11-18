@@ -25,8 +25,8 @@ export const en: Dict = {
       { id: 'requirements', label: 'Requirements' },
     ],
     cta: 'Request access',
+    menu: 'Sections',
     switchText: 'Español',
-    switchShort: 'ES',
     switchLabel: 'Cambiar a español',
   },
   hero: {
@@ -40,7 +40,7 @@ export const en: Dict = {
     // app (roles of the demo project and the Tester template)
     tags: [
       { label: 'Backend', tone: 'lilac' },
-      { label: 'QA', tone: 'green' },
+      { label: 'Analyst', tone: 'green' },
       { label: 'Tester', tone: 'yellow' },
       { label: 'Frontend', tone: 'orange' },
       { label: 'Full-stack', tone: 'pink' },
@@ -172,7 +172,8 @@ export const en: Dict = {
     cost: 'Cost reported by the provider; with a subscription it is an estimate.',
     shots: [
       // DRAFT (titles and captions)
-      { file: 'grupos', alt: 'Shared Status of the Online store group, with five tasks waiting on you and the recent activity', title: 'Waiting on you and Running', caption: 'The specs and code waiting for your approval across the three repositories of “Online store”, and what is running, which role is doing it and since when.' },
+      { file: 'estado-decision', alt: 'The “Waiting on you” list of the Online store group: five tasks from its three repositories, three awaiting your approval and two your review', title: 'Waiting on you', caption: 'The specs and code waiting for your approval across the three repositories of “Online store”.' },
+      { file: 'estado-en-marcha', alt: 'The “Running” strip: the Backend role is running storefront task #5 and has been for under a minute', title: 'Running', caption: 'What is running, which role is doing it and since when.', strip: true },
       { file: 'estado-coste', alt: 'Cost and time over the last 30 days per role in the storefront project: Backend, Full-stack and Frontend', title: 'Cost per role', caption: 'What the runs of each role have cost over the last 30 days.', strip: true },
     ],
   },
@@ -192,8 +193,8 @@ export const en: Dict = {
     ],
     // app (RoleForm, locales and template catalogue)
     dialog: {
+      alt: 'The app’s “Hire: Backend developer” dialog, with the role’s name, its instructions, the model and the permission to run commands',
       title: 'Hire: Backend developer',
-      hint: 'Review the name, instructions and permissions. The template does not change when you edit the role.',
       name: 'Name',
       nameValue: 'Backend',
       prompt: 'Instructions',
@@ -202,12 +203,8 @@ export const en: Dict = {
       count: '{used} / {max}',
       model: 'Model',
       modelPlaceholder: 'Claude Code default',
-      modelHint: "Leave it empty to use Claude Code's default model, or write an alias (opus, sonnet) or a full model name.",
       permissions: 'Permissions',
       allowBash: 'Run commands',
-      allowBashHint:
-        'When running a task, the agent can run commands in its workspace terminal: install dependencies, run the tests, build. The workspace only holds what is in git, with no installed dependencies or .env files. Specifying never runs commands.',
-      toolsLine: "The plugins, skills, MCP servers and web access it can use don't depend on the role: turn them on in Tools, in the project's or the group's team.",
       back: 'Templates',
       confirm: 'Hire',
     },
@@ -260,11 +257,10 @@ export const en: Dict = {
     text: 'Understaffed doesn’t install git or Claude Code, but it explains how when they are missing.',
     // DRAFT
     tiles: [
-      { name: 'Claude Code', text: 'Installed and signed in.' },
-      { name: 'Git', text: '2.30 or later.' },
-      { name: 'OpenSpec', text: 'Included in the app.' },
-      { name: 'Windows', text: 'Desktop app.' },
-      { name: 'macOS', text: 'Desktop app.' },
+      { name: 'Claude Code', text: 'Installed and signed in.', href: 'https://claude.com/product/claude-code' },
+      { name: 'Git', text: '2.30 or later.', href: 'https://git-scm.com/' },
+      { name: 'OpenSpec', text: 'Included in the app.', href: 'https://github.com/Fission-AI/OpenSpec' },
+      { name: 'Windows and macOS', text: 'Desktop app.' },
     ],
   },
   waitlist: {
@@ -277,8 +273,21 @@ export const en: Dict = {
     submit: 'Request access',
     // DRAFT
     after: 'Joining doesn’t create an Understaffed account.',
-    todo: 'TODO: waitlist destination pending',
-    privacyTodo: 'TODO: privacy notice pending',
+    // DRAFT
+    privacy: 'Your email goes to our inbox and we only use it to tell you when you can install Understaffed. To leave the list, write to {email}.',
+    // DRAFT
+    noJs: 'This form needs JavaScript. Without it, write to {email} and we’ll add you.',
+    sending: 'Sending…',
+    errors: {
+      // DRAFT
+      empty: 'Enter your email to join the list.',
+      // DRAFT
+      invalid: 'That email doesn’t look right. Check it: it should look like name@example.com.',
+      // DRAFT
+      limited: 'There are too many attempts from your connection. Wait a while and try again.',
+      // DRAFT
+      failed: 'We couldn’t add you. Try again or write to {email}.',
+    },
     // DRAFT
     thanksTitle: 'You’re on the list.',
     // DRAFT

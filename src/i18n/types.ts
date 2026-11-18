@@ -29,7 +29,7 @@ export interface Dict {
   ogLocale: string;
   meta: { title: string; description: string; ogImageAlt: string };
   skip: string;
-  header: { home: string; navLabel: string; nav: Link[]; cta: string; switchText: string; switchShort: string; switchLabel: string };
+  header: { home: string; navLabel: string; nav: Link[]; cta: string; menu: string; switchText: string; switchLabel: string };
   hero: {
     title: [string, string];
     lead: string;
@@ -101,8 +101,9 @@ export interface Dict {
     lead: string;
     templates: { name: string; text: string; tone: Tone }[];
     dialog: {
+      /** Lo que enseña el diálogo, para quien no lo ve. */
+      alt: string;
       title: string;
-      hint: string;
       name: string;
       nameValue: string;
       prompt: string;
@@ -110,11 +111,8 @@ export interface Dict {
       count: string;
       model: string;
       modelPlaceholder: string;
-      modelHint: string;
       permissions: string;
       allowBash: string;
-      allowBashHint: string;
-      toolsLine: string;
       back: string;
       confirm: string;
     };
@@ -135,7 +133,8 @@ export interface Dict {
     id: string;
     title: string;
     text: string;
-    tiles: { name: string; text: string }[];
+    /** `href`: la página de esa herramienta. */
+    tiles: { name: string; text: string; href?: string }[];
   };
   waitlist: {
     id: string;
@@ -144,8 +143,19 @@ export interface Dict {
     label: string;
     submit: string;
     after: string;
-    todo: string;
-    privacyTodo: string;
+    /** El aviso de privacidad. `{email}` es el buzón de la lista. */
+    privacy: string;
+    /** Lo que se ve en lugar del formulario sin JavaScript. `{email}` es el buzón de la lista. */
+    noJs: string;
+    /** El texto del botón mientras se envía. */
+    sending: string;
+    errors: {
+      empty: string;
+      invalid: string;
+      limited: string;
+      /** `{email}` es el buzón de la lista. */
+      failed: string;
+    };
     thanksTitle: string;
     thanks: string;
   };

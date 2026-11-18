@@ -24,6 +24,10 @@ La portada SHALL mostrar, en este orden: cabecera con navegación, hero con demo
 - **WHEN** se cuentan los enlaces de la navegación de la cabecera
 - **THEN** hay como mucho cuatro enlaces a secciones, más el cambio de idioma y el botón «Pedir acceso», que lleva a la lista de espera
 
+#### Scenario: Navegación en pantallas estrechas
+- **WHEN** se abre la portada por debajo de 64rem de ancho
+- **THEN** la cabecera muestra la marca, «Pedir acceso» y un botón con nombre accesible que despliega los mismos enlaces a secciones y el cambio de idioma, y el menú se cierra al elegir un enlace, con Escape o al tocar fuera
+
 ### Requirement: Hero con acción principal
 El hero SHALL contener un único `h1`, una frase que explique que Understaffed gestiona proyectos de software con un equipo de agentes de IA y que nada llega a la rama del usuario sin sus dos aprobaciones, una única acción principal, «Pedir acceso», con el color principal, que lleve a la lista de espera, y como mucho una acción secundaria sin el color principal.
 
@@ -96,6 +100,10 @@ La portada SHALL incluir una sección de requisitos, presentada como un tablero 
 - **WHEN** se lee la sección de requisitos en cada idioma
 - **THEN** se mencionan Windows, macOS, git 2.30 o posterior y Claude Code con sesión iniciada, y se dice que la app no los instala pero explica cómo hacerlo
 
+#### Scenario: Enlaces a las herramientas
+- **WHEN** se inspeccionan las fichas de Claude Code, Git y OpenSpec
+- **THEN** el nombre de cada una enlaza a la página de esa herramienta
+
 #### Scenario: Sin afirmaciones no verificadas
 - **WHEN** se revisa el texto de la sección
 - **THEN** no nombra otros sistemas operativos ni otros CLI de IA como compatibles, ni cifras de rendimiento, tamaño de instalación o precio
@@ -105,11 +113,15 @@ La portada SHALL incluir una sección de requisitos, presentada como un tablero 
 - **THEN** se presenta dentro de `code` o `pre` en la fuente monoespaciada del sitio
 
 ### Requirement: Vista Estado
-La portada SHALL incluir una sección que presente la vista Estado de un grupo: lo que espera la decisión del usuario, lo que está en marcha y lo integrado, en las tareas de los repositorios del grupo, con su coste. Muestra también las capturas reales de Estado y del grupo.
+La portada SHALL incluir una sección que presente la vista Estado de un grupo: lo que espera la decisión del usuario, lo que está en marcha y lo integrado, en las tareas de los repositorios del grupo, con su coste. Lo enseña con recortes de la captura real de Estado del grupo, a un tamaño al que se leen los títulos de las tareas.
 
 #### Scenario: Contenido de Estado
 - **WHEN** se lee la sección Estado en cada idioma
-- **THEN** aparecen tareas de al menos dos repositorios del grupo con su estado, y las capturas `estado` y `grupos`
+- **THEN** aparecen tareas de al menos dos repositorios del grupo con su estado, y los recortes `estado-decision`, `estado-en-marcha` y `estado-coste`, cada uno con su pie
+
+#### Scenario: Recortes legibles
+- **WHEN** se mide el texto de las tareas del recorte `estado-decision` a 1440 px y a 390 px de ancho de ventana
+- **THEN** los títulos de las tareas se ven a 9 px o más, y a 390 px el recorte conserva su ancho mínimo y su marco se desplaza de lado sin desbordar la página
 
 #### Scenario: El coste no es un precio
 - **WHEN** se revisa el texto sobre el coste
@@ -123,7 +135,7 @@ La sección Estado SHALL mostrar que varios repositorios de un mismo producto fo
 - **THEN** nombra el grupo y sus repositorios, y el Estado reúne tareas de todos ellos
 
 ### Requirement: Lista de espera
-La portada SHALL cerrar con una sección de lista de espera que contenga el único formulario de la página: un campo de email y el botón «Pedir acceso». Pide solo el email, envía el idioma de la página en un campo oculto y aclara que apuntarse no crea una cuenta.
+La portada SHALL cerrar con una sección de lista de espera que contenga el único formulario de la página: un campo de email y el botón «Pedir acceso». Pide solo el email, envía también el idioma de la página, aclara que apuntarse no crea una cuenta y dice para qué se usa el email y cómo salir de la lista. El formulario envía a `config.waitlistUrl`, la ruta de la lista de espera del servidor de Understaffed, que avisa al buzón `config.waitlistEmail`.
 
 #### Scenario: Un solo formulario
 - **WHEN** se inspecciona el HTML de `/` y de `/en/`
@@ -131,19 +143,23 @@ La portada SHALL cerrar con una sección de lista de espera que contenga el úni
 
 #### Scenario: Sin destino configurado
 - **WHEN** `config.waitlistUrl` está vacío
-- **THEN** el formulario no tiene `action`, el botón de envío está deshabilitado y se ve un texto `TODO:` que indica que falta el destino
+- **THEN** el build falla con un mensaje que lo dice, y no se publica un formulario que no envía
 
 #### Scenario: Con destino configurado
-- **WHEN** `config.waitlistUrl` tiene una URL
-- **THEN** el formulario envía por `POST` a esa URL, el botón está habilitado y no se ve el `TODO:` del destino
+- **WHEN** `config.waitlistUrl` tiene una URL y el usuario envía un email válido
+- **THEN** el script hace un `POST` a `config.waitlistUrl` con `email` y `language` en JSON, y mientras espera la respuesta el botón está deshabilitado y dice «Enviando…»
 
 #### Scenario: Confirmación
+- **WHEN** el servidor responde `202`
+- **THEN** el título y la frase de la banda pasan a ser la confirmación en el idioma de la página, el formulario se oculta y el título recibe el foco
+
+#### Scenario: La confirmación solo sigue a un envío
 - **WHEN** se abre la portada con el fragmento `#thanks`
-- **THEN** se muestra el mensaje de confirmación en el idioma de la página y el formulario queda oculto, sin JavaScript
+- **THEN** se ve el formulario y no la confirmación
 
 #### Scenario: Aviso de privacidad pendiente
-- **WHEN** aún no existe el texto legal
-- **THEN** junto al formulario se ve un texto `TODO:` que indica que falta el aviso de privacidad
+- **WHEN** el equipo aún no ha revisado el texto legal
+- **THEN** el aviso está marcado como borrador en el código fuente de textos, y junto al formulario se lee para qué se usa el email y un enlace `mailto:` al buzón de la lista para salir de ella, y no hay ningún texto `TODO:`
 
 ### Requirement: Límites de lo que se anuncia
 Los textos de la portada MUST NOT presentar como disponibles las integraciones con Jira, Linear o GitHub Issues, los sprints, la delegación entre agentes, las ejecuciones en paralelo, la fase 3 de la colaboración ni un servicio de cuentas alojado por Understaffed.
@@ -168,8 +184,12 @@ El hero SHALL incluir una ventana de la app con el tablero de cinco columnas tal
 - **THEN** se ve la tarjeta esperando aprobación y los pasos escritos, sin botones que no hagan nada
 
 ### Requirement: Roles
-La portada SHALL presentar cómo se contrata un rol con el editor de la app a tamaño real: nombre, instrucciones de la plantilla «Desarrollador backend», modelo, el permiso «Ejecutar comandos» y la línea sobre herramientas, con notas al margen que explican cada parte con los textos de la app.
+La portada SHALL presentar cómo se contrata un rol con una imagen del diálogo de contratar de la app, con sus textos: nombre, instrucciones de la plantilla «Desarrollador backend», modelo y el permiso «Ejecutar comandos». La imagen MUST NOT contener controles que se puedan enfocar o usar, y MUST tener un texto alternativo que diga lo que enseña.
 
 #### Scenario: Plantillas reales
 - **WHEN** se lee la sección de roles
 - **THEN** las plantillas nombradas son las de la app (Analista de producto, Desarrollador full-stack, frontend y backend, y Tester) y las instrucciones son las de la plantilla de backend
+
+#### Scenario: El diálogo es una imagen
+- **WHEN** se recorre la sección de roles con el teclado y se inspecciona el diálogo
+- **THEN** no hay ningún `input`, `textarea` ni `button` dentro, el diálogo tiene `role="img"` con un nombre accesible y el foco no se detiene en él

@@ -7,10 +7,21 @@ interface Props {
 }
 const { t } = Astro.props;
 const { waitlist } = t;
-// Sin destino no hay envío: el formulario no lleva `action` y el botón va deshabilitado, lo que
-// también impide el envío implícito con Intro.
-const ready = Boolean(config.waitlistUrl);
+// Sin destino no hay lista de espera: mejor un build roto que un formulario que no envía.
+if (!config.waitlistUrl) throw new Error('config.waitlistUrl está vacío: la lista de espera no tiene adónde enviar.');
 const tags = t.hero.tags;
+const email = config.waitlistEmail;
+/** Las dos mitades de un texto alrededor de `{email}`, para poner ahí el enlace al buzón. */
+const around = (text: string) => text.split('{email}');
+const [privacyBefore, privacyAfter = ''] = around(waitlist.privacy);
+const [noJsBefore, noJsAfter = ''] = around(waitlist.noJs);
+// Lo que escribe el script: el botón mientras envía, los errores y la confirmación.
+const strings = {
+  sending: waitlist.sending,
+  errors: { ...waitlist.errors, failed: waitlist.errors.failed.replace('{email}', email) },
+  thanksTitle: waitlist.thanksTitle,
+  thanks: waitlist.thanks,
+};
 ---
 
 <section id={waitlist.id} class="waitlist" aria-labelledby="waitlist-title" tabindex="-1">
@@ -19,25 +30,22 @@ const tags = t.hero.tags;
       <ul class="tags" aria-hidden="true">
         {tags.slice(0, 4).map((tag, i) => <li class={`tag tone-${tag.tone} s${i}`}>{tag.label}</li>)}
       </ul>
-      <div class="inner">
-        <h2 id="waitlist-title">{waitlist.title}</h2>
-        <p class="lead">{waitlist.lead}</p>
-        <form class="form" method="post" action={ready ? config.waitlistUrl : undefined}>
+      <div class="inner" data-waitlist data-endpoint={config.waitlistUrl} data-strings={JSON.stringify(strings)}>
+        <h2 id="waitlist-title" tabindex="-1" data-title>{waitlist.title}</h2>
+        <p class="lead" data-lead>{waitlist.lead}</p>
+        <form class="form" method="post">
           <input type="hidden" name="lang" value={t.lang} />
           <label for="waitlist-email">{waitlist.label}</label>
           <div class="row">
-            <input id="waitlist-email" class="field" name="email" type="email" required autocomplete="email" inputmode="email" autocapitalize="off" spellcheck="false" />
-            <button class="submit" type="submit" disabled={!ready} aria-describedby={ready ? undefined : 'waitlist-todo'}>{waitlist.submit}</button>
+            <input id="waitlist-email" class="field" name="email" type="email" required autocomplete="email" inputmode="email" autocapitalize="off" spellcheck="false" aria-describedby="waitlist-error" />
+            <button class="submit" type="submit">{waitlist.submit}</button>
+            <p id="waitlist-error" class="error" role="alert"></p>
           </div>
           <p class="after">{waitlist.after}</p>
-          {!ready && <p id="waitlist-todo" class="todo">{waitlist.todo}</p>}
-          <p class="todo">{waitlist.privacyTodo}</p>
+          <p class="note">{privacyBefore}<a href={`mailto:${email}`}>{email}</a>{privacyAfter}</p>
         </form>
-        <!-- Si el servicio redirige a #thanks, la confirmación aparece sin JavaScript. -->
-        <div id="thanks" class="thanks" tabindex="-1">
-          <p class="thanks-title">{waitlist.thanksTitle}</p>
-          <p>{waitlist.thanks}</p>
-        </div>
+        <!-- El envío lo hace el script. Sin él, en lugar del formulario se ve cómo apuntarse por correo. -->
+        <p class="nojs">{noJsBefore}<a href={`mailto:${email}`}>{email}</a>{noJsAfter}</p>
       </div>
     </div>
   </div>
@@ -80,13 +88,14 @@ const tags = t.hero.tags;
     margin-bottom: 0.5rem;
     font-weight: 600;
   }
+  /* El error va pegado al campo: en una columna, entre el campo y el botón. */
   .row {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-areas: 'field' 'error' 'submit';
     gap: 0.625rem;
   }
   .field {
-    flex: 1;
+    grid-area: field;
     min-width: 0;
     min-height: 3.5rem;
     padding: 0 1.125rem;
@@ -100,11 +109,19 @@ const tags = t.hero.tags;
     outline: 3px solid var(--on-band);
     outline-offset: 3px;
   }
-  .field:user-invalid {
+  .field[aria-invalid='true'] {
     outline: 3px solid var(--on-band-danger);
     outline-offset: 0;
   }
+  .field:read-only {
+    color: color-mix(in srgb, var(--band-ink) 60%, var(--on-band));
+  }
+  .field::selection {
+    background: var(--band);
+    color: var(--on-band);
+  }
   .submit {
+    grid-area: submit;
     min-height: 3.5rem;
     padding: 0 1.75rem;
     border: 0;
@@ -128,45 +145,77 @@ const tags = t.hero.tags;
     outline: 3px solid var(--on-band);
     outline-offset: 3px;
   }
+  /* Solo mientras se envía. */
   .submit:disabled {
     background: rgb(13 16 23 / 0.35);
     color: var(--on-band-muted);
-    cursor: not-allowed;
+    cursor: progress;
+  }
+  .error {
+    grid-area: error;
+    padding-inline: 0.25rem;
+    color: var(--on-band-danger);
+    font-weight: 600;
+  }
+  .error:empty {
+    display: none;
   }
   .after {
     margin-top: 1rem;
     color: var(--on-band);
   }
-  .todo {
-    margin-top: 0.375rem;
+  .note,
+  .nojs {
     color: var(--on-band-muted);
+  }
+  .note {
+    margin-top: 0.375rem;
     font-size: var(--step-small);
   }
-  .thanks {
-    display: none;
-    scroll-margin-top: 10rem;
+  .inner a {
+    color: var(--on-band);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
   }
-  .thanks:target {
-    display: block;
-    margin-top: 2rem;
+  .inner a:focus-visible {
+    outline: 3px solid var(--on-band);
+    outline-offset: 3px;
   }
-  .inner:has(.thanks:target) .form {
-    display: none;
-  }
-  .thanks:focus {
+  /* El título, cuando recibe el foco al confirmar el alta. */
+  h2:focus {
     outline: none;
   }
-  .thanks-title {
-    font-size: var(--step-title);
-    font-weight: 750;
+  .form[hidden] {
+    display: none;
   }
-  /* Etiquetas de roles flotando en las esquinas de la banda. */
+  /* Sin el script no hay envío: en lugar del formulario, cómo apuntarse por correo. */
+  .nojs {
+    display: none;
+    margin-top: 2rem;
+  }
+  :global(html:not(.js)) .form {
+    display: none;
+  }
+  :global(html:not(.js)) .nojs {
+    display: block;
+  }
+  /* Etiquetas de roles flotando en las esquinas de la banda. Como la banda, no cambian con el tema. */
   .tags {
     display: none;
+    --lilac: #ecdcff;
+    --lilac-ink: #b48af5;
+    --orange: #ffe3c8;
+    --orange-ink: #f6a15e;
+    --green: #d3f5df;
+    --green-ink: #5cc98a;
+    --yellow: #fff0bf;
+    --yellow-ink: #efbf3f;
+    --ink: var(--band-ink);
   }
   @media (min-width: 64rem) {
     .row {
-      flex-direction: row;
+      grid-template-columns: 1fr auto;
+      grid-template-areas: 'field submit' 'error error';
     }
     .tags {
       display: block;

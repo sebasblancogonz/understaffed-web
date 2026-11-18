@@ -25,8 +25,8 @@ export const es: Dict = {
       { id: 'requirements', label: 'Requisitos' },
     ],
     cta: 'Pedir acceso',
+    menu: 'Secciones',
     switchText: 'English',
-    switchShort: 'EN',
     switchLabel: 'Cambiar a inglés',
   },
   hero: {
@@ -40,7 +40,7 @@ export const es: Dict = {
     // app (roles del proyecto de demostración y la plantilla Tester)
     tags: [
       { label: 'Backend', tone: 'lilac' },
-      { label: 'QA', tone: 'green' },
+      { label: 'Analista', tone: 'green' },
       { label: 'Tester', tone: 'yellow' },
       { label: 'Frontend', tone: 'orange' },
       { label: 'Full-stack', tone: 'pink' },
@@ -172,7 +172,8 @@ export const es: Dict = {
     cost: 'Coste que informa el proveedor; con suscripción es una estimación.',
     shots: [
       // DRAFT (títulos y pies)
-      { file: 'grupos', alt: 'Estado conjunto del grupo Tienda online, con cinco tareas que esperan tu decisión y la actividad reciente', title: 'Espera tu decisión y En marcha', caption: 'Las specs y el código que esperan tu aprobación en los tres repositorios de «Tienda online», y lo que se está ejecutando, qué rol lo hace y desde cuándo.' },
+      { file: 'estado-decision', alt: 'La lista «Espera tu decisión» del grupo Tienda online: cinco tareas de sus tres repositorios, tres que esperan tu aprobación y dos tu revisión', title: 'Espera tu decisión', caption: 'Las specs y el código que esperan tu aprobación en los tres repositorios de «Tienda online».' },
+      { file: 'estado-en-marcha', alt: 'La franja «En marcha»: el rol Backend ejecuta la tarea #5 de storefront, «Límite de intentos en el inicio de sesión», desde hace 59 segundos', title: 'En marcha', caption: 'Lo que se está ejecutando, qué rol lo hace y desde cuándo.', strip: true },
       { file: 'estado-coste', alt: 'Coste y tiempo de los últimos 30 días por rol en el proyecto storefront: Backend, Full-stack y Frontend', title: 'Coste por rol', caption: 'Lo que han costado las ejecuciones de cada rol en los últimos 30 días.', strip: true },
     ],
   },
@@ -192,8 +193,8 @@ export const es: Dict = {
     ],
     // app (RoleForm, locales y catálogo de plantillas)
     dialog: {
+      alt: 'El diálogo «Contratar: Desarrollador backend» de la app, con el nombre del rol, sus instrucciones, el modelo y el permiso para ejecutar comandos',
       title: 'Contratar: Desarrollador backend',
-      hint: 'Revisa el nombre, las instrucciones y los permisos. La plantilla no cambia aunque edites el rol.',
       name: 'Nombre',
       nameValue: 'Backend',
       prompt: 'Instrucciones',
@@ -202,12 +203,8 @@ export const es: Dict = {
       count: '{used} / {max}',
       model: 'Modelo',
       modelPlaceholder: 'Por defecto de Claude Code',
-      modelHint: 'Déjalo vacío para usar el modelo por defecto de Claude Code, o escribe un alias (opus, sonnet) o el nombre completo de un modelo.',
       permissions: 'Permisos',
       allowBash: 'Ejecutar comandos',
-      allowBashHint:
-        'Al ejecutar una tarea, el agente podrá lanzar comandos en la terminal de su espacio de trabajo: instalar dependencias, pasar los tests, compilar. El espacio de trabajo solo contiene lo que está en git, sin dependencias instaladas ni archivos .env. Especificar nunca ejecuta comandos.',
-      toolsLine: 'Los plugins, las skills, los servidores MCP y la web que puede usar no dependen del rol: se activan en Herramientas, en el equipo del proyecto o del grupo.',
       back: 'Plantillas',
       confirm: 'Contratar',
     },
@@ -260,11 +257,10 @@ export const es: Dict = {
     text: 'Understaffed no instala git ni Claude Code, pero te explica cómo hacerlo cuando faltan.',
     // DRAFT
     tiles: [
-      { name: 'Claude Code', text: 'Instalado y con la sesión iniciada.' },
-      { name: 'Git', text: '2.30 o posterior.' },
-      { name: 'OpenSpec', text: 'Va incluido en la app.' },
-      { name: 'Windows', text: 'App de escritorio.' },
-      { name: 'macOS', text: 'App de escritorio.' },
+      { name: 'Claude Code', text: 'Instalado y con la sesión iniciada.', href: 'https://claude.com/product/claude-code' },
+      { name: 'Git', text: '2.30 o posterior.', href: 'https://git-scm.com/' },
+      { name: 'OpenSpec', text: 'Va incluido en la app.', href: 'https://github.com/Fission-AI/OpenSpec' },
+      { name: 'Windows y macOS', text: 'App de escritorio.' },
     ],
   },
   waitlist: {
@@ -277,8 +273,21 @@ export const es: Dict = {
     submit: 'Pedir acceso',
     // DRAFT
     after: 'Apuntarte no crea una cuenta en Understaffed.',
-    todo: 'TODO: destino de la lista de espera pendiente',
-    privacyTodo: 'TODO: aviso de privacidad pendiente',
+    // DRAFT
+    privacy: 'Tu email llega a nuestro buzón y solo lo usamos para avisarte de cuándo puedes instalar Understaffed. Para salir de la lista, escribe a {email}.',
+    // DRAFT
+    noJs: 'Este formulario necesita JavaScript. Sin él, escribe a {email} y te apuntamos.',
+    sending: 'Enviando…',
+    errors: {
+      // DRAFT
+      empty: 'Escribe tu email para apuntarte.',
+      // DRAFT
+      invalid: 'Ese email no parece válido. Revísalo: tiene que ser como nombre@ejemplo.com.',
+      // DRAFT
+      limited: 'Hay demasiados intentos desde tu conexión. Espera un rato y vuelve a probar.',
+      // DRAFT
+      failed: 'No hemos podido apuntarte. Vuelve a intentarlo o escribe a {email}.',
+    },
     // DRAFT
     thanksTitle: 'Estás en la lista.',
     // DRAFT

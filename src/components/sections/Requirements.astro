@@ -20,7 +20,7 @@ const parts = (text: string) => text.split(/(\bgit\b)/g);
       {
         requirements.tiles.map((tile, i) => (
           <li data-reveal style={`--i:${i}`}>
-            <h3 class="name">{tile.name}</h3>
+            <h3 class="name">{tile.href ? <a href={tile.href} rel="noopener">{tile.name}</a> : tile.name}</h3>
             <p class="text">{tile.text}</p>
           </li>
         ))
@@ -52,6 +52,17 @@ const parts = (text: string) => text.split(/(\bgit\b)/g);
     font-weight: 750;
     letter-spacing: -0.01em;
   }
+  .name a {
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-decoration-color: var(--border);
+    transition: text-decoration-color var(--t-hover) ease;
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .name a:hover {
+      text-decoration-color: var(--accent);
+    }
+  }
   .text {
     margin-top: 0.25rem;
     color: var(--muted);
@@ -59,7 +70,7 @@ const parts = (text: string) => text.split(/(\bgit\b)/g);
   }
   @media (min-width: 48rem) {
     .tiles {
-      grid-template-columns: repeat(5, minmax(0, 1fr));
+      grid-template-columns: repeat(4, minmax(0, 1fr));
     }
   }
 </style>

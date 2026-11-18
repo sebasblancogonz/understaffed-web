@@ -118,18 +118,22 @@ hay enlace de descarga público.
 **Restricciones de la web en sí**
 
 - El sitio es estático. Desde el rediseño lleva un solo script pequeño (la demostración del
-  hero, las pestañas, el panel de Estado y las entradas); sin él, la página está completa.
+  hero, las pestañas, el panel de Estado, el envío de la lista de espera y las entradas); sin
+  él, la página está completa.
 - Tiene dos idiomas con las mismas secciones. El español es el idioma por defecto (`/`) y el
   inglés va en `/en/`.
 - Los requisitos de presentación, accesibilidad y rendimiento que obligan al sitio están en
   `openspec/specs/` (sobre todo `site-presentation` y `landing-content`).
+- La lista de espera (decidido el 2026-11-18): el formulario envía el email al servidor de
+  Understaffed (`POST /v2/waitlist`), que avisa por correo al buzón `waitlist@understaffed.app`.
+  El servidor no guarda la lista: la lista es ese buzón. El envío lo hace el script; sin
+  JavaScript, la sección dice cómo apuntarse por correo.
 
 **Sin decidir**
 
-- Cómo se recoge la lista de espera: el servicio o el endpoint, y si se hace con un formulario
-  HTML sin JavaScript. La primera propuesta dejaba los formularios fuera de alcance. Hay que
-  revisar esa decisión.
-- El texto legal para recoger emails: el aviso de privacidad y el consentimiento.
+- El texto legal para recoger emails: el aviso de privacidad y el consentimiento. La web lleva
+  un aviso en borrador (para qué se usa el email y cómo salir de la lista) que el equipo tiene
+  que revisar.
 - La URL pública definitiva. Hoy `site` apunta a `https://understaffed.example` en
   `astro.config.mjs`.
 - Si el servicio de cuentas de Understaffed estará abierto al público en el lanzamiento. Hoy

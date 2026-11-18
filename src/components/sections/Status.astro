@@ -8,7 +8,9 @@ interface Props {
 const { t } = Astro.props;
 const { status } = t;
 // Cada pie lleva un círculo de color: el cobalto para lo que espera tu decisión.
-const marks = ['var(--accent)', 'var(--green-ink)'];
+const marks = ['var(--accent)', 'var(--orange-ink)', 'var(--green-ink)'];
+// La proporción de cada recorte, para su hueco mientras falte.
+const ratios: Record<string, string> = { 'estado-decision': '1220 / 844', 'estado-en-marcha': '1190 / 84', 'estado-coste': '1159 / 186' };
 ---
 
 <section id={status.id} class="status" aria-labelledby="status-title" tabindex="-1">
@@ -17,23 +19,25 @@ const marks = ['var(--accent)', 'var(--green-ink)'];
       <h2 id="status-title">{status.title}</h2>
       <p>{status.lead}</p>
     </header>
+    <!-- Tres recortes de la vista Estado a un tamaño que se lee: la lista y, a su lado, las dos franjas. -->
     <div class="shots">
       {
         status.shots.map((shot, i) => (
-          <figure data-reveal style={`--i:${i}; --mark:${marks[i]}`}>
-            {shot.strip ? (
-              <div class="window strip">
-                <Shot lang={t.lang} file={shot.file} alt={shot.alt} label={t.placeholder.label} ratio="1159 / 186" sizes="(min-width: 64rem) 32rem, 100vw" />
-              </div>
-            ) : (
-              <div class="window">
-                <Shot lang={t.lang} file={shot.file} alt={shot.alt} label={t.placeholder.label} sizes="(min-width: 64rem) 48rem, 100vw" />
-              </div>
-            )}
+          <figure class:list={[shot.strip ? 'is-strip' : 'is-list']} data-reveal style={`--i:${i}; --mark:${marks[i]}`}>
+            <div class:list={['window', 'frame', { strip: shot.strip }]}>
+              <Shot
+                lang={t.lang}
+                file={shot.file}
+                alt={shot.alt}
+                label={t.placeholder.label}
+                ratio={ratios[shot.file]}
+                sizes={shot.strip ? '(min-width: 64rem) 30rem, 42rem' : '(min-width: 64rem) 44rem, (min-width: 40rem) 100vw, 34rem'}
+              />
+            </div>
             <figcaption>
               <span class="cap-title">{shot.title}</span>
               <span>{shot.caption}</span>
-              {i === status.shots.length - 1 && <span class="cost">{status.cost}</span>}
+              {shot.file === 'estado-coste' && <span class="cost">{status.cost}</span>}
             </figcaption>
           </figure>
         ))
@@ -49,9 +53,31 @@ const marks = ['var(--accent)', 'var(--green-ink)'];
   }
   .shots {
     display: grid;
-    gap: 2rem;
-    align-items: center;
+    gap: 2.5rem 2rem;
+    align-items: start;
     margin-top: clamp(2.5rem, 1.5rem + 3vw, 4rem);
+  }
+  figure {
+    min-width: 0;
+  }
+  /*
+   * En una pantalla estrecha el recorte no se encoge hasta dejar de leerse: conserva un ancho
+   * mínimo y su marco se desplaza de lado.
+   */
+  .frame {
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+  .frame :global(.shot) {
+    min-width: 34rem;
+  }
+  .frame.strip :global(.shot) {
+    min-width: 42rem;
+  }
+  .frame:focus-visible {
+    outline-offset: 3px;
   }
   figcaption {
     display: grid;
@@ -85,9 +111,22 @@ const marks = ['var(--accent)', 'var(--green-ink)'];
   .strip {
     border-radius: var(--radius);
   }
+  @media (min-width: 40rem) {
+    .frame:not(.strip) :global(.shot) {
+      min-width: 0;
+    }
+  }
+  /* La lista a la izquierda, a toda la altura; las dos franjas, una sobre otra, a su derecha. */
   @media (min-width: 64rem) {
     .shots {
       grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
+      grid-template-rows: auto 1fr;
+    }
+    .is-list {
+      grid-row: span 2;
+    }
+    .frame.strip :global(.shot) {
+      min-width: 0;
     }
   }
 </style>
