@@ -1,37 +1,72 @@
+/*
+ * Tokens de la web. Colores del tema según `site-presentation` (los de la app); proporciones de la
+ * dirección «el producto actúa»: fondo neutro, tinta casi negra, un solo color saturado (cobalto)
+ * en la acción y como campo entero de la lista de espera.
+ */
 :root {
   color-scheme: light dark;
 
   --bg: #ffffff;
-  --text: #0d1017;
-  --text-secondary: #5b6474;
   --surface: #f1f4f6;
+  --surface-2: #e4e8ec;
+  --ink: #0d1017;
+  --muted: #5b6474;
   --border: #e3e6eb;
-  /* Borde de campos de formulario: 3:1 o más frente a --surface y --bg (WCAG 1.4.11). */
+  /* Borde de campos dentro de los fragmentos: 3:1 o más frente al fondo (WCAG 1.4.11). */
   --field-border: #7c8494;
-  /* Rojo de error de la app: solo para un campo que el navegador rechaza. */
   --danger: #d92d20;
   --accent: #2f5bea;
   --on-accent: #ffffff;
+  /* El campo cobalto de la lista de espera es el mismo en los dos temas. */
+  --field: #2f5bea;
+  --on-field: #ffffff;
+  --on-field-soft: #e3e9ff;
+  /* Banda oscura del panel de Estado (tablero de salidas), en los dos temas. */
+  --board: #0d1017;
+  --board-row: #1a1f29;
+  --board-row-2: #232937;
+  --on-board: #eceef2;
+  --on-board-soft: #a9b1bf;
 
   --font-sans: 'Inter Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --font-mono: 'JetBrains Mono Variable', ui-monospace, 'Cascadia Code', Menlo, monospace;
+  /* taste-skill-ignore: solo dentro de code y pre (rutas, comandos y el árbol de archivos). */
+  --font-mono: 'JetBrains Mono Variable', ui-monospace, 'Cascadia Code', Menlo, monospace; /* taste-skill-ignore */
 
-  --radius: 12px;
-  --container: 72rem;
-  --gutter: 1.25rem;
+  /* Cinco tamaños: pequeño, texto, entrada, título y pantalla. */
+  --step-small: 0.875rem;
+  --step-body: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
+  --step-lead: clamp(1.25rem, 1.1rem + 0.7vw, 1.625rem);
+  --step-head: clamp(2rem, 1.3rem + 3.2vw, 4rem);
+  --step-display: clamp(2.25rem, 0.6rem + 6vw, 6.25rem);
+
+  --margin: clamp(1.25rem, 0.5rem + 2.4vw, 2.5rem);
+  --container: 90rem;
+  --section: clamp(6rem, 3rem + 9vw, 12rem);
+
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.76, 0, 0.24, 1);
+  --ease-soft: cubic-bezier(0.33, 1, 0.68, 1);
+  --t-press: 140ms;
+  --t-hover: 180ms;
+  --t-ui: 240ms;
+  --t-reveal: 800ms;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --bg: #0d1017;
-    --text: #eceef2;
-    --text-secondary: #9aa3b2;
     --surface: #1f2430;
+    --surface-2: #262d39;
+    --ink: #eceef2;
+    --muted: #9aa3b2;
     --border: #262d39;
     --field-border: #6b7383;
     --danger: #f97066;
     --accent: #5b7fff;
     --on-accent: #0d1017;
+    --board: #161a22;
+    --board-row: #1f2430;
+    --board-row-2: #272e3b;
   }
 }
 

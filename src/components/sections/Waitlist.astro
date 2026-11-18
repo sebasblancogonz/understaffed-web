@@ -1,6 +1,4 @@
 ---
-import Section from '../ui/Section.astro';
-import Button from '../ui/Button.astro';
 import { config } from '../../config';
 import type { Dict } from '../../i18n/types';
 
@@ -10,80 +8,122 @@ interface Props {
 const { t } = Astro.props;
 const { waitlist } = t;
 
-// Sin destino no hay envío: el formulario no lleva `action` y el botón va deshabilitado,
-// lo que también impide el envío implícito con Intro.
+// Sin destino no hay envío: el formulario no lleva `action` y el botón va deshabilitado, lo que
+// también impide el envío implícito con Intro.
 const ready = Boolean(config.waitlistUrl);
 ---
 
-<Section id={waitlist.id} title={waitlist.title} intro={waitlist.intro} tone="surface" layout="split">
-  <p slot="head" class="account">{waitlist.account}</p>
-  <div class="panel">
-    <form class="form" method="post" action={ready ? config.waitlistUrl : undefined}>
-      <input type="hidden" name="lang" value={t.lang} />
-      <label for="waitlist-email">{waitlist.label}</label>
-      <div class="row">
-        <input
-          id="waitlist-email"
-          name="email"
-          type="email"
-          required
-          autocomplete="email"
-          inputmode="email"
-          autocapitalize="off"
-          spellcheck="false"
-        />
-        <Button disabled={!ready} describedby={ready ? undefined : 'waitlist-todo'}>{waitlist.submit}</Button>
+<!-- El cierre: una frase cuyo hueco es el campo de email y cuya última parte es el botón, sobre el
+     único campo de color entero de la página. -->
+<section id={waitlist.id} class="waitlist" aria-labelledby="waitlist-title" tabindex="-1">
+  <h2 id="waitlist-title" class="sr-only">{waitlist.title}</h2>
+  <div class="wrap">
+    <div class="panel">
+      <form class="sentence" method="post" action={ready ? config.waitlistUrl : undefined} data-reveal>
+        <input type="hidden" name="lang" value={t.lang} />
+        <label for="waitlist-email" class="words">{waitlist.before}</label>
+        <input id="waitlist-email" class="field" name="email" type="email" required autocomplete="email" inputmode="email" autocapitalize="off" spellcheck="false" />
+        <button class="submit" type="submit" disabled={!ready} aria-describedby={ready ? undefined : 'waitlist-todo'}>{waitlist.submit}</button>
+      </form>
+      <div class="notes" data-reveal style="--i:1">
+        <p>{waitlist.after}</p>
+        {!ready && <p id="waitlist-todo" class="todo">{waitlist.todo}</p>}
+        <p class="todo">{waitlist.privacyTodo}</p>
       </div>
-      {!ready && <p id="waitlist-todo" class="todo mono">{waitlist.todo}</p>}
-      <p class="todo mono">{waitlist.privacyTodo}</p>
-    </form>
-    {/* Si el servicio redirige a `#thanks`, la confirmación aparece sin JavaScript. */}
-    <div id="thanks" class="thanks" tabindex="-1">
-      <h3>{waitlist.thanksTitle}</h3>
-      <p>{waitlist.thanks}</p>
+      <!-- Si el servicio redirige a #thanks, la confirmación aparece sin JavaScript. -->
+      <div id="thanks" class="thanks" tabindex="-1">
+        <p class="thanks-title">{waitlist.thanksTitle}</p>
+        <p>{waitlist.thanks}</p>
+      </div>
     </div>
   </div>
-</Section>
+</section>
 
 <style>
-  .account {
-    margin-top: 1rem;
-    font-weight: 500;
+  .waitlist {
+    background: var(--field);
+    color: var(--on-field);
   }
-  label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: 600;
+  .panel {
+    padding-block: clamp(5rem, 3rem + 8vw, 10rem);
   }
-  .row {
+  .sentence {
     display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.15em 0.3em;
+    font-size: var(--step-display);
+    font-weight: 500;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
   }
-  input[type='email'] {
-    flex: 1;
+  .words {
+    white-space: nowrap;
+  }
+  .field {
+    flex: 1 1 100%;
     min-width: 0;
+    height: calc(var(--step-display) * 1.1);
     min-height: 3rem;
-    padding: 0 1.25rem;
-    border: 1px solid var(--field-border);
-    border-radius: 999px;
-    background: var(--bg);
-    color: var(--text);
-    font: inherit;
-    font-size: 1rem;
+    padding: 0 0.75em;
+    border: 0;
+    background: var(--on-field);
+    color: #0d1017;
+    font-size: var(--step-lead);
+    letter-spacing: -0.01em;
   }
-  input[type='email']:user-invalid {
-    border-color: var(--danger);
+  .field:focus-visible {
+    outline: 3px solid #0d1017;
+    outline-offset: 3px;
+  }
+  .field:user-invalid {
+    outline: 3px solid #d92d20;
+    outline-offset: 0;
+  }
+  .submit {
+    flex: none;
+    height: 1.1em;
+    min-height: 3rem;
+    padding: 0 0.35em;
+    border: 0;
+    background: #0d1017;
+    color: #ffffff;
+    font-size: inherit;
+    font-weight: 500;
+    letter-spacing: -0.03em;
+    cursor: pointer;
+    transition: transform var(--t-press) var(--ease-out), background-color var(--t-hover) ease;
+  }
+  .submit:active:not(:disabled) {
+    transform: scale(0.98);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .submit:not(:disabled):hover {
+      background: #232937;
+    }
+  }
+  .submit:focus-visible {
+    outline: 3px solid var(--on-field);
+    outline-offset: 3px;
+  }
+  /* Deshabilitado mientras falta el destino: sin relleno de tinta, con el texto que explica por qué. */
+  .submit:disabled {
+    background: color-mix(in srgb, #0d1017 30%, var(--field));
+    color: var(--on-field-soft);
+    cursor: not-allowed;
+  }
+  .notes {
+    display: grid;
+    gap: 0.5rem;
+    margin-top: 2rem;
+    max-width: 48ch;
+  }
+  .notes p {
+    color: var(--on-field);
   }
   .todo {
-    margin-top: 0.75rem;
-    color: var(--text-secondary);
-    font-size: 0.8125rem;
+    font-size: var(--step-small);
   }
-  .row + .todo {
-    margin-top: 1rem;
-  }
-  /* Al llegar con #thanks, el encabezado de la sección sigue a la vista sobre la confirmación. */
   .thanks {
     display: none;
     scroll-margin-top: 12rem;
@@ -91,23 +131,31 @@ const ready = Boolean(config.waitlistUrl);
   .thanks:target {
     display: block;
   }
-  .panel:has(.thanks:target) .form {
+  .panel:has(.thanks:target) .sentence,
+  .panel:has(.thanks:target) .notes {
     display: none;
   }
   .thanks:focus {
     outline: none;
   }
-  .thanks h3 {
-    font-size: 1.5rem;
+  .thanks-title {
+    font-size: var(--step-head);
+    font-weight: 500;
+    letter-spacing: -0.022em;
+    line-height: 1.05;
   }
-  .thanks p {
-    margin-top: 0.5rem;
-    color: var(--text-secondary);
-    font-size: 1.125rem;
+  .thanks p + p {
+    margin-top: 1rem;
+    font-size: var(--step-lead);
   }
-  @media (min-width: 40rem) {
-    .row {
-      flex-direction: row;
+
+  @media (min-width: 48rem) {
+    .field {
+      flex: 0 1 calc(var(--step-display) * 7);
+      min-height: 0;
+    }
+    .submit {
+      min-height: 0;
     }
   }
 </style>

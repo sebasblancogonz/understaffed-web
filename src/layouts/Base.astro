@@ -21,6 +21,8 @@ const ogImage = new URL(config.ogImagePath, site).href;
 <html lang={t.lang}>
   <head>
     <meta charset="utf-8" />
+    <!-- La clase `js` activa la demostración y las entradas; sin ella la página se ve completa. -->
+    <script is:inline>document.documentElement.classList.add('js');setTimeout(function(){if(!window.__landingReady)document.documentElement.classList.remove('js')},3000);</script>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{t.meta.title}</title>
     <meta name="description" content={t.meta.description} />

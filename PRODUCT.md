@@ -84,6 +84,21 @@ hay enlace de descarga público.
   - Dueño y colaborador son papeles en cada cosa compartida.
   - Funciona con un servidor propio. Que funcione también con el servicio de Understaffed
     depende de que ese servicio esté abierto al público (ver «Sin decidir»).
+- Los **roles** (añadido el 2026-11-18 con el rediseño; verificado en el código de la app):
+  - Se contratan desde plantillas: Analista de producto, Desarrollador full-stack, frontend y
+    backend, y Tester. Editar el rol no cambia la plantilla. Fuente:
+    `../understaffed/src-tauri/src/catalog/mod.rs`.
+  - Cada rol tiene nombre, instrucciones de hasta 8000 caracteres, modelo (vacío usa el de Claude
+    Code, o un alias como opus o sonnet) y el permiso «Ejecutar comandos». Especificar nunca
+    ejecuta comandos. Fuente: `../understaffed/src/features/team/RoleForm.tsx` y sus locales.
+  - Plugins, skills, servidores MCP y la web se activan por proyecto o grupo, no por rol; lo que
+    no se activa se deniega. Fuente: locales de la app (`role.toolsLine`, `tools.intro`).
+- Cada ejecución carga la configuración personal de Claude Code (CLAUDE.md, hooks, subagentes y
+  comandos, y las skills y plugins del propio CLI). Las skills sueltas, los plugins y los servidores
+  MCP instalados solo se usan si el proyecto o su grupo los activan. La línea de comandos con que
+  se lanza está en el README de la app.
+- Aprobar el código integra el trabajo en un único commit sobre la rama del usuario, con sus
+  hooks y su firma (squash, la opción por defecto). Fuente: locales de la app (`squashHint`).
 
 **Límites que la web no puede cruzar**
 
@@ -102,8 +117,8 @@ hay enlace de descarga público.
 
 **Restricciones de la web en sí**
 
-- El sitio es estático y no envía JavaScript al cliente salvo que una función concreta lo
-  requiera.
+- El sitio es estático. Desde el rediseño lleva un solo script pequeño (la demostración del
+  hero, las pestañas, el panel de Estado y las entradas); sin él, la página está completa.
 - Tiene dos idiomas con las mismas secciones. El español es el idioma por defecto (`/`) y el
   inglés va en `/en/`.
 - Los requisitos de presentación, accesibilidad y rendimiento que obligan al sitio están en
@@ -124,21 +139,24 @@ hay enlace de descarga público.
 
 ## Brand Commitments
 
-Estos compromisos vienen del PRODUCT.md de la app. **Para la web están heredados y sin
-confirmar:** nadie ha decidido todavía si la web los sigue al pie de la letra.
+Estos compromisos vienen del PRODUCT.md de la app.
+
+**Decisión para la web (2026-11-18):** el usuario eligió rediseñar la web con taste-skill y dejar en
+ella el estándar visual de la categoría. La app lo mantiene. En la web siguen fijos el nombre, la
+marca, el cobalto como único color saturado, la voz y el tema claro y oscuro.
 
 - **Nombre:** Understaffed. Es lo único fijo de la identidad.
 - **Voz:** neutra y técnica, de herramienta profesional. El nombre no se explota como chiste y no
   se usa jerga de oficina.
-- **Nivel:** el producto sigue el estándar de su categoría, sin ironía ni rarezas. Tiene que
-  poder ponerse junto a Linear, GitHub Projects y Height o Plane.
+- **Nivel:** la app sigue el estándar de su categoría, sin ironía ni rarezas, y tiene que poder
+  ponerse junto a Linear, GitHub Projects y Height o Plane. La web no (ver la decisión de arriba).
 - **Identidad:**
   - La marca son siete puntos en forma de U: seis círculos son personas y el cuadrado es el
     agente.
   - Hay un único color de acento, cobalto, y tema claro y oscuro.
   - El detalle visual de la app está en `../understaffed/DESIGN.md`.
-  - **Discrepancia en la web:** `public/favicon.svg` es una U de un solo trazo sobre un cuadrado
-    cobalto, no la marca de siete puntos, y la cabecera muestra solo el nombre en texto.
+  - En la web, la marca está copiada de la app en `src/components/ui/Mark.astro` y en
+    `public/favicon.svg`.
 - **Textos de la web:** son borradores de desarrollo marcados con `// DRAFT` en `src/i18n/`, a la
   espera de un redactor.
 
@@ -149,8 +167,11 @@ confirmar:** nadie ha decidido todavía si la web los sigue al pie de la letra.
 - La fuente de verdad del producto: `../understaffed/PRODUCT.md` y `../understaffed/README.md`,
   en el repositorio de la app. Este archivo recoge lo que la web necesita de ellos y lo que solo
   aplica a la web. Si los dos discrepan sobre la app, manda el de la app.
-- Capturas reales de la app en claro y oscuro, en español e inglés: tablero, revisión y
-  aprobación. Están en `src/assets/` y los originales en `media/capturas/`.
+- Capturas reales de la app en claro y oscuro, en español e inglés: tablero, revisión,
+  aprobación, Estado, grupo, cuenta y colaboración. Están en `src/assets/` y los originales en
+  `media/capturas/`. Sus datos son de demostración (proyecto storefront, grupo «Tienda online» u
+  «Online store», cuentas @example.com, servidor sync.example.com), y la web los reutiliza en sus
+  fragmentos de interfaz.
 - Vídeo de demostración de la app en los dos idiomas y temas, con pósteres, en `public/video/`.
 - Specs del sitio en `openspec/specs/` y propuestas archivadas en `openspec/changes/archive/`.
 - `screenshots/` guarda capturas de una versión anterior de esta web, no de la app. No sirven
@@ -158,12 +179,9 @@ confirmar:** nadie ha decidido todavía si la web los sigue al pie de la letra.
 
 **Lo que no hay y no se inventa**
 
-- No hay capturas de la vista Estado, de los grupos de proyectos, de la sincronización ni de la
-  colaboración.
 - Falta la imagen Open Graph (`public/og.png`). Tampoco hay URL pública ni endpoint para la
   lista de espera.
 - No hay clientes, testimonios, logos de clientes, métricas, precios ni prensa.
-- En este repositorio no hay ningún archivo de la marca de siete puntos.
 
 ## Product Principles
 

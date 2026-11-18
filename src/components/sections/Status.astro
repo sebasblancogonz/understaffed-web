@@ -1,6 +1,5 @@
 ---
-import Section from '../ui/Section.astro';
-import Placeholder from '../ui/Placeholder.astro';
+import Shot from '../ui/Shot.astro';
 import type { Dict } from '../../i18n/types';
 
 interface Props {
@@ -8,68 +7,283 @@ interface Props {
 }
 const { t } = Astro.props;
 const { status } = t;
+// La cuarta fila empieza abierta; pulsar otra abre esa en su lugar.
+const OPEN = 3;
 ---
 
-<Section id={status.id} title={status.title} intro={status.intro}>
-  <ul class="parts">
-    {status.items.map((item, i) => (
-      <li class="part">
-        <h3>
-          {/* Como en la app: el cobalto solo marca lo que espera tu decisión. */}
-          <span class:list={['chip', { awaiting: i === 0 }]}>{item.title}</span>
-        </h3>
-        <p>{item.text}</p>
-      </li>
-    ))}
-  </ul>
-  <div class="visual">
-    <Placeholder lang={t.lang} file={status.shot.file} alt={status.shot.alt} label={t.placeholder.label} />
+<!-- El Estado del grupo como un tablero de salidas: una fila por tarea, sin encabezado visible; el
+     nombre de la fila abierta es el texto más grande. Debajo, las capturas reales. -->
+<section id={status.id} class="status" aria-labelledby="status-title" tabindex="-1">
+  <h2 id="status-title" class="sr-only">{status.title}</h2>
+  <div class="band">
+    <ul class="board" data-ui data-board>
+      {
+        status.rows.map((row, i) => (
+          <li class:list={['row', row.kind, { 'is-open': i === OPEN }]} data-row data-reveal style={`--i:${i}; --rise: 16px`}>
+            <button type="button" class="head" aria-expanded={i === OPEN ? 'true' : 'false'} aria-controls={`status-row-${i}`}>
+              <span class="name">
+                <span class="num">{row.num}</span> {row.title}
+              </span>
+              <span class="fact repo">{row.repo}</span>
+              <span class="fact role">{row.role}</span>
+              <span class="fact time">{row.fact}</span>
+              <span class="state">
+                {row.kind === 'run' && <span class="spin" aria-hidden="true"></span>}
+                {row.status}
+              </span>
+            </button>
+            <div class="detail" id={`status-row-${i}`}>
+              <p class="facts">
+                {row.repo} · {row.role} · {row.fact}
+              </p>
+              <p>{row.detail[0]}</p>
+              <p>{row.detail[1]}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ul>
   </div>
-</Section>
+  <div class="wrap below">
+    <div class="say" data-reveal>
+      <p class="intro">{status.intro}</p>
+      <p class="cost">{status.cost}</p>
+    </div>
+    <div class="shots">
+      {
+        status.shots.map((shot, i) => (
+          <figure data-reveal style={`--i:${i + 1}`}>
+            <div class="stage">
+              <Shot lang={t.lang} file={shot.file} alt={shot.alt} label={t.placeholder.label} sizes="(min-width: 60rem) 64rem, 100vw" />
+            </div>
+            <figcaption>{shot.caption}</figcaption>
+          </figure>
+        ))
+      }
+    </div>
+  </div>
+</section>
 
 <style>
-  .parts {
+  .status {
+    padding-top: var(--section);
+  }
+  .band {
+    background: var(--board);
+    overflow: hidden;
+  }
+  /* Los bordes de la sección cortan la primera y la última fila: la lista parece seguir. */
+  [data-ui].board {
     display: grid;
-    gap: 1.75rem 2rem;
-    margin: 0;
-    padding: 0;
-    list-style: none;
+    gap: 4px;
+    margin-block: -2.25rem;
+    padding-inline: 0.5rem;
+    color: var(--on-board);
   }
-  .part {
-    padding-top: 1.25rem;
-    border-top: 1px solid var(--border);
+  [data-ui] .row {
+    background: var(--board-row);
   }
-  h3 {
-    font-size: 0.9375rem;
-    line-height: 1;
+  [data-ui] .row:nth-child(even) {
+    background: var(--board-row-2);
   }
-  .chip {
-    display: inline-block;
-    padding: 0.4rem 0.75rem;
-    border-radius: 999px;
-    background: var(--surface);
-    color: var(--text);
+  [data-ui] .head {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+    min-height: 4rem;
+    padding: 0.5rem 0.75rem;
+    border: 0;
+    background: none;
+    color: inherit;
+    text-align: left;
+    cursor: pointer;
+  }
+  [data-ui] .name {
+    overflow: hidden;
+    font-size: var(--step-body);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  [data-ui] .num {
+    color: var(--on-board-soft);
+    font-variant-numeric: tabular-nums;
+  }
+  [data-ui] .fact {
+    display: none;
+    color: var(--on-board-soft);
+    font-size: var(--step-small);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  [data-ui] .state {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 2.5rem;
+    padding: 0.25rem 0.75rem;
+    font-size: var(--step-small);
     font-weight: 600;
+    white-space: nowrap;
   }
-  .chip.awaiting {
-    background: var(--accent);
-    color: var(--on-accent);
+  [data-ui] .decision .state {
+    background: var(--field);
+    color: var(--on-field);
   }
-  .part p {
-    margin-top: 0.75rem;
-    color: var(--text-secondary);
+  [data-ui] .run .state {
+    background: var(--board-row-2);
   }
-  .visual {
-    margin-top: 3rem;
+  [data-ui] .row:nth-child(even).run .state {
+    background: var(--board-row);
   }
-  @media (min-width: 48rem) {
-    .parts {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+  [data-ui] .done .state {
+    color: var(--on-board-soft);
+    font-weight: 500;
+  }
+  [data-ui] .spin {
+    width: 0.75rem;
+    height: 0.75rem;
+    border: 2px solid var(--on-board-soft);
+    border-top-color: var(--on-board);
+    border-radius: 50%;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    [data-ui] .spin {
+      animation: spin 900ms linear infinite;
     }
   }
-  @media (min-width: 72rem) {
-    .parts {
-      grid-template-columns: repeat(4, minmax(0, 1fr));
+  @keyframes spin {
+    to {
+      transform: rotate(1turn);
+    }
+  }
+  [data-ui] .detail {
+    display: grid;
+    gap: 0.125rem;
+    padding: 0 0.75rem 1rem;
+    font-size: var(--step-body);
+  }
+  [data-ui] .detail .facts {
+    margin-bottom: 0.25rem;
+    font-weight: 500;
+  }
+  :global(.js) [data-ui] .row:not(.is-open) .detail {
+    display: none;
+  }
+  /* La fila abierta: campo cobalto, nombre grande y su detalle en dos líneas. */
+  [data-ui] .row.is-open {
+    background: var(--field);
+    color: var(--on-field);
+  }
+  [data-ui] .row.is-open .head {
+    min-height: 6rem;
+  }
+  [data-ui] .row.is-open .name {
+    font-size: var(--step-lead);
+    white-space: normal;
+  }
+  [data-ui] .row.is-open .num,
+  [data-ui] .row.is-open .fact {
+    color: var(--on-field-soft);
+  }
+  [data-ui] .row.is-open.decision .state {
+    background: var(--on-field);
+    color: var(--field);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    [data-ui] .row:not(.is-open) .head:hover .name {
+      text-decoration: underline;
+      text-decoration-thickness: 0.06em;
+      text-underline-offset: 0.2em;
+    }
+  }
+  [data-ui] .head:focus-visible {
+    outline-color: var(--on-board);
+    outline-offset: -3px;
+  }
+
+  .below {
+    display: grid;
+    gap: 3rem;
+    padding-top: 4rem;
+  }
+  .intro {
+    max-width: 30ch;
+    font-size: var(--step-lead);
+    font-weight: 500;
+    line-height: 1.25;
+  }
+  .cost {
+    margin-top: 1rem;
+    max-width: 44ch;
+    color: var(--muted);
+    font-size: var(--step-small);
+  }
+  .shots {
+    display: grid;
+    gap: 2rem;
+  }
+  .stage {
+    padding: clamp(0.75rem, 2vw, 1.5rem);
+    background: var(--surface);
+  }
+  figcaption {
+    margin-top: 0.75rem;
+    color: var(--muted);
+    font-size: var(--step-small);
+  }
+
+  @media (min-width: 60rem) {
+    [data-ui].board {
+      gap: 4px;
+      margin-block: -2.25rem;
+      padding-inline: 0.75rem;
+    }
+    [data-ui] .head {
+      grid-template-columns: minmax(0, 6fr) minmax(0, 2fr) minmax(0, 1.4fr) minmax(0, 1.6fr) 15rem;
+      gap: 1.5rem;
+      min-height: 4.5rem;
+      padding-inline: 1.25rem;
+    }
+    [data-ui] .name {
+      font-size: var(--step-lead);
+    }
+    [data-ui] .fact {
+      display: block;
+    }
+    [data-ui] .state {
+      justify-self: stretch;
+    }
+    [data-ui] .row:not(.is-open) .detail .facts {
+      display: none;
+    }
+    [data-ui] .detail {
+      padding: 0 1.25rem 1.5rem;
+      max-width: 60rem;
+    }
+    /* Abierta, el nombre ocupa todo el ancho salvo el estado; los datos pasan al detalle. */
+    [data-ui] .row.is-open .head {
+      grid-template-columns: minmax(0, 1fr) 15rem;
+      min-height: 7rem;
+      align-items: end;
+    }
+    [data-ui] .row.is-open .fact {
+      display: none;
+    }
+    [data-ui] .row.is-open .name {
+      font-size: var(--step-head);
+      line-height: 1.05;
+    }
+    .below {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 3fr);
+      align-items: start;
+      gap: 4rem;
+    }
+    .shots {
+      gap: 2.5rem;
     }
   }
 </style>

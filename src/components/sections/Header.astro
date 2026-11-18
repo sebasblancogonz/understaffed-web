@@ -1,4 +1,5 @@
 ---
+import Mark from '../ui/Mark.astro';
 import { paths, type Lang } from '../../config';
 import type { Dict } from '../../i18n/types';
 
@@ -9,90 +10,47 @@ const { t } = Astro.props;
 const other: Lang = t.lang === 'es' ? 'en' : 'es';
 ---
 
+<!-- Sin barra de navegación: la marca arriba a la izquierda y el cambio de idioma a la derecha.
+     Los enlaces a las secciones están en el pie. -->
 <header class="header">
-  <div class="container bar">
-    <a class="brand" href={paths[t.lang]} aria-label="Understaffed">Understaffed</a>
-    <nav aria-label={t.nav.label} class="nav">
-      <ul>
-        {t.nav.items.map((item) => (
-          <li>
-            {/* La lista de espera se marca en tinta, sin cobalto: el acento es solo del hero. */}
-            <a href={`#${item.id}`} class:list={{ strong: item.id === t.waitlist.id }}>{item.label}</a>
-          </li>
-        ))}
-      </ul>
-    </nav>
-    <a class="lang" href={paths[other]} hreflang={other} lang={other} aria-label={t.nav.switchLabel}>
-      {t.nav.switchText}
-    </a>
-  </div>
+  <a class="brand" href={paths[t.lang]} aria-label={t.header.home}>
+    <Mark />
+    <span class="word">Understaffed</span>
+  </a>
+  <a class="lang link" href={paths[other]} hreflang={other} lang={other} aria-label={t.header.switchLabel}>
+    {t.header.switchText}
+  </a>
 </header>
 
 <style>
   .header {
-    border-bottom: 1px solid var(--border);
-  }
-  /* En móvil: marca e idioma arriba, la navegación debajo. Desde 60rem, todo en una fila. */
-  .bar {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    grid-template-areas:
-      'brand lang'
-      'nav nav';
+    position: absolute;
+    inset: 0 0 auto;
+    z-index: 10;
+    display: flex;
     align-items: center;
-    gap: 0.25rem 1.5rem;
-    padding-block: 0.5rem;
+    justify-content: space-between;
+    padding: var(--margin);
+    pointer-events: none;
+  }
+  .header a {
+    pointer-events: auto;
   }
   .brand {
-    grid-area: brand;
-    justify-self: start;
-    padding-block: 0.6rem;
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    text-decoration: none;
-  }
-  .nav {
-    grid-area: nav;
-  }
-  ul {
     display: flex;
-    flex-wrap: wrap;
-    gap: 0 1rem;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-  .nav a {
-    display: inline-block;
-    padding-block: 0.6rem;
-    color: var(--text-secondary);
+    align-items: center;
+    gap: 0.625rem;
+    color: var(--ink);
     text-decoration: none;
-    font-size: 0.95rem;
   }
-  .nav a:hover,
-  .nav a.strong {
-    color: var(--text);
-  }
-  .nav a.strong {
+  .word {
+    font-size: var(--step-body);
     font-weight: 600;
+    letter-spacing: -0.02em;
   }
   .lang {
-    grid-area: lang;
-    padding: 0.45rem 0.75rem;
-    border: 1px solid var(--border);
-    border-radius: 999px;
-    font-size: 0.95rem;
-    text-decoration: none;
-  }
-  @media (min-width: 60rem) {
-    .bar {
-      grid-template-columns: auto minmax(0, 1fr) auto;
-      grid-template-areas: 'brand nav lang';
-      min-height: 4rem;
-    }
-    ul {
-      justify-content: flex-end;
-      gap: 0 1.25rem;
-    }
+    padding-block: 0.5rem;
+    font-size: var(--step-small);
+    font-weight: 500;
   }
 </style>

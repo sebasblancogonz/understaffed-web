@@ -1,0 +1,91 @@
+---
+import { getImage } from 'astro:assets';
+
+/**
+ * Captura real de la app en la variante del tema del sistema y en el idioma de la página. El
+ * navegador solo descarga la variante que corresponde. Si falta una variante, un hueco con TODO.
+ */
+interface Props {
+  /** Nombre base de la captura, sin idioma, tema ni extensión (p. ej. `tablero`) */
+  file: string;
+  lang: string;
+  alt: string;
+  label: string;
+  /** Proporción del hueco mientras no exista la captura */
+  ratio?: string;
+  /** `eager` solo para lo que se ve al cargar; el resto se carga en diferido. */
+  loading?: 'eager' | 'lazy';
+  /** Ancho que ocupa la captura en la página, para elegir el archivo adecuado. */
+  sizes?: string;
+  class?: string;
+}
+const {
+  file,
+  lang,
+  alt,
+  label,
+  ratio = '16 / 10',
+  loading = 'lazy',
+  sizes = '(min-width: 90rem) 84rem, 100vw',
+  class: className,
+} = Astro.props;
+
+const shots = import.meta.glob<{ default: ImageMetadata }>('/src/assets/*.{png,jpg,jpeg,webp}', { eager: true });
+const lightName = `${file}-${lang}-light.png`;
+const darkName = `${file}-${lang}-dark.png`;
+const light = shots[`/src/assets/${lightName}`]?.default;
+const dark = shots[`/src/assets/${darkName}`]?.default;
+const missing = [light ? '' : lightName, dark ? '' : darkName].filter(Boolean);
+
+const widths = [480, 800, 1200, 1600];
+const lightImg = light && (await getImage({ src: light, widths, format: 'webp' }));
+const darkImg = dark && (await getImage({ src: dark, widths, format: 'webp' }));
+---
+
+{
+  light && dark && lightImg && darkImg ? (
+    <picture class:list={['shot', className]}>
+      <source media="(prefers-color-scheme: dark)" srcset={darkImg.srcSet.attribute} {sizes} />
+      <img
+        src={lightImg.src}
+        srcset={lightImg.srcSet.attribute}
+        {sizes}
+        width={light.width}
+        height={light.height}
+        alt={alt}
+        loading={loading}
+        decoding="async"
+      />
+    </picture>
+  ) : (
+    <div class:list={['todo', className]} style={`aspect-ratio: ${ratio}`} role="img" aria-label={alt}>
+      <p>{label}</p>
+      {missing.map((name) => <p class="name">src/assets/{name}</p>)}
+    </div>
+  )
+}
+
+<style>
+  .shot,
+  .shot img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .todo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    padding: 1rem;
+    width: 100%;
+    background: var(--surface-2);
+    font-size: var(--step-small);
+    text-align: center;
+  }
+  .name {
+    color: var(--muted);
+    overflow-wrap: anywhere;
+  }
+</style>
