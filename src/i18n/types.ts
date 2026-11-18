@@ -1,21 +1,54 @@
 import type { Lang } from '../config';
 
-export interface Step {
-  title: string;
-  text: string;
-}
-
 export interface Shot {
   file: string;
   alt: string;
 }
 
-/** Bloque con título, texto y su captura (p. ej. sincronizar o colaborar). */
-export interface Feature {
+/** Tarjeta del tablero de demostración (datos de las capturas). */
+export interface Card {
+  num: string;
+  title: string;
+  prio: string;
+  progress?: string;
+  role?: string;
+  /** Estado de la tarjeta, en el chip de arriba. */
+  state?: 'awaiting' | 'running' | 'awaitingReview';
+}
+
+/** Fila del panel de Estado del grupo. */
+export interface BoardRow {
+  repo: string;
+  num: string;
+  title: string;
+  role: string;
+  fact: string;
+  status: string;
+  kind: 'run' | 'decision' | 'done';
+  detail: [string, string];
+}
+
+export interface Band {
+  label: string;
   title: string;
   text: string;
-  detail: string;
-  shot: Shot;
+  who?: string;
+  marks?: ('person' | 'agent')[];
+}
+
+export interface Tab {
+  id: string;
+  title: string;
+  sub: string;
+  bands: Band[];
+  media: { kind: 'video'; alt: string } | { kind: 'shot'; shot: Shot };
+}
+
+export interface Note {
+  /** Parte del editor a la que se refiere. */
+  part: 'name' | 'prompt' | 'model' | 'bash' | 'tools' | 'templates';
+  title: string;
+  text: string;
 }
 
 export interface Dict {
@@ -23,72 +56,107 @@ export interface Dict {
   ogLocale: string;
   meta: { title: string; description: string; ogImageAlt: string };
   skip: string;
-  nav: {
-    label: string;
-    items: { id: string; label: string }[];
-    switchText: string;
-    switchLabel: string;
-  };
+  header: { home: string; switchText: string; switchLabel: string };
   hero: {
     title: string;
     lead: string;
     cta: string;
     note: string;
-    shot: Shot;
+    demo: {
+      label: string;
+      caption: string;
+      columns: [string, string, string, string, string];
+      task: { num: string; title: string; prio: string; role: string; total: number };
+      /** Las demás tarjetas de cada columna, de Backlog a Hecho. */
+      others: [Card[], Card[], Card[], Card[], Card[]];
+      chips: { awaiting: string; running: string; awaitingReview: string; integrating: string };
+      actions: {
+        requestChanges: string;
+        approveSpec: string;
+        run: string;
+        sendBack: string;
+        approveCode: string;
+        restart: string;
+      };
+      /** Pista de la app para cada paso: Backlog, Por hacer, En curso, En revisión, Hecho. */
+      hints: [string, string, string, string, string];
+      notes: { requestChanges: string; sendBack: string };
+      log: string[];
+      review: { files: string; result: string; message: string };
+      done: string;
+      live: string;
+      fallbackTitle: string;
+      fallback: string[];
+    };
   };
   how: {
     id: string;
     title: string;
-    intro: string;
-    steps: Step[];
-    pathLabel: string;
-    pathExample: string;
-    cli: string;
-    shot: Shot;
+    one: { lead: string; label: string; value: string; role: string; tree: string; shot: Shot };
+    two: { lead: string; buttons: [string, string]; intro: string; command: string };
+    three: { lead: string; option: string; hint: string; button: string; shot: Shot };
   };
-  approvals: {
+  requirements: {
     id: string;
     title: string;
-    intro: string;
-    items: Step[];
-    shot: Shot;
+    text: string;
+    tiles: { name: string; text: string }[];
   };
   status: {
     id: string;
     title: string;
     intro: string;
-    /** El primero es lo que espera tu decisión: lleva el acento. */
-    items: Step[];
-    shot: Shot;
+    rows: BoardRow[];
+    open: string;
+    cost: string;
+    shots: (Shot & { caption: string })[];
   };
-  groups: {
+  roles: {
     id: string;
     title: string;
-    intro: string;
-    items: Step[];
-    shot: Shot;
+    dialog: {
+      title: string;
+      hint: string;
+      name: string;
+      nameValue: string;
+      prompt: string;
+      promptValue: string;
+      count: string;
+      model: string;
+      modelPlaceholder: string;
+      modelHint: string;
+      permissions: string;
+      allowBash: string;
+      allowBashHint: string;
+      toolsLine: string;
+      back: string;
+      confirm: string;
+    };
+    notes: Note[];
   };
   local: {
     id: string;
-    title: string;
-    text: string;
-    account: string;
-    sync: Feature;
-    team: Feature;
+    title: [string, string];
+    cta: string;
+    tabsLabel: string;
+    tabs: Tab[];
   };
-  requirements: { id: string; title: string; items: string[]; note: string };
   waitlist: {
     id: string;
     title: string;
-    intro: string;
-    account: string;
-    label: string;
+    before: string;
     submit: string;
+    after: string;
     todo: string;
     privacyTodo: string;
     thanksTitle: string;
     thanks: string;
   };
+  footer: {
+    text: string;
+    navLabel: string;
+    nav: { id: string; label: string }[];
+    year: string;
+  };
   placeholder: { label: string };
-  footer: { text: string };
 }

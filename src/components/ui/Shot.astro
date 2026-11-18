@@ -1,6 +1,10 @@
 ---
 import { getImage } from 'astro:assets';
 
+/**
+ * Captura real de la app en la variante del tema del sistema y en el idioma de la página. El
+ * navegador solo descarga la variante que corresponde. Si falta una variante, un hueco con TODO.
+ */
 interface Props {
   /** Nombre base de la captura, sin idioma, tema ni extensión (p. ej. `tablero`) */
   file: string;
@@ -9,10 +13,11 @@ interface Props {
   label: string;
   /** Proporción del hueco mientras no exista la captura */
   ratio?: string;
-  /** `eager` solo para la captura del hero; el resto se carga en diferido. */
+  /** `eager` solo para lo que se ve al cargar; el resto se carga en diferido. */
   loading?: 'eager' | 'lazy';
   /** Ancho que ocupa la captura en la página, para elegir el archivo adecuado. */
   sizes?: string;
+  class?: string;
 }
 const {
   file,
@@ -21,32 +26,26 @@ const {
   label,
   ratio = '16 / 10',
   loading = 'lazy',
-  sizes = '(min-width: 72rem) 70rem, 100vw',
+  sizes = '(min-width: 90rem) 84rem, 100vw',
+  class: className,
 } = Astro.props;
 
-const shots = import.meta.glob<{ default: ImageMetadata }>(
-  '/src/assets/*.{png,jpg,jpeg,webp}',
-  { eager: true },
-);
+const shots = import.meta.glob<{ default: ImageMetadata }>('/src/assets/*.{png,jpg,jpeg,webp}', { eager: true });
 const lightName = `${file}-${lang}-light.png`;
 const darkName = `${file}-${lang}-dark.png`;
 const light = shots[`/src/assets/${lightName}`]?.default;
 const dark = shots[`/src/assets/${darkName}`]?.default;
 const missing = [light ? '' : lightName, dark ? '' : darkName].filter(Boolean);
 
-const widths = [480, 800, 1200];
+const widths = [480, 800, 1200, 1600];
 const lightImg = light && (await getImage({ src: light, widths, format: 'webp' }));
 const darkImg = dark && (await getImage({ src: dark, widths, format: 'webp' }));
 ---
 
 {
   light && dark && lightImg && darkImg ? (
-    <picture>
-      <source
-        media="(prefers-color-scheme: dark)"
-        srcset={darkImg.srcSet.attribute}
-        {sizes}
-      />
+    <picture class:list={['shot', className]}>
+      <source media="(prefers-color-scheme: dark)" srcset={darkImg.srcSet.attribute} {sizes} />
       <img
         src={lightImg.src}
         srcset={lightImg.srcSet.attribute}
@@ -56,24 +55,22 @@ const darkImg = dark && (await getImage({ src: dark, widths, format: 'webp' }));
         alt={alt}
         loading={loading}
         decoding="async"
-        class="shot"
       />
     </picture>
   ) : (
-    <div class="todo" style={`aspect-ratio: ${ratio}`} role="img" aria-label={alt}>
-      <p class="mono"><strong>{label}</strong></p>
-      {missing.map((name) => <p class="mono name">src/assets/{name}</p>)}
+    <div class:list={['todo', className]} style={`aspect-ratio: ${ratio}`} role="img" aria-label={alt}>
+      <p>{label}</p>
+      {missing.map((name) => <p class="name">src/assets/{name}</p>)}
     </div>
   )
 }
 
 <style>
-  .shot {
+  .shot,
+  .shot img {
     display: block;
     width: 100%;
     height: auto;
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
   }
   .todo {
     display: flex;
@@ -83,13 +80,12 @@ const darkImg = dark && (await getImage({ src: dark, widths, format: 'webp' }));
     gap: 0.25rem;
     padding: 1rem;
     width: 100%;
-    background: var(--surface);
-    border: 1px dashed var(--text-secondary);
-    border-radius: var(--radius);
+    background: var(--surface-2);
+    font-size: var(--step-small);
     text-align: center;
   }
   .name {
-    color: var(--text-secondary);
+    color: var(--muted);
     overflow-wrap: anywhere;
   }
 </style>

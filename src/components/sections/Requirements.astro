@@ -1,5 +1,4 @@
 ---
-import Section from '../ui/Section.astro';
 import type { Dict } from '../../i18n/types';
 
 interface Props {
@@ -7,46 +6,86 @@ interface Props {
 }
 const { t } = Astro.props;
 const { requirements } = t;
-// Nombres de comando en monoespaciada: git y claude
+// Los nombres de comando van en `code` (spec: rutas y comandos en monoespaciada).
 const parts = (text: string) => text.split(/(\bgit\b)/g);
 ---
 
-<Section id={requirements.id} title={requirements.title}>
-  <div class="box">
-    <ul>
-      {requirements.items.map((item) => (
-        <li>{parts(item).map((p) => (p === 'git' ? <code>git</code> : p))}</li>
-      ))}
+<!-- Lo que la app usa, como un tablero de nombres grandes. La primera pieza, doble y en cobalto,
+     lleva el encabezado. -->
+<section id={requirements.id} class="req" aria-labelledby="requirements-title" tabindex="-1">
+  <div class="wrap">
+    <ul class="tiles">
+      <li class="tile lead" data-reveal>
+        <h2 id="requirements-title">{requirements.title}</h2>
+        <p>{parts(requirements.text).map((p) => (p === 'git' ? <code>git</code> : p))}</p>
+      </li>
+      {
+        requirements.tiles.map((tile, i) => (
+          <li class="tile" data-reveal style={`--i:${(i % 3) + 1}`}>
+            <p class="name">{tile.name}</p>
+            <p class="text">{parts(tile.text).map((p) => (p === 'git' ? <code>git</code> : p))}</p>
+          </li>
+        ))
+      }
     </ul>
-    <p class="note">{parts(requirements.note).map((p) => (p === 'git' ? <code>git</code> : p))}</p>
   </div>
-</Section>
+</section>
 
 <style>
-  .box {
-    max-width: 40rem;
-    padding: 1.75rem;
+  .req {
+    padding-block: var(--section);
+  }
+  .tiles {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.375rem;
+  }
+  .tile {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 1.5rem;
+    min-height: 11rem;
+    padding: 1.25rem;
     background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    font-size: 1.125rem;
   }
-  ul {
-    margin: 0;
-    padding-left: 1.25rem;
+  .tile.lead {
+    grid-column: 1 / -1;
+    min-height: 12rem;
+    background: var(--field);
+    color: var(--on-field);
   }
-  li + li {
-    margin-top: 0.5rem;
+  h2 {
+    font-size: var(--step-head);
   }
-  .note {
-    margin-top: 1rem;
-    color: var(--text-secondary);
+  .lead p {
+    max-width: 38ch;
+    color: var(--on-field-soft);
   }
-  code {
-    padding: 0.1rem 0.4rem;
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    font-size: 0.95em;
+  .name {
+    font-size: var(--step-body);
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    line-height: 1.15;
+  }
+  .text {
+    max-width: 32ch;
+  }
+  @media (min-width: 60rem) {
+    .tiles {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 0.5rem;
+    }
+    .tile {
+      min-height: 15rem;
+      padding: 1.5rem;
+    }
+    .tile.lead {
+      grid-column: span 2;
+      min-height: 15rem;
+    }
+    .name {
+      font-size: var(--step-lead);
+    }
   }
 </style>

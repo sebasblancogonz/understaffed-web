@@ -3,11 +3,10 @@ import Base from '../layouts/Base.astro';
 import Header from './sections/Header.astro';
 import Hero from './sections/Hero.astro';
 import HowItWorks from './sections/HowItWorks.astro';
-import Approvals from './sections/Approvals.astro';
-import Status from './sections/Status.astro';
-import Groups from './sections/Groups.astro';
-import LocalFirst from './sections/LocalFirst.astro';
 import Requirements from './sections/Requirements.astro';
+import Status from './sections/Status.astro';
+import Roles from './sections/Roles.astro';
+import LocalFirst from './sections/LocalFirst.astro';
 import Waitlist from './sections/Waitlist.astro';
 import Footer from './sections/Footer.astro';
 import { getDict } from '../i18n';
@@ -24,11 +23,14 @@ const t = getDict(lang);
   <Header slot="header" t={t} />
   <Hero t={t} />
   <HowItWorks t={t} />
-  <Approvals t={t} />
-  <Status t={t} />
-  <Groups t={t} />
-  <LocalFirst t={t} />
   <Requirements t={t} />
+  <Status t={t} />
+  <Roles t={t} />
+  <LocalFirst t={t} />
   <Waitlist t={t} />
   <Footer slot="footer" t={t} />
 </Base>
+
+<script>
+  import '../scripts/landing';
+</script>

@@ -1,6 +1,5 @@
 ---
-import Section from '../ui/Section.astro';
-import Placeholder from '../ui/Placeholder.astro';
+import Shot from '../ui/Shot.astro';
 import type { Dict } from '../../i18n/types';
 
 interface Props {
@@ -8,73 +7,319 @@ interface Props {
 }
 const { t } = Astro.props;
 const { local } = t;
-// Lo compartido no gasta el cobalto, como en la app: estos bloques van en tinta y gris.
-const blocks = [local.sync, local.team];
+
+// Vídeo de demostración del tablero, en el tema y el idioma de la página. No se descarga hasta que
+// su pestaña está a la vista (el script le pone la fuente); sin JavaScript se ve su fotograma.
+const video = `/video/understaffed-demo-${t.lang}`;
+const sources = [
+  { scheme: 'light', file: `${video}-light` },
+  { scheme: 'dark', file: video },
+];
+const href = `#${t.waitlist.id}`;
 ---
 
-<Section id={local.id} title={local.title} intro={local.text}>
-  <p slot="head" class="account">{local.account}</p>
-  <div class="blocks">
-    {blocks.map((block) => (
-      <article class="block">
-        <h3>{block.title}</h3>
-        <p class="text">{block.text}</p>
-        <p class="detail">{block.detail}</p>
-        <div class="shot">
-          <Placeholder
-            lang={t.lang}
-            file={block.shot.file}
-            alt={block.shot.alt}
-            label={t.placeholder.label}
-            ratio="1360 / 1640"
-            sizes="(min-width: 72rem) 34rem, (min-width: 60rem) 48vw, 100vw"
-          />
-        </div>
-      </article>
-    ))}
+<!-- Pestañas como una agenda por bandas: a la izquierda las pestañas apiladas, a la derecha las
+     bandas de la elegida y su vídeo o captura. -->
+<section id={local.id} class="local" aria-labelledby="local-title" tabindex="-1">
+  <div class="wrap">
+    <div class="top">
+      <h2 id="local-title" data-reveal>
+        <span class="soft">{local.title[0]}</span>
+        <span>{local.title[1]}</span>
+      </h2>
+      <a class="button" href={href} data-reveal style="--i:1">{local.cta}</a>
+    </div>
+
+    <div class="agenda">
+      <div class="tabs" role="tablist" aria-label={local.tabsLabel} data-tabs hidden>
+        {
+          local.tabs.map((tab, i) => (
+            <button
+              type="button"
+              role="tab"
+              class="tab"
+              id={`${tab.id}-tab`}
+              aria-controls={tab.id}
+              aria-selected={i === 0 ? 'true' : 'false'}
+              tabindex={i === 0 ? 0 : -1}
+            >
+              <span class="tab-title">{tab.title}</span>
+              <span class="tab-sub">{tab.sub}</span>
+            </button>
+          ))
+        }
+      </div>
+
+      <div class="panels">
+        {
+          local.tabs.map((tab, i) => (
+            <div class="panel" id={tab.id} role="tabpanel" aria-labelledby={`${tab.id}-tab`} data-panel data-index={i}>
+              <h3 class="panel-title">
+                {tab.title} <span>{tab.sub}</span>
+              </h3>
+              <ul class="bands">
+                {tab.bands.map((band, j) => (
+                  <li class="band" data-reveal style={`--i:${j}; --rise: 16px`}>
+                    <p class="label">{band.label}</p>
+                    <div class="what">
+                      <p class="band-title">{band.title}</p>
+                      <p class="band-text">{band.text}</p>
+                    </div>
+                    {band.who && (
+                      <p class="who">
+                        <span>{band.who}</span>
+                        {band.marks && (
+                          <span class="marks" aria-hidden="true">
+                            {band.marks.map((m) => (
+                              <span class={m}></span>
+                            ))}
+                          </span>
+                        )}
+                      </p>
+                    )}
+                  </li>
+                ))}
+              </ul>
+              <div class="media" data-reveal style="--i:2">
+                {tab.media.kind === 'video' ? (
+                  <div class="video">
+                    <picture>
+                      <source media="(prefers-color-scheme: dark)" srcset={`${video}-poster.jpg`} />
+                      <img src={`${video}-light-poster.jpg`} width="1920" height="1200" alt={tab.media.alt} loading="lazy" decoding="async" />
+                    </picture>
+                    <video muted loop playsinline disablepictureinpicture preload="none" tabindex="-1" aria-hidden="true" data-video>
+                      {sources.flatMap(({ scheme, file }) => [
+                        <source data-src={`${file}.webm`} type="video/webm" media={`(prefers-color-scheme: ${scheme})`} />,
+                        <source data-src={`${file}.mp4`} type="video/mp4" media={`(prefers-color-scheme: ${scheme})`} />,
+                      ])}
+                    </video>
+                  </div>
+                ) : (
+                  <Shot lang={t.lang} file={tab.media.shot.file} alt={tab.media.shot.alt} label={t.placeholder.label} ratio="1360 / 1640" sizes="(min-width: 60rem) 26rem, 100vw" />
+                )}
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
   </div>
-</Section>
+</section>
 
 <style>
-  .account {
-    margin-top: 1rem;
-    font-size: 1.125rem;
-    font-weight: 500;
+  .local {
+    padding-block: var(--section);
   }
-  .blocks {
-    display: grid;
-    gap: 3rem;
-  }
-  .block {
+  .top {
     display: flex;
-    flex-direction: column;
-    padding-top: 1.25rem;
-    border-top: 1px solid var(--border);
+    flex-wrap: wrap;
+    align-items: end;
+    justify-content: space-between;
+    gap: 1.5rem;
   }
-  h3 {
-    font-size: 1.375rem;
+  h2 {
+    font-size: var(--step-head);
   }
-  .text {
-    margin-top: 0.75rem;
-    max-width: 34rem;
+  h2 span {
+    display: block;
   }
-  .detail {
-    margin-top: 0.5rem;
-    max-width: 34rem;
-    color: var(--text-secondary);
+  .soft {
+    color: var(--muted);
   }
-  .shot {
-    margin-top: 2rem;
+  .agenda {
+    margin-top: 3.5rem;
   }
-  @media (min-width: 60rem) {
-    .blocks {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 3rem;
+  .tabs {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.375rem;
+  }
+  :global(.js) .tabs[hidden] {
+    display: grid;
+  }
+  .tab {
+    display: grid;
+    align-content: center;
+    gap: 0.125rem;
+    min-height: 4rem;
+    padding: 0.5rem 0.75rem;
+    border: 0;
+    background: var(--surface);
+    text-align: left;
+    cursor: pointer;
+    transition: background-color var(--t-hover) ease, color var(--t-hover) ease;
+  }
+  .tab-title {
+    font-size: var(--step-body);
+    font-weight: 500;
+    line-height: 1.2;
+  }
+  .tab-sub {
+    color: var(--muted);
+    font-size: var(--step-small);
+  }
+  .tab[aria-selected='true'] {
+    background: var(--ink);
+    color: var(--bg);
+  }
+  .tab[aria-selected='true'] .tab-sub {
+    color: color-mix(in srgb, var(--bg) 80%, var(--ink));
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .tab[aria-selected='false']:hover {
+      background: var(--surface-2);
     }
-    /* Las capturas se alinean abajo aunque los textos tengan distinta longitud. */
-    .shot {
-      margin-top: auto;
-      padding-top: 2rem;
+  }
+  .panels {
+    margin-top: 1rem;
+  }
+  .panel + .panel {
+    margin-top: 3rem;
+  }
+  :global(.js) .panel + .panel {
+    margin-top: 0;
+  }
+  :global(.js) .panel[hidden] {
+    display: none;
+  }
+  .panel-title {
+    margin-bottom: 1rem;
+    font-size: var(--step-lead);
+  }
+  .panel-title span {
+    color: var(--muted);
+  }
+  /* taste-skill-ignore: título oculto a la vista (lo dicen las pestañas), no es un filete */
+  :global(.js) .panel-title {
+    position: absolute;
+    width: 1px; /* taste-skill-ignore */
+    height: 1px; /* taste-skill-ignore */
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+  }
+  .bands {
+    display: grid;
+    gap: 4px;
+  }
+  .band {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.25rem;
+    padding: 1rem;
+    background: var(--surface);
+  }
+  .band:nth-child(even) {
+    background: var(--surface-2);
+  }
+  .label {
+    font-size: var(--step-lead);
+    font-weight: 500;
+    line-height: 1.2;
+  }
+  .band-title {
+    font-weight: 600;
+  }
+  .band-text {
+    margin-top: 0.125rem;
+  }
+  .who {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    font-size: var(--step-small);
+  }
+  .marks {
+    display: inline-flex;
+  }
+  .marks span {
+    display: block;
+    width: 1.5rem;
+    height: 1.5rem;
+    border: 2px solid var(--bg);
+  }
+  .marks span + span {
+    margin-left: -0.375rem;
+  }
+  .marks .person {
+    border-radius: 50%;
+    background: var(--ink);
+  }
+  .marks .agent {
+    background: var(--accent);
+  }
+  .media {
+    margin-top: 1rem;
+    background: var(--surface);
+    padding: clamp(0.75rem, 2vw, 1.5rem);
+  }
+  .video {
+    position: relative;
+  }
+  .video img,
+  .video video {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .video video {
+    position: absolute;
+    inset: 0;
+    height: 100%;
+    object-fit: cover;
+    transition: opacity 600ms var(--ease-soft);
+  }
+  /* Sin JavaScript el vídeo no tiene fuente: se queda el fotograma. Con él, aparece al reproducirse. */
+  :global(html:not(.js)) .video video {
+    display: none;
+  }
+  :global(.js) .video video {
+    opacity: 0;
+  }
+  .video video.is-playing {
+    opacity: 1;
+  }
+
+  @media (min-width: 60rem) {
+    .agenda {
+      display: grid;
+      grid-template-columns: 10rem minmax(0, 1fr);
+      gap: 2.5rem;
+      align-items: start;
+    }
+    :global(html:not(.js)) .agenda {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .tabs {
+      grid-template-columns: minmax(0, 1fr);
+      position: sticky;
+      top: 1.5rem;
+    }
+    .panels {
+      margin-top: 0;
+    }
+    .panel {
+      display: grid;
+      grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+      gap: 1.5rem;
+      align-items: start;
+    }
+    .panel-title {
+      grid-column: 1 / -1;
+    }
+    .band {
+      grid-template-columns: 8rem minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 1.25rem;
+      min-height: 5.5rem;
+      padding: 1rem 1.25rem;
+    }
+    .who {
+      justify-content: flex-end;
+      text-align: right;
+    }
+    .media {
+      margin-top: 0;
     }
   }
 </style>

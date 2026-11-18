@@ -19,50 +19,108 @@ html {
 body {
   margin: 0;
   background: var(--bg);
-  color: var(--text);
+  color: var(--ink);
   font-family: var(--font-sans);
-  font-size: 1rem;
-  line-height: 1.6;
+  font-size: var(--step-body);
+  line-height: 1.5;
   overflow-wrap: break-word;
 }
 
-h1, h2, h3, p { margin: 0; }
+h1, h2, h3, p, ol, ul, figure { margin: 0; }
+h1, h2, h3 { font-weight: 500; line-height: 1.05; letter-spacing: -0.022em; text-wrap: balance; }
 p { text-wrap: pretty; }
-h1, h2, h3 { line-height: 1.15; letter-spacing: -0.02em; font-weight: 650; }
+ol, ul { padding: 0; list-style: none; }
+img, video { display: block; max-width: 100%; height: auto; }
+button, input, textarea { font: inherit; color: inherit; }
 
-a { color: inherit; }
+a { color: inherit; text-underline-offset: 0.2em; text-decoration-thickness: 0.07em; }
 
-/* Superficies del navegador con la paleta: selección y cursor de texto en cobalto, como en la app. */
-::selection { background: color-mix(in srgb, var(--accent) 22%, transparent); }
-input { caret-color: var(--accent); }
+code, pre { font-family: var(--font-mono); font-size: 0.875em; }
+pre code { font-size: 1em; }
 
-code, .mono { font-family: var(--font-mono); font-size: 0.9em; }
+::selection { background: color-mix(in srgb, var(--accent) 24%, transparent); }
+input, textarea { caret-color: var(--accent); }
 
 :focus-visible {
   outline: 3px solid var(--accent);
   outline-offset: 3px;
-  border-radius: 4px;
 }
 
 .skip {
   position: absolute;
-  left: var(--gutter);
+  left: var(--margin);
   top: 0.5rem;
-  z-index: 10;
+  z-index: 20;
   padding: 0.6rem 1rem;
-  background: var(--bg);
-  color: var(--text);
-  border: 1px solid var(--text);
-  border-radius: 8px;
+  background: var(--ink);
+  color: var(--bg);
   transform: translateY(-200%);
 }
 .skip:focus { transform: none; }
 
-.container {
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.wrap {
   width: 100%;
   max-width: var(--container);
   margin-inline: auto;
-  padding-inline: var(--gutter);
+  padding-inline: var(--margin);
 }
 
-main:focus { outline: none; }
+main:focus,
+section:focus { outline: none; }
+section[id] { scroll-margin-top: 1rem; }
+
+/* La acción principal: bloque plano de esquinas cuadradas (el cuadrado es el agente de la marca). */
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3rem;
+  padding: 0.75rem 1.5rem;
+  border: 0;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: transform var(--t-press) var(--ease-out), background-color var(--t-hover) ease;
+}
+.button:active { transform: scale(0.97); }
+@media (hover: hover) and (pointer: fine) {
+  .button:hover { background-color: color-mix(in srgb, var(--accent) 86%, var(--ink)); }
+}
+
+.link {
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  transition: text-decoration-color var(--t-hover) ease;
+}
+@media (hover: hover) and (pointer: fine) {
+  .link:hover { text-decoration-color: currentColor; }
+}
+
+/* Entradas de sección: solo con JavaScript y sin movimiento reducido; el contenido nunca queda oculto si el script falla. */
+@media (prefers-reduced-motion: no-preference) {
+  .js [data-reveal] {
+    opacity: 0;
+    transform: translateY(var(--rise, 24px));
+    transition: opacity 700ms var(--ease-out), transform 900ms var(--ease-out);
+    transition-delay: calc(var(--i, 0) * 80ms);
+  }
+  .js [data-reveal].is-in {
+    opacity: 1;
+    transform: none;
+  }
+}

@@ -1,6 +1,5 @@
 ---
-import Section from '../ui/Section.astro';
-import Placeholder from '../ui/Placeholder.astro';
+import Shot from '../ui/Shot.astro';
 import type { Dict } from '../../i18n/types';
 
 interface Props {
@@ -10,78 +9,207 @@ const { t } = Astro.props;
 const { how } = t;
 ---
 
-<Section id={how.id} title={how.title} intro={how.intro}>
-  <ol class="steps">
-    {how.steps.map((step, i) => (
-      <li class="step">
-        <span class="num mono" aria-hidden="true">{i + 1}</span>
-        <h3>{step.title}</h3>
-        <p>{step.text}</p>
-      </li>
-    ))}
-  </ol>
-  <p class="path">
-    {how.pathLabel} <code>{how.pathExample}</code>
-  </p>
-  <p class="cli">{how.cli}</p>
-  <div class="visual">
-    <Placeholder lang={t.lang} file={how.shot.file} alt={how.shot.alt} label={t.placeholder.label} />
+<!-- Lo que das y lo que vuelve: tres intercambios en una columna estrecha. -->
+<section id={how.id} class="how" aria-labelledby="how-title" tabindex="-1">
+  <div class="wrap">
+    <div class="column">
+      <h2 id="how-title" data-reveal>{how.title}</h2>
+
+      <div class="exchange">
+        <p class="say" data-reveal>{how.one.lead}</p>
+        <div class="call" data-reveal style="--i:1">
+          <div class="quick" data-ui>
+            <label for="how-task">{how.one.label}</label>
+            <div class="quick-row">
+              <input id="how-task" type="text" value={how.one.value} readonly />
+              <span class="role">{how.one.role}<span class="agent"></span></span>
+            </div>
+          </div>
+        </div>
+        <div class="response" data-reveal style="--i:2">
+          <pre><code>{how.one.tree}</code></pre>
+          <div class="crop">
+            <Shot lang={t.lang} file={how.one.shot.file} alt={how.one.shot.alt} label={t.placeholder.label} ratio="1360 / 1640" sizes="(min-width: 60rem) 32rem, 100vw" />
+          </div>
+        </div>
+      </div>
+
+      <div class="exchange">
+        <p class="say" data-reveal>{how.two.lead}</p>
+        <div class="call" data-reveal style="--i:1">
+          <p class="buttons" data-ui>
+            {how.two.buttons.map((label, i) => <span class:list={['ui-btn', { primary: i > 0 }]}>{label}</span>)}
+          </p>
+        </div>
+        <div class="response" data-reveal style="--i:2">
+          <p class="intro">{how.two.intro}</p>
+          <pre><code>{how.two.command}</code></pre>
+        </div>
+      </div>
+
+      <div class="exchange">
+        <p class="say" data-reveal>{how.three.lead}</p>
+        <div class="call" data-reveal style="--i:1">
+          <div class="choice" data-ui>
+            <p class="option"><span class="radio" aria-hidden="true"></span><span><strong>{how.three.option}</strong><span class="hint">{how.three.hint}</span></span></p>
+            <span class="ui-btn primary">{how.three.button}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="result" data-reveal>
+      <Shot lang={t.lang} file={how.three.shot.file} alt={how.three.shot.alt} label={t.placeholder.label} sizes="(min-width: 60rem) 64rem, 100vw" />
+    </div>
   </div>
-</Section>
+</section>
 
 <style>
-  .steps {
+  .how {
+    padding-block: var(--section) 0;
+  }
+  .column {
+    max-width: 35rem;
+  }
+  h2 {
+    font-size: var(--step-head);
+  }
+  .exchange {
+    margin-top: 3.5rem;
+  }
+  .exchange + .exchange {
+    margin-top: 5.5rem;
+  }
+  .say {
+    font-size: var(--step-lead);
+    font-weight: 500;
+    line-height: 1.25;
+  }
+  .call {
+    margin-top: 1rem;
+    padding: 1.25rem;
+    background: var(--surface);
+  }
+  .response {
     display: grid;
-    gap: 1rem;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.25rem;
+    margin-top: 1.5rem;
+  }
+  .intro {
+    color: var(--ink);
+  }
+  pre {
     margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-  .step {
-    padding: 1.5rem;
+    padding: 1.25rem;
     background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
+    font-size: var(--step-small);
+    line-height: 1.6;
+    overflow-x: auto;
   }
-  .num {
+  .crop {
+    aspect-ratio: 1360 / 1100;
+    overflow: hidden;
+    background: var(--surface);
+  }
+  .result {
+    margin-top: 3rem;
+    padding: clamp(1rem, 3vw, 2.5rem);
+    background: var(--surface);
+  }
+
+  /* Fragmentos de la app: sus convenciones (radios pequeños, bordes de 1 px). */
+  [data-ui].quick label {
     display: block;
-    margin-bottom: 0.75rem;
-    color: var(--text-secondary);
-  }
-  h3 {
-    font-size: 1.125rem;
-  }
-  .step p {
-    margin-top: 0.5rem;
-    color: var(--text-secondary);
-  }
-  .path {
-    margin-top: 2rem;
-    color: var(--text-secondary);
-  }
-  code {
-    padding: 0.15rem 0.5rem;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    color: var(--text);
-    overflow-wrap: anywhere;
-  }
-  .cli {
-    margin-top: 0.75rem;
+    margin-bottom: 0.375rem;
+    font-size: var(--step-small);
     font-weight: 500;
   }
-  .visual {
-    margin-top: 3rem;
+  [data-ui] .quick-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
   }
-  @media (min-width: 48rem) {
-    .steps {
-      grid-template-columns: repeat(2, 1fr);
+  [data-ui] input {
+    flex: 1;
+    min-width: 0;
+    height: 2.5rem;
+    padding: 0 0.75rem;
+    border: 1px solid var(--field-border);
+    border-radius: 6px;
+    background: var(--bg);
+    font-size: var(--step-small);
+  }
+  [data-ui] .role {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    color: var(--muted);
+    font-size: var(--step-small);
+  }
+  [data-ui] .agent {
+    display: inline-block;
+    width: 0.75rem;
+    height: 0.75rem;
+    background: var(--accent);
+  }
+  [data-ui].buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+  }
+  [data-ui] .ui-btn {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.25rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--field-border);
+    border-radius: 6px;
+    background: var(--bg);
+    font-size: var(--step-small);
+    font-weight: 500;
+  }
+  [data-ui] .ui-btn.primary {
+    border-color: var(--accent);
+    background: var(--accent);
+    color: var(--on-accent);
+  }
+  [data-ui].choice {
+    display: grid;
+    gap: 1rem;
+    justify-items: end;
+  }
+  [data-ui] .option {
+    display: flex;
+    gap: 0.75rem;
+    justify-self: stretch;
+    padding: 0.75rem;
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+    background: var(--bg);
+    font-size: var(--step-small);
+  }
+  [data-ui] .radio {
+    flex: none;
+    width: 1rem;
+    height: 1rem;
+    margin-top: 0.125rem;
+    border: 5px solid var(--accent);
+    border-radius: 50%;
+  }
+  [data-ui] .option .hint {
+    display: block;
+    color: var(--muted);
+  }
+
+  @media (min-width: 60rem) {
+    .column {
+      margin-left: 25%;
     }
-  }
-  @media (min-width: 72rem) {
-    .steps {
-      grid-template-columns: repeat(5, 1fr);
+    .response {
+      margin-left: 3.5rem;
+    }
+    .result {
+      margin-left: 25%;
     }
   }
 </style>
