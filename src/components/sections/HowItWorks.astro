@@ -98,6 +98,8 @@ const { how } = t;
   }
   .frame :global(img) {
     object-fit: cover;
+    /* El recorte sigue por la derecha: se desvanece en vez de cortar una palabra. */
+    mask-image: linear-gradient(to right, var(--ink) calc(100% - 2.5rem), transparent);
   }
   /* El bloque de código mide lo mismo que los recortes y crece si su contenido no cabe. */
   .frame.code {

@@ -8,7 +8,19 @@ const { t } = Astro.props;
 const { roles } = t;
 const d = roles.dialog;
 const MAX = 8000;
-const count = d.count.replace('{used}', String(d.promptValue.length)).replace('{max}', String(MAX));
+// La plantilla que enseña el diálogo al cargar: Desarrollador backend.
+const START = Math.max(0, roles.templates.findIndex((tpl) => tpl.tone === 'lilac'));
+const first = roles.templates[START];
+const fill = (text: string, name: string) => text.replace('{name}', name);
+const countOf = (prompt: string) => d.count.replace('{used}', String(prompt.length)).replace('{max}', String(MAX));
+// Lo que necesita el script para cambiar el diálogo de plantilla.
+const strings = JSON.stringify({
+  hireFrom: d.hireFrom,
+  alt: d.alt,
+  count: d.count,
+  max: MAX,
+  templates: roles.templates.map(({ name, prompt }) => ({ name, prompt })),
+});
 ---
 
 <section id={roles.id} class="roles" aria-labelledby="roles-title" tabindex="-1">
@@ -22,40 +34,39 @@ const count = d.count.replace('{used}', String(d.promptValue.length)).replace('{
         <p class="catalog-label">{roles.templatesLabel}</p>
         <ul class="templates">
           {
-            roles.templates.map((tpl) => {
-              const current = d.title.includes(tpl.name);
-              return (
-                <li class:list={['template', `tone-${tpl.tone}`, { current }]}>
-                  <p class="who">
-                    <span class="tag">{tpl.name}</span>
-                    {current && <span class="mark">{roles.current}</span>}
-                  </p>
-                  <p class="says">
-                    <q>{tpl.text}</q>
-                  </p>
-                </li>
-              );
-            })
+            roles.templates.map((tpl, i) => (
+              <li class:list={['template', `tone-${tpl.tone}`, { current: i === START }]} data-template data-tone={tpl.tone}>
+                <p class="who">
+                  <span class="tag">{tpl.name}</span>
+                  <span class="mark">{roles.current}</span>
+                </p>
+                <p class="says">
+                  <q>{tpl.text}</q>
+                </p>
+                {/* Ocupa toda la fila. Sin el script no aparece: la fila es solo texto. */}
+                <button type="button" class="pick" data-pick aria-pressed={i === START ? 'true' : 'false'} aria-label={fill(roles.pick, tpl.name)} hidden />
+              </li>
+            ))
           }
         </ul>
       </div>
 
-      <!-- El diálogo de contratar de la app, con sus textos. Es una imagen: no tiene controles. -->
+      <!-- El diálogo de contratar de la app, con sus textos. Es una imagen: sus controles no se usan. La lista de al lado elige qué plantilla enseña. -->
       <figure class="dialog" data-reveal style="--i:1">
-        <div class="panel window" data-ui role="img" aria-label={d.alt}>
+        <div class="panel window" data-ui role="img" aria-label={fill(d.alt, first.name)} data-role-dialog data-strings={strings}>
           <div class="part head">
-            <p class="dialog-title">{d.title}</p>
+            <p class="dialog-title" data-role-title>{fill(d.hireFrom, first.name)}</p>
           </div>
           <div class="part">
             <p class="label">{d.name}</p>
-            <p class="value">{d.nameValue}</p>
+            <p class="value" data-role-name>{first.name}</p>
           </div>
           <div class="part">
             <p class="label-row">
               <span class="label">{d.prompt}</span>
-              <span class="muted">{count}</span>
+              <span class="muted" data-role-count>{countOf(first.prompt)}</span>
             </p>
-            <p class="value prompt">{d.promptValue}</p>
+            <p class="value prompt" data-role-prompt>{first.prompt}</p>
           </div>
           <div class="part">
             <p class="label">{d.model}</p>
@@ -74,6 +85,7 @@ const count = d.count.replace('{used}', String(d.promptValue.length)).replace('{
           </div>
         </div>
         <figcaption>{roles.caption}</figcaption>
+        <p class="sr-only" aria-live="polite" data-role-live></p>
       </figure>
     </div>
   </div>
@@ -100,13 +112,39 @@ const count = d.count.replace('{used}', String(d.promptValue.length)).replace('{
     border-top: 1px solid var(--border);
   }
   .template {
+    position: relative;
     display: grid;
     gap: 0.625rem;
     padding: 1.125rem 0.25rem;
     border-bottom: 1px solid var(--border);
   }
+  /* El botón de cada fila la cubre entera: se pulsa la fila, no una palabra. */
+  .pick {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    border: 0;
+    border-radius: var(--radius);
+    background: none;
+    cursor: pointer;
+  }
+  .pick[hidden] {
+    display: none;
+  }
+  .pick:focus-visible {
+    outline-offset: -3px;
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .template:not(.current):has(.pick:hover) .tag {
+      box-shadow: inset 0 0 0 2px var(--tone-ink);
+    }
+  }
+  .template:not(.current) .mark {
+    display: none;
+  }
   /* La plantilla que enseña el diálogo lleva el fondo suave de su color. */
   .template.current {
+    z-index: 1;
     margin-inline: -0.75rem;
     padding-inline: 1rem;
     border-radius: var(--radius);

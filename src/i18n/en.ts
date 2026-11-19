@@ -30,12 +30,12 @@ export const en: Dict = {
   },
   hero: {
     // DRAFT
-    title: ['Your team of', 'AI agents'],
+    title: ['Every task goes', 'through you twice'],
     // DRAFT
-    lead: 'Hire roles, give them tasks from a board, and nothing reaches your branch until you approve the spec and then the code.',
+    lead: 'You hire AI roles and assign them tasks from a board. You approve the spec before any code is written, and the code before it reaches your branch.',
     cta: 'Request access',
     // DRAFT
-    secondary: 'See how it works',
+    secondary: 'Try the demo',
     // app (roles of the demo project and the Tester template)
     tags: [
       { label: 'Backend', tone: 'lilac' },
@@ -82,7 +82,7 @@ export const en: Dict = {
           { num: '#3', title: 'Fix VAT rounding in the cart', prio: 'Urgent', progress: '2/2', role: 'Backend' },
         ],
       ],
-      chips: { awaiting: 'Awaiting your approval', running: 'Running', awaitingReview: 'Waiting for your review', integrating: 'Integrating' },
+      chips: { awaiting: 'Awaiting your approval', running: 'Running', awaitingReview: 'Waiting for your review', integrating: 'Integrating', specifying: 'Specifying' },
       actions: {
         requestChanges: 'Request changes',
         approveSpec: 'Approve spec',
@@ -94,7 +94,7 @@ export const en: Dict = {
       },
       // DRAFT: what to do at each step
       hints: [
-        'Read the criteria in the spec of task #6 and approve it, or request changes.',
+        'Try it: read the criteria of task\u00a0#6 and approve its spec, or request changes.',
         'The spec is approved. Run the task: its role will work on its own branch.',
         'The Frontend role is working on its branch. There is nothing for you to do until it finishes.',
         'It finished successfully. Look at the files it changed and approve, or send it back with a comment.',
@@ -130,7 +130,7 @@ export const en: Dict = {
         'Finished successfully',
       ],
       review: { files: '8 of 8 tasks done', result: '', message: '' },
-      done: 'Integrated into main · Single commit',
+      done: 'Integrated into main ·\u00a0Single\u00a0commit',
       // DRAFT
       live: '{title}: {column}.',
       // DRAFT
@@ -146,7 +146,7 @@ export const en: Dict = {
   how: {
     id: 'how',
     // DRAFT
-    title: 'Every task goes through you twice',
+    title: 'How a task reaches your branch',
     // DRAFT
     lead: 'The spec, before any code is written. The code, before it reaches your branch.',
     cards: [
@@ -188,6 +188,8 @@ export const en: Dict = {
     lead: 'The Status view brings together what awaits your approval, what is running, the activity and the cost per role. In a group, across all of its repositories.',
     // app
     cost: 'Cost reported by the provider; with a subscription it is an estimate.',
+    // DRAFT
+    swipe: 'Swipe the image to see all of it.',
     shots: [
       // DRAFT (titles and captions)
       { file: 'estado-decision', alt: 'The “Waiting on you” list of the Online store group: five tasks from its three repositories, three awaiting your approval and two your review', title: 'Waiting on you', caption: 'The specs and code waiting for your approval across the three repositories of “Online store”.' },
@@ -205,25 +207,35 @@ export const en: Dict = {
     templatesLabel: 'Templates, and how their instructions begin',
     // DRAFT
     current: 'In the dialog',
+    // DRAFT: `{name}` is the template
+    pick: 'Show {name} in the dialog',
     // DRAFT
-    caption: 'The app’s hire dialog, with the Backend developer template.',
+    caption: 'The app’s hire dialog. Pick a template from the list to see its instructions.',
     // app (template catalogue: name and first sentence of its instructions)
     templates: [
-      { name: 'Product analyst', text: 'Your strength is understanding the problem before the solution: what the user needs, why, and how everyone will know it is solved.', tone: 'green' },
-      { name: 'Full-stack developer', text: 'You work end to end: data, logic, interface and tests.', tone: 'pink' },
-      { name: 'Frontend developer', text: 'You build interfaces that are clear, accessible and consistent with the project’s design system.', tone: 'orange' },
-      { name: 'Backend developer', text: 'You take care of data, APIs, business logic and their reliability.', tone: 'lilac' },
-      { name: 'Tester', text: 'Your goal is that what gets delivered does what the spec says, edge cases included.', tone: 'yellow' },
+      { name: 'Product analyst', text: 'Your strength is understanding the problem before the solution: what the user needs, why, and how everyone will know it is solved.', tone: 'green', prompt:
+          'You are a product analyst on a software team. Your strength is understanding the problem before the solution: what the user needs, why, and how everyone will know it is solved.\n\n- When specifying, write verifiable requirements and concrete scenarios (GIVEN/WHEN/THEN) that work as acceptance criteria. Cover the usual case, the errors and the limits.\n- Write down assumptions and open questions in the design instead of inventing answers.\n- Keep the scope small: separate what is essential from what is nice to have, and leave out anything the task does not ask for.\n- When implementing, prioritise documentation, interface copy and acceptance tests; if a task needs code, keep it as simple as possible and explain it.',
+      },
+      { name: 'Full-stack developer', text: 'You work end to end: data, logic, interface and tests.', tone: 'pink', prompt:
+          'You are a full-stack developer. You work end to end: data, logic, interface and tests.\n\n- Before changing anything, read the surrounding code and follow its conventions, structure and style.\n- Make small changes focused on what each task asks for; do not reorganise what does not need it.\n- Back every new behaviour with tests when the project has them.\n- Validate input at the edge of the system, handle errors explicitly and never leave secrets in the code.\n- If something in the spec is ambiguous or contradictory, pick the most cautious option and write it down.',
+      },
+      { name: 'Frontend developer', text: 'You build interfaces that are clear, accessible and consistent with the project’s design system.', tone: 'orange', prompt:
+          'You are a frontend developer. You build interfaces that are clear, accessible and consistent with the project\'s design system.\n\n- Reuse the components, styles and design tokens that already exist before creating new ones.\n- Take care of loading, empty and error states, and make everything usable with a keyboard and a screen reader.\n- Keep business logic out of presentational components.\n- Follow the structure, naming and state management the project already uses.\n- Write tests for interface logic that has rules, not for layout.',
+      },
+      { name: 'Backend developer', text: 'You take care of data, APIs, business logic and their reliability.', tone: 'lilac', prompt:
+          'You are a backend developer. You take care of data, APIs, business logic and their reliability.\n\n- Design data changes carefully: safe migrations, constraints in the database and nothing that loses existing information.\n- Validate every external input and return clear, stable errors.\n- Think about concurrency, transactions and partial failures.\n- Follow the project\'s architecture and conventions; do not add dependencies without a reason.\n- Cover new logic with tests, including the error cases.',
+      },
+      { name: 'Tester', text: 'Your goal is that what gets delivered does what the spec says, edge cases included.', tone: 'yellow', prompt:
+          'You are a tester. Your goal is that what gets delivered does what the spec says, edge cases included.\n\n- Treat the spec\'s scenarios as acceptance criteria and turn them into automated tests when the project has a place for them.\n- Look for the gaps: empty or huge inputs, errors, permissions, intermediate states and concurrency.\n- When specifying, propose the scenarios that are missing and make clear how each requirement is checked.\n- If you find a bug that is not yours to fix, describe it with the steps to reproduce it instead of hiding it.\n- Never change the app\'s behaviour just to make a test pass.',
+      },
     ],
     // app (RoleForm, locales and template catalogue)
     dialog: {
-      alt: 'The app’s “Hire: Backend developer” dialog, with the role’s name, its instructions, the model and the permission to run commands',
-      title: 'Hire: Backend developer',
+      // `{name}` is the chosen template
+      alt: 'The app’s “Hire: {name}” dialog, with the role’s name, its instructions, the model and the permission to run commands',
+      hireFrom: 'Hire: {name}',
       name: 'Name',
-      nameValue: 'Backend',
       prompt: 'Instructions',
-      promptValue:
-        'You are a backend developer. You take care of data, APIs, business logic and their reliability.\n\n- Design data changes carefully: safe migrations, constraints in the database and nothing that loses existing information.\n- Validate every external input and return clear, stable errors.\n- Think about concurrency, transactions and partial failures.\n- Follow the project’s architecture and conventions; do not add dependencies without a reason.\n- Cover new logic with tests, including the error cases.',
       count: '{used} / {max}',
       model: 'Model',
       modelPlaceholder: 'Claude Code default',
@@ -318,6 +330,8 @@ export const en: Dict = {
     thanks: 'We’ll write to {email} when you can install Understaffed.',
     // DRAFT
     again: 'Use another email',
+    // DRAFT
+    backToDemo: 'Back to the demo',
   },
   footer: {
     // DRAFT

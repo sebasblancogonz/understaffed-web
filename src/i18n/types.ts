@@ -55,7 +55,7 @@ export interface Dict {
       task: { num: string; title: string; prio: string; role: string; total: number };
       /** Las demás tarjetas de cada columna, de Backlog a Hecho. */
       others: [Card[], Card[], Card[], Card[], Card[]];
-      chips: { awaiting: string; running: string; awaitingReview: string; integrating: string };
+      chips: { awaiting: string; running: string; awaitingReview: string; integrating: string; specifying: string };
       actions: {
         requestChanges: string;
         approveSpec: string;
@@ -96,6 +96,8 @@ export interface Dict {
     title: string;
     lead: string;
     cost: string;
+    /** La pista de que un recorte se desplaza de lado, en pantallas estrechas. */
+    swipe: string;
     /** `strip`: un recorte apaisado (una franja de la app), no una ventana entera. */
     shots: (Shot & { title: string; caption: string; strip?: boolean })[];
   };
@@ -109,15 +111,17 @@ export interface Dict {
     current: string;
     /** El pie del diálogo. */
     caption: string;
-    templates: { name: string; text: string; tone: Tone }[];
+    /** El nombre accesible del botón que lleva una plantilla al diálogo. `{name}` es la plantilla. */
+    pick: string;
+    /** `prompt`: las instrucciones completas de la plantilla, las del catálogo de la app. */
+    templates: { name: string; text: string; tone: Tone; prompt: string }[];
     dialog: {
       /** Lo que enseña el diálogo, para quien no lo ve. */
       alt: string;
-      title: string;
+      /** El título del diálogo. `{name}` es la plantilla. */
+      hireFrom: string;
       name: string;
-      nameValue: string;
       prompt: string;
-      promptValue: string;
       count: string;
       model: string;
       modelPlaceholder: string;
@@ -171,6 +175,8 @@ export interface Dict {
     thanks: string;
     /** Vuelve al formulario para apuntar otra dirección. */
     again: string;
+    /** Vuelve a la demostración del hero. */
+    backToDemo: string;
   };
   footer: {
     text: string;

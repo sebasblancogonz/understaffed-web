@@ -113,6 +113,8 @@ const { local } = t;
   .frame :global(img) {
     object-fit: cover;
     object-position: left top;
+    /* El recorte sigue por la derecha: se desvanece en vez de cortar una palabra. */
+    mask-image: linear-gradient(to right, var(--ink) calc(100% - 2.5rem), transparent);
   }
   @media (min-width: 64rem) {
     .cards {

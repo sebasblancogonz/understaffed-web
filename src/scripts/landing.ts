@@ -1,6 +1,6 @@
 /**
  * El único script de la portada. Todo lo que hace mejora una página que ya está completa sin él:
- * la demostración del hero, el menú de secciones, el envío de la lista de espera y las entradas de las secciones. Las cadenas vienen del HTML, no de aquí.
+ * la demostración del hero, el menú de secciones, la sección actual, las plantillas de Roles, el envío de la lista de espera y las entradas de las secciones. Las cadenas vienen del HTML, no de aquí.
  */
 
 (window as unknown as { __landingReady: boolean }).__landingReady = true;
@@ -10,7 +10,7 @@ const wait = (ms: number) => new Promise<void>((r) => setTimeout(r, reduced() ? 
 
 interface DemoStrings {
   columns: string[];
-  chips: { awaiting: string; running: string; awaitingReview: string; integrating: string };
+  chips: { awaiting: string; running: string; awaitingReview: string; integrating: string; specifying: string };
   hints: string[];
   notes: { requestChanges: string; sendBack: string };
   log: string[];
@@ -44,6 +44,7 @@ function initDemo() {
   const result = task.querySelector<HTMLElement>('[data-result]')!;
   const spec = task.querySelector<HTMLElement>('[data-spec]')!;
   const note = task.querySelector<HTMLElement>('[data-note]')!;
+  const actions = task.querySelector<HTMLElement>('[data-actions]')!;
   const hint = scope.querySelector<HTMLElement>('[data-hint]')!;
   const live = scope.querySelector<HTMLElement>('[data-live]')!;
   const buttons = Object.fromEntries(
@@ -113,10 +114,12 @@ function initDemo() {
     spec.hidden = step !== 0;
     note.hidden = true;
     for (const [name, button] of Object.entries(buttons)) button.hidden = !actionsOf[step].includes(name as keyof typeof buttons);
+    actions.classList.toggle('idle', actionsOf[step].length === 0);
     place();
     announce();
     if (focus) {
-      const next = actionsOf[step].map((n) => buttons[n])[0];
+      // Al terminar, el foco va al siguiente paso: pedir acceso.
+      const next = step === 5 ? cta?.querySelector<HTMLElement>('a') : actionsOf[step].map((n) => buttons[n])[0];
       (next ?? root).focus({ preventScroll: true });
     }
   };
@@ -137,13 +140,28 @@ function initDemo() {
     render();
   };
 
-  // La consecuencia de pedir cambios o devolver se lee en la propia tarjeta.
+  // La consecuencia de pedir cambios o devolver se lee en la propia tarjeta, en el sitio de lo
+  // que se estaba decidiendo: la tarjeta no crece.
   const remark = (text: string) => {
+    spec.hidden = result.hidden = true;
     note.textContent = text;
     note.hidden = false;
     live.textContent = text;
   };
-  buttons.request.addEventListener('click', () => remark(s.notes.requestChanges));
+  // Pedir cambios: el rol vuelve a especificar con el comentario y la spec espera otra vez.
+  buttons.request.addEventListener('click', async () => {
+    if (busy) return;
+    busy = true;
+    task.classList.remove('awaiting');
+    chip(s.chips.specifying, 'running');
+    for (const button of Object.values(buttons)) button.hidden = true;
+    actions.classList.add('idle');
+    remark(s.notes.requestChanges);
+    root.focus({ preventScroll: true });
+    await wait(2200);
+    busy = false;
+    render();
+  });
   buttons.approve.addEventListener('click', () => {
     if (busy) return;
     step = 1;
@@ -157,7 +175,7 @@ function initDemo() {
     busy = true;
     buttons.sendback.disabled = buttons.approvecode.disabled = true;
     remark(s.notes.sendBack);
-    await wait(1200);
+    await wait(1800);
     buttons.sendback.disabled = buttons.approvecode.disabled = false;
     void runTask();
   });
@@ -175,6 +193,16 @@ function initDemo() {
     step = 0;
     render();
   });
+
+  // «Probar la demo»: la ventana a la vista y el foco en la acción que toca.
+  document.querySelectorAll<HTMLAnchorElement>('[data-try]').forEach((link) =>
+    link.addEventListener('click', (event) => {
+      event.preventDefault();
+      scope.scrollIntoView({ block: 'start', behavior: reduced() ? 'auto' : 'smooth' });
+      const next = actionsOf[step].map((n) => buttons[n])[0];
+      (next ?? root).focus({ preventScroll: true });
+    }),
+  );
 
   window.addEventListener('resize', () => place());
   render(false);
@@ -199,6 +227,67 @@ function initMenu() {
   document.addEventListener('click', (event) => {
     if (!menu.contains(event.target as Node)) close();
   });
+}
+
+interface RoleStrings {
+  hireFrom: string;
+  alt: string;
+  count: string;
+  max: number;
+  templates: { name: string; prompt: string }[];
+}
+
+/** Roles: elegir una plantilla de la lista enseña su nombre y sus instrucciones en el diálogo. */
+function initRoles() {
+  const panel = document.querySelector<HTMLElement>('[data-role-dialog]');
+  if (!panel || !panel.dataset.strings) return;
+  const s = JSON.parse(panel.dataset.strings) as RoleStrings;
+  const rows = [...document.querySelectorAll<HTMLElement>('[data-template]')];
+  const title = panel.querySelector<HTMLElement>('[data-role-title]')!;
+  const name = panel.querySelector<HTMLElement>('[data-role-name]')!;
+  const prompt = panel.querySelector<HTMLElement>('[data-role-prompt]')!;
+  const count = panel.querySelector<HTMLElement>('[data-role-count]')!;
+  const live = document.querySelector<HTMLElement>('[data-role-live]')!;
+  rows.forEach((row, i) => {
+    const pick = row.querySelector<HTMLButtonElement>('[data-pick]')!;
+    pick.hidden = false;
+    pick.addEventListener('click', () => {
+      const tpl = s.templates[i];
+      const heading = s.hireFrom.replace('{name}', tpl.name);
+      title.textContent = heading;
+      name.textContent = tpl.name;
+      prompt.textContent = tpl.prompt;
+      count.textContent = s.count.replace('{used}', String(tpl.prompt.length)).replace('{max}', String(s.max));
+      panel.setAttribute('aria-label', s.alt.replace('{name}', tpl.name));
+      panel.dataset.tone = row.dataset.tone;
+      rows.forEach((r, j) => {
+        r.classList.toggle('current', i === j);
+        r.querySelector('[data-pick]')!.setAttribute('aria-pressed', String(i === j));
+      });
+      live.textContent = heading;
+    });
+  });
+}
+
+/** La cabecera marca la sección que se está leyendo. */
+function initCurrent() {
+  const links = [...document.querySelectorAll<HTMLAnchorElement>('.header .nav a[href^="#"]')];
+  const sections = links.map((a) => document.querySelector<HTMLElement>(a.hash)).filter((el): el is HTMLElement => Boolean(el));
+  if (!sections.length || !('IntersectionObserver' in window)) return;
+  const seen = new Set<Element>();
+  const watch = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) entry.isIntersecting ? seen.add(entry.target) : seen.delete(entry.target);
+      const current = sections.find((section) => seen.has(section));
+      for (const link of links) {
+        if (current && link.hash === `#${current.id}`) link.setAttribute('aria-current', 'true');
+        else link.removeAttribute('aria-current');
+      }
+    },
+    // Cuenta la sección que cruza la franja bajo la cabecera.
+    { rootMargin: '-25% 0px -65% 0px' },
+  );
+  sections.forEach((section) => watch.observe(section));
 }
 
 /** Entradas de sección: una vez, al entrar en pantalla. */
@@ -265,7 +354,8 @@ function initWaitlist() {
   };
   /** La confirmación ocupa el sitio de la pregunta sin que la banda cambie de alto. */
   const confirm = (email: string) => {
-    root.style.minHeight = `${root.offsetHeight}px`;
+    // En pantallas estrechas la banda encoge: conservar el alto dejaría una pantalla casi vacía.
+    if (window.matchMedia('(min-width: 40rem)').matches) root.style.minHeight = `${root.offsetHeight}px`;
     root.dataset.done = '';
     title.textContent = s.thanksTitle;
     lead.textContent = s.thanks.replace('{email}', email);
@@ -341,3 +431,5 @@ initReveal();
 initDemo();
 initWaitlist();
 initMenu();
+initRoles();
+initCurrent();

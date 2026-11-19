@@ -22,7 +22,7 @@ const spots = ['l1', 'l2', 'l3', 'r1', 'r2'];
       <p class="lead">{hero.lead}</p>
       <div class="actions">
         <a class="button large" href={`#${t.waitlist.id}`}>{hero.cta}</a>
-        <a class="button large secondary" href={`#${t.how.id}`}>{hero.secondary}</a>
+        <a class="button large secondary" href="#demo" data-try>{hero.secondary}</a>
       </div>
       <ul class="tags" aria-hidden="true">
         {
@@ -41,7 +41,7 @@ const spots = ['l1', 'l2', 'l3', 'r1', 'r2'];
 <style>
   .hero {
     /* Aire entre la cabecera y el titular. */
-    padding-top: clamp(2.5rem, 1rem + 4vw, 5rem);
+    padding-top: clamp(1.75rem, 1rem + 1.75vw, 2.5rem);
     overflow: hidden;
   }
   .intro {

@@ -105,6 +105,9 @@ const other: Lang = t.lang === 'es' ? 'en' : 'es';
     text-decoration: none;
     transition: color var(--t-hover) ease;
   }
+  .nav a[aria-current] {
+    color: var(--ink);
+  }
   @media (hover: hover) and (pointer: fine) {
     .nav a:hover,
     .lang:hover {

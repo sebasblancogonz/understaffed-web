@@ -30,12 +30,12 @@ export const es: Dict = {
   },
   hero: {
     // DRAFT
-    title: ['Tu equipo de', 'agentes de IA'],
+    title: ['Cada tarea pasa', 'por ti dos veces'],
     // DRAFT
-    lead: 'Contratas roles, les das tareas desde un tablero y nada llega a tu rama sin que apruebes la spec y después el código.',
+    lead: 'Contratas roles de IA y les asignas tareas de un tablero. Apruebas la spec antes de que se escriba código, y el código antes de que llegue a tu rama.',
     cta: 'Pedir acceso',
     // DRAFT
-    secondary: 'Ver cómo funciona',
+    secondary: 'Probar la demo',
     // app (roles del proyecto de demostración y la plantilla Tester)
     tags: [
       { label: 'Backend', tone: 'lilac' },
@@ -82,7 +82,7 @@ export const es: Dict = {
           { num: '#3', title: 'Redondeo del IVA en el carrito', prio: 'Urgente', progress: '2/2', role: 'Backend' },
         ],
       ],
-      chips: { awaiting: 'Espera tu aprobación', running: 'En marcha', awaitingReview: 'Espera tu revisión', integrating: 'Integrando' },
+      chips: { awaiting: 'Espera tu aprobación', running: 'En marcha', awaitingReview: 'Espera tu revisión', integrating: 'Integrando', specifying: 'Especificando' },
       actions: {
         requestChanges: 'Pedir cambios',
         approveSpec: 'Aprobar spec',
@@ -94,7 +94,7 @@ export const es: Dict = {
       },
       // DRAFT: lo que toca hacer en cada paso
       hints: [
-        'Lee los criterios de la spec de la tarea #6 y apruébala, o pide cambios.',
+        'Pruébalo: lee los criterios de la tarea\u00a0#6 y aprueba su spec, o pide cambios.',
         'La spec está aprobada. Ejecuta la tarea: su rol trabajará en una rama propia.',
         'El rol Frontend trabaja en su rama. No tienes que hacer nada hasta que termine.',
         'Ha terminado bien. Mira los archivos que ha cambiado y aprueba, o devuélvela con un comentario.',
@@ -130,7 +130,7 @@ export const es: Dict = {
         'Terminó bien',
       ],
       review: { files: '8 de 8 tareas hechas', result: '', message: '' },
-      done: 'Integrada en main · Un commit',
+      done: 'Integrada en main ·\u00a0Un\u00a0commit',
       // DRAFT
       live: '{title}: {column}.',
       // DRAFT
@@ -146,7 +146,7 @@ export const es: Dict = {
   how: {
     id: 'how',
     // DRAFT
-    title: 'Cada tarea pasa por ti dos veces',
+    title: 'Así llega una tarea a tu rama',
     // DRAFT
     lead: 'La spec, antes de que se escriba código. El código, antes de llegar a tu rama.',
     cards: [
@@ -188,6 +188,8 @@ export const es: Dict = {
     lead: 'La vista Estado reúne lo que espera tu aprobación, lo que está en marcha, la actividad y el coste por rol. En un grupo, el de todos sus repositorios.',
     // app
     cost: 'Coste que informa el proveedor; con suscripción es una estimación.',
+    // DRAFT
+    swipe: 'Desliza la imagen para verla entera.',
     shots: [
       // DRAFT (títulos y pies)
       { file: 'estado-decision', alt: 'La lista «Espera tu decisión» del grupo Tienda online: cinco tareas de sus tres repositorios, tres que esperan tu aprobación y dos tu revisión', title: 'Espera tu decisión', caption: 'Las specs y el código que esperan tu aprobación en los tres repositorios de «Tienda online».' },
@@ -204,26 +206,36 @@ export const es: Dict = {
     // DRAFT
     templatesLabel: 'Plantillas, y cómo empiezan sus instrucciones',
     // DRAFT
-    current: 'La del diálogo',
+    current: 'En el diálogo',
+    // DRAFT: `{name}` es la plantilla
+    pick: 'Ver {name} en el diálogo',
     // DRAFT
-    caption: 'El diálogo de contratar de la app, con la plantilla Desarrollador backend.',
+    caption: 'El diálogo de contratar de la app. Elige una plantilla de la lista para ver sus instrucciones.',
     // app (catálogo de plantillas: nombre y primera frase de sus instrucciones)
     templates: [
-      { name: 'Analista de producto', text: 'Tu fuerte es entender el problema antes que la solución: qué necesita el usuario, por qué y cómo se sabrá que está resuelto.', tone: 'green' },
-      { name: 'Desarrollador full-stack', text: 'Trabajas de punta a punta: datos, lógica, interfaz y pruebas.', tone: 'pink' },
-      { name: 'Desarrollador frontend', text: 'Construyes interfaces claras, accesibles y coherentes con el sistema de diseño del proyecto.', tone: 'orange' },
-      { name: 'Desarrollador backend', text: 'Te ocupas de los datos, las API, la lógica de negocio y su fiabilidad.', tone: 'lilac' },
-      { name: 'Tester', text: 'Tu objetivo es que lo que se entrega haga lo que dice la spec, también en los casos límite.', tone: 'yellow' },
+      { name: 'Analista de producto', text: 'Tu fuerte es entender el problema antes que la solución: qué necesita el usuario, por qué y cómo se sabrá que está resuelto.', tone: 'green', prompt:
+          'Eres analista de producto en un equipo de software. Tu fuerte es entender el problema antes que la solución: qué necesita el usuario, por qué y cómo se sabrá que está resuelto.\n\n- Al especificar, escribe requisitos verificables y escenarios concretos (GIVEN/WHEN/THEN) que sirvan como criterios de aceptación. Cubre el caso habitual, los errores y los límites.\n- Anota los supuestos y las preguntas abiertas en el diseño en lugar de inventar respuestas.\n- Mantén el alcance pequeño: separa lo imprescindible de lo deseable y deja fuera lo que la tarea no pide.\n- Al implementar, prioriza la documentación, los textos de la interfaz y las pruebas de aceptación; si una tarea exige código, hazlo de la forma más sencilla y explícalo.',
+      },
+      { name: 'Desarrollador full-stack', text: 'Trabajas de punta a punta: datos, lógica, interfaz y pruebas.', tone: 'pink', prompt:
+          'Eres desarrollador full-stack. Trabajas de punta a punta: datos, lógica, interfaz y pruebas.\n\n- Antes de cambiar nada, lee el código cercano y sigue sus convenciones, su estructura y su estilo.\n- Haz cambios pequeños y centrados en lo que pide cada tarea; no reorganices lo que no hace falta.\n- Acompaña cada comportamiento nuevo de sus pruebas cuando el proyecto las tenga.\n- Valida la entrada en el borde del sistema, trata los errores de forma explícita y no dejes secretos en el código.\n- Si algo de la spec es ambiguo o contradictorio, elige la opción más prudente y déjalo anotado.',
+      },
+      { name: 'Desarrollador frontend', text: 'Construyes interfaces claras, accesibles y coherentes con el sistema de diseño del proyecto.', tone: 'orange', prompt:
+          'Eres desarrollador frontend. Construyes interfaces claras, accesibles y coherentes con el sistema de diseño del proyecto.\n\n- Reutiliza los componentes, estilos y variables de diseño que ya existen antes de crear otros nuevos.\n- Cuida los estados de carga, vacío y error, y que todo se pueda usar con teclado y con lector de pantalla.\n- Mantén la lógica de negocio fuera de los componentes de presentación.\n- Sigue la estructura, los nombres y la forma de gestionar el estado que ya usa el proyecto.\n- Escribe pruebas para la lógica de la interfaz que tenga reglas, no para la maquetación.',
+      },
+      { name: 'Desarrollador backend', text: 'Te ocupas de los datos, las API, la lógica de negocio y su fiabilidad.', tone: 'lilac', prompt:
+          'Eres desarrollador backend. Te ocupas de los datos, las API, la lógica de negocio y su fiabilidad.\n\n- Diseña los cambios de datos con cuidado: migraciones seguras, restricciones en la base y nada que pierda información existente.\n- Valida toda entrada externa y devuelve errores claros y estables.\n- Piensa en la concurrencia, las transacciones y los fallos a medias.\n- Sigue la arquitectura y las convenciones del proyecto; no añadas dependencias sin necesidad.\n- Cubre la lógica nueva con pruebas, incluidos los casos de error.',
+      },
+      { name: 'Tester', text: 'Tu objetivo es que lo que se entrega haga lo que dice la spec, también en los casos límite.', tone: 'yellow', prompt:
+          'Eres tester. Tu objetivo es que lo que se entrega haga lo que dice la spec, también en los casos límite.\n\n- Toma los escenarios de la spec como criterios de aceptación y conviértelos en pruebas automáticas cuando el proyecto tenga dónde ponerlas.\n- Busca los huecos: entradas vacías o enormes, errores, permisos, estados intermedios y concurrencia.\n- Al especificar, propón los escenarios que falten y deja claro cómo se comprueba cada requisito.\n- Si encuentras un fallo que no te toca arreglar, descríbelo con los pasos para reproducirlo en lugar de esconderlo.\n- No cambies el comportamiento de la app para que una prueba pase.',
+      },
     ],
     // app (RoleForm, locales y catálogo de plantillas)
     dialog: {
-      alt: 'El diálogo «Contratar: Desarrollador backend» de la app, con el nombre del rol, sus instrucciones, el modelo y el permiso para ejecutar comandos',
-      title: 'Contratar: Desarrollador backend',
+      // `{name}` es la plantilla elegida
+      alt: 'El diálogo «Contratar: {name}» de la app, con el nombre del rol, sus instrucciones, el modelo y el permiso para ejecutar comandos',
+      hireFrom: 'Contratar: {name}',
       name: 'Nombre',
-      nameValue: 'Backend',
       prompt: 'Instrucciones',
-      promptValue:
-        'Eres desarrollador backend. Te ocupas de los datos, las API, la lógica de negocio y su fiabilidad.\n\n- Diseña los cambios de datos con cuidado: migraciones seguras, restricciones en la base y nada que pierda información existente.\n- Valida toda entrada externa y devuelve errores claros y estables.\n- Piensa en la concurrencia, las transacciones y los fallos a medias.\n- Sigue la arquitectura y las convenciones del proyecto; no añadas dependencias sin necesidad.\n- Cubre la lógica nueva con pruebas, incluidos los casos de error.',
       count: '{used} / {max}',
       model: 'Modelo',
       modelPlaceholder: 'Por defecto de Claude Code',
@@ -318,6 +330,8 @@ export const es: Dict = {
     thanks: 'Escribiremos a {email} cuando puedas instalar Understaffed.',
     // DRAFT
     again: 'Usar otro email',
+    // DRAFT
+    backToDemo: 'Volver a la demo',
   },
   footer: {
     // DRAFT
