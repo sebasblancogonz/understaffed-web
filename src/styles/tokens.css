@@ -56,7 +56,7 @@
   --step-lead: clamp(1.125rem, 1rem + 0.5vw, 1.375rem);
   --step-title: clamp(1.25rem, 1.1rem + 0.5vw, 1.5rem);
   --step-head: clamp(2rem, 1.1rem + 3.2vw, 3.75rem);
-  --step-display: clamp(2.75rem, 1rem + 4.15vw, 4.75rem);
+  --step-display: clamp(2rem, 1rem + 4.15vw, 4.75rem);
   /* Texto de los botones grandes (hero y lista de espera), como en el comp. */
   --step-action: 1.1875rem;
 

@@ -63,6 +63,12 @@ const parts = (text: string) => text.split(/(\bgit\b)/g);
       text-decoration-color: var(--accent);
     }
   }
+  @media (pointer: coarse) {
+    .name a {
+      display: inline-block;
+      padding-block: 0.7rem;
+    }
+  }
   .text {
     margin-top: 0.25rem;
     color: var(--muted);

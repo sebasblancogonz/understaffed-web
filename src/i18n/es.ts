@@ -115,10 +115,10 @@ export const es: Dict = {
       code: {
         head: 'Código',
         files: [
-          { name: 'admin/theme.css', add: 64 },
-          { name: 'admin/ThemeMenu.tsx', add: 41 },
-          { name: 'profile/prefs.ts', add: 9, del: 1 },
-          { name: 'admin/theme.test.ts', add: 36 },
+          { name: 'theme.css', add: 64 },
+          { name: 'ThemeMenu.tsx', add: 41 },
+          { name: 'prefs.ts', add: 9, del: 1 },
+          { name: 'theme.test.ts', add: 36 },
         ],
         message: 'Hecho. Todas las tareas están marcadas y las pruebas pasan.',
       },
@@ -130,7 +130,7 @@ export const es: Dict = {
         'Terminó bien',
       ],
       review: { files: '8 de 8 tareas hechas', result: '', message: '' },
-      done: 'Integrada en main ·\u00a0Un\u00a0commit',
+      done: 'Integrada en main\u00a0· Un\u00a0commit',
       // DRAFT
       live: '{title}: {column}.',
       // DRAFT
@@ -189,7 +189,7 @@ export const es: Dict = {
     // app
     cost: 'Coste que informa el proveedor; con suscripción es una estimación.',
     // DRAFT
-    swipe: 'Desliza la imagen para verla entera.',
+    swipe: 'En esta pantalla, desliza cada imagen para verla entera.',
     shots: [
       // DRAFT (títulos y pies)
       { file: 'estado-decision', alt: 'La lista «Espera tu decisión» del grupo Tienda online: cinco tareas de sus tres repositorios, tres que esperan tu aprobación y dos tu revisión', title: 'Espera tu decisión', caption: 'Las specs y el código que esperan tu aprobación en los tres repositorios de «Tienda online».' },
@@ -204,13 +204,13 @@ export const es: Dict = {
     // DRAFT
     lead: 'Empieza por una plantilla o por un rol en blanco. Cada rol lleva sus instrucciones, su modelo y su permiso para ejecutar comandos.',
     // DRAFT
-    templatesLabel: 'Plantillas, y cómo empiezan sus instrucciones',
+    templatesLabel: 'Elige una plantilla para leer sus instrucciones',
     // DRAFT
     current: 'En el diálogo',
     // DRAFT: `{name}` es la plantilla
     pick: 'Ver {name} en el diálogo',
     // DRAFT
-    caption: 'El diálogo de contratar de la app. Elige una plantilla de la lista para ver sus instrucciones.',
+    caption: 'El diálogo de contratar de la app, con las instrucciones completas de la plantilla elegida.',
     // app (catálogo de plantillas: nombre y primera frase de sus instrucciones)
     templates: [
       { name: 'Analista de producto', text: 'Tu fuerte es entender el problema antes que la solución: qué necesita el usuario, por qué y cómo se sabrá que está resuelto.', tone: 'green', prompt:
