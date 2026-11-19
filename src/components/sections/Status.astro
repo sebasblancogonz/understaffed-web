@@ -35,10 +35,10 @@ const ratios: Record<string, string> = { 'estado-decision': '1220 / 844', 'estad
               />
             </div>
             <figcaption>
-              <span class="swipe">{status.swipe}</span>
               <span class="cap-title">{shot.title}</span>
               <span>{shot.caption}</span>
               {shot.file === 'estado-coste' && <span class="cost">{status.cost}</span>}
+              {i === 0 && <span class="swipe">{status.swipe}</span>}
             </figcaption>
           </figure>
         ))

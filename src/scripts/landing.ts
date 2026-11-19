@@ -146,6 +146,7 @@ function initDemo() {
     spec.hidden = result.hidden = true;
     note.textContent = text;
     note.hidden = false;
+    hint.textContent = text;
     live.textContent = text;
   };
   // Pedir cambios: el rol vuelve a especificar con el comentario y la spec espera otra vez.
@@ -173,10 +174,9 @@ function initDemo() {
   buttons.sendback.addEventListener('click', async () => {
     if (busy) return;
     busy = true;
-    buttons.sendback.disabled = buttons.approvecode.disabled = true;
+    // Los botones siguen ahí mientras espera, para no perder el foco; `busy` evita otra pulsación.
     remark(s.notes.sendBack);
     await wait(1800);
-    buttons.sendback.disabled = buttons.approvecode.disabled = false;
     void runTask();
   });
   buttons.approvecode.addEventListener('click', async () => {
@@ -264,7 +264,12 @@ function initRoles() {
         r.classList.toggle('current', i === j);
         r.querySelector('[data-pick]')!.setAttribute('aria-pressed', String(i === j));
       });
+      prompt.scrollTop = 0;
       live.textContent = heading;
+      // En una columna el diálogo queda bajo la lista: se trae a la vista para que el toque tenga respuesta.
+      if (!window.matchMedia('(min-width: 64rem)').matches) {
+        panel.closest('.dialog')?.scrollIntoView({ block: 'start', behavior: reduced() ? 'auto' : 'smooth' });
+      }
     });
   });
 }

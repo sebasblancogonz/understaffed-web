@@ -45,7 +45,11 @@ El hero SHALL contener un único `h1` que diga que cada tarea pasa dos veces por
 
 #### Scenario: Aire en el hero
 - **WHEN** se mide el hero a 1440 px de ancho
-- **THEN** el titular arranca 5rem por debajo de la cabecera y la pista de la demostración 5.5rem por debajo de los botones
+- **THEN** el titular arranca 6rem por debajo de la cabecera y la pista de la demostración 6.5rem por debajo de los botones
+
+#### Scenario: Titular en pantallas estrechas
+- **WHEN** se abre la portada a 360 y a 390 px de ancho, en español y en inglés
+- **THEN** el `h1` ocupa exactamente dos líneas
 
 #### Scenario: Las acciones de la demo en el primer pliegue
 - **WHEN** se carga la portada a 1440 × 900
@@ -145,7 +149,7 @@ La portada SHALL incluir una sección que presente la vista Estado de un grupo: 
 
 #### Scenario: Recortes que se deslizan
 - **WHEN** se abre la sección por debajo de 40rem de ancho
-- **THEN** cada marco que se desplaza tiene un nombre accesible, su borde derecho se desvanece y bajo él se lee que la imagen se desliza
+- **THEN** cada marco que se desplaza tiene un nombre accesible, su borde derecho se desvanece, y una sola línea, bajo el primer pie, dice que las imágenes se deslizan
 
 ### Requirement: Grupos de proyectos
 La sección Estado SHALL mostrar que varios repositorios de un mismo producto forman un grupo con su Estado conjunto.
@@ -228,7 +232,7 @@ El hero SHALL incluir una ventana de la app con el tablero de cinco columnas tal
 - **THEN** está sobre la ventana, dice qué puede hacer el visitante en ese paso, y sin JavaScript no se muestra
 
 ### Requirement: Roles
-La portada SHALL presentar cómo se contrata un rol con una imagen del diálogo de contratar de la app, con sus textos: nombre, instrucciones de la plantilla «Desarrollador backend», modelo y el permiso «Ejecutar comandos». Las plantillas se presentan como una lista con el nombre de cada rol y el arranque de sus instrucciones entre comillas, y la plantilla que enseña el diálogo va marcada. Elegir una plantilla de la lista SHALL enseñar en el diálogo su nombre y sus instrucciones completas, que son las del catálogo de la app. La imagen MUST NOT contener controles que se puedan enfocar o usar, y MUST tener un texto alternativo que diga lo que enseña.
+La portada SHALL presentar cómo se contrata un rol con una imagen del diálogo de contratar de la app, con sus textos: nombre, instrucciones de la plantilla «Desarrollador backend», modelo y el permiso «Ejecutar comandos». Las plantillas se presentan como una lista con el nombre de cada rol y el arranque de sus instrucciones entre comillas, y la plantilla que enseña el diálogo va marcada. Elegir una plantilla de la lista SHALL enseñar en el diálogo su nombre y sus instrucciones completas, que son las del catálogo de la app. El diálogo MUST NOT contener controles de formulario: sus botones del pie están dibujados, apagados y ocultos a la tecnología de asistencia. Sus instrucciones MUST poder leerse enteras, en un campo que se desplaza.
 
 #### Scenario: Plantillas reales
 - **WHEN** se lee la sección de roles
@@ -236,11 +240,15 @@ La portada SHALL presentar cómo se contrata un rol con una imagen del diálogo 
 
 #### Scenario: El diálogo es una imagen
 - **WHEN** se recorre la sección de roles con el teclado y se inspecciona el diálogo
-- **THEN** no hay ningún `input`, `textarea` ni `button` dentro, el diálogo tiene `role="img"` con un nombre accesible y el foco no se detiene en él
+- **THEN** no hay ningún `input`, `textarea` ni `button` dentro, el diálogo tiene `role="group"` con un nombre accesible, y el foco solo se detiene en el campo de instrucciones, para poder desplazarlo con el teclado
 
 #### Scenario: Elegir una plantilla
 - **WHEN** el visitante pulsa una fila de la lista de plantillas
-- **THEN** el título, el nombre, las instrucciones y el contador del diálogo pasan a ser los de esa plantilla, la fila queda marcada con `aria-pressed="true"` y el cambio se anuncia en una región `aria-live`
+- **THEN** el título, el nombre, las instrucciones y el contador del diálogo pasan a ser los de esa plantilla, la fila queda marcada con `aria-pressed="true"` y el cambio se anuncia en una región `aria-live`; por debajo de 64rem, donde el diálogo va bajo la lista, la página lo trae a la vista
+
+#### Scenario: Las filas se reconocen como pulsables
+- **WHEN** se mira la lista de plantillas con JavaScript
+- **THEN** su título pide elegir una plantilla y cada fila sin elegir lleva una flecha al final
 
 #### Scenario: Roles sin JavaScript
 - **WHEN** se carga la portada sin JavaScript

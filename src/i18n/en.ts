@@ -115,10 +115,10 @@ export const en: Dict = {
       code: {
         head: 'Code',
         files: [
-          { name: 'admin/theme.css', add: 64 },
-          { name: 'admin/ThemeMenu.tsx', add: 41 },
-          { name: 'profile/prefs.ts', add: 9, del: 1 },
-          { name: 'admin/theme.test.ts', add: 36 },
+          { name: 'theme.css', add: 64 },
+          { name: 'ThemeMenu.tsx', add: 41 },
+          { name: 'prefs.ts', add: 9, del: 1 },
+          { name: 'theme.test.ts', add: 36 },
         ],
         message: 'Done. Every task is checked off and the tests pass.',
       },
@@ -130,7 +130,7 @@ export const en: Dict = {
         'Finished successfully',
       ],
       review: { files: '8 of 8 tasks done', result: '', message: '' },
-      done: 'Integrated into main ·\u00a0Single\u00a0commit',
+      done: 'Integrated into main\u00a0· Single\u00a0commit',
       // DRAFT
       live: '{title}: {column}.',
       // DRAFT
@@ -189,7 +189,7 @@ export const en: Dict = {
     // app
     cost: 'Cost reported by the provider; with a subscription it is an estimate.',
     // DRAFT
-    swipe: 'Swipe the image to see all of it.',
+    swipe: 'On this screen, swipe each image to see all of it.',
     shots: [
       // DRAFT (titles and captions)
       { file: 'estado-decision', alt: 'The “Waiting on you” list of the Online store group: five tasks from its three repositories, three awaiting your approval and two your review', title: 'Waiting on you', caption: 'The specs and code waiting for your approval across the three repositories of “Online store”.' },
@@ -204,13 +204,13 @@ export const en: Dict = {
     // DRAFT
     lead: 'Start from a template or a blank role. Every role has its instructions, its model and its permission to run commands.',
     // DRAFT
-    templatesLabel: 'Templates, and how their instructions begin',
+    templatesLabel: 'Pick a template to read its instructions',
     // DRAFT
     current: 'In the dialog',
     // DRAFT: `{name}` is the template
     pick: 'Show {name} in the dialog',
     // DRAFT
-    caption: 'The app’s hire dialog. Pick a template from the list to see its instructions.',
+    caption: 'The app’s hire dialog, with the full instructions of the chosen template.',
     // app (template catalogue: name and first sentence of its instructions)
     templates: [
       { name: 'Product analyst', text: 'Your strength is understanding the problem before the solution: what the user needs, why, and how everyone will know it is solved.', tone: 'green', prompt:

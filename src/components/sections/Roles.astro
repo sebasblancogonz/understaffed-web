@@ -39,6 +39,10 @@ const strings = JSON.stringify({
                 <p class="who">
                   <span class="tag">{tpl.name}</span>
                   <span class="mark">{roles.current}</span>
+                  {/* La flecha dice que la fila se pulsa. Solo se ve con el script, en las filas sin elegir. */}
+                  <svg class="go" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true">
+                    <path d="M4 10h11m-4.5-4.5L15 10l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
                 </p>
                 <p class="says">
                   <q>{tpl.text}</q>
@@ -51,9 +55,9 @@ const strings = JSON.stringify({
         </ul>
       </div>
 
-      <!-- El diálogo de contratar de la app, con sus textos. Es una imagen: sus controles no se usan. La lista de al lado elige qué plantilla enseña. -->
+      <!-- El diálogo de contratar de la app, con sus textos. Sus botones están dibujados y no se usan; lo que se lee de verdad son las instrucciones, que se desplazan. La lista de al lado elige la plantilla. -->
       <figure class="dialog" data-reveal style="--i:1">
-        <div class="panel window" data-ui role="img" aria-label={fill(d.alt, first.name)} data-role-dialog data-strings={strings}>
+        <div class="panel window" data-ui role="group" aria-label={fill(d.alt, first.name)} data-role-dialog data-strings={strings}>
           <div class="part head">
             <p class="dialog-title" data-role-title>{fill(d.hireFrom, first.name)}</p>
           </div>
@@ -66,7 +70,7 @@ const strings = JSON.stringify({
               <span class="label">{d.prompt}</span>
               <span class="muted" data-role-count>{countOf(first.prompt)}</span>
             </p>
-            <p class="value prompt" data-role-prompt>{first.prompt}</p>
+            <p class="value prompt" data-role-prompt tabindex="0" role="region" aria-label={d.prompt}>{first.prompt}</p>
           </div>
           <div class="part">
             <p class="label">{d.model}</p>
@@ -79,7 +83,7 @@ const strings = JSON.stringify({
               <span>{d.allowBash}</span>
             </p>
           </div>
-          <div class="part foot">
+          <div class="part foot" aria-hidden="true">
             <span class="ui-btn">{d.back}</span>
             <span class="ui-btn primary">{d.confirm}</span>
           </div>
@@ -141,6 +145,24 @@ const strings = JSON.stringify({
   }
   .template:not(.current) .mark {
     display: none;
+  }
+  /* La flecha va al final de la fila, centrada en su alto. */
+  .go {
+    display: none;
+    position: absolute;
+    top: 50%;
+    right: 0.25rem;
+    translate: 0 -50%;
+    color: var(--muted);
+  }
+  .template {
+    padding-right: 2.25rem;
+  }
+  :global(.js) .template:not(.current) .go {
+    display: block;
+  }
+  .dialog {
+    scroll-margin-top: 5.5rem;
   }
   /* La plantilla que enseña el diálogo lleva el fondo suave de su color. */
   .template.current {
@@ -217,11 +239,17 @@ const strings = JSON.stringify({
     line-height: 1.45;
   }
   /* Las instrucciones enseñan su arranque y se pierden hacia abajo, como en el campo de la app. */
+  /* Las instrucciones se leen enteras: el campo se desplaza, como en la app. */
   [data-ui] .prompt {
-    max-height: 9.5rem;
-    overflow: hidden;
+    max-height: 13rem;
+    overflow-y: auto;
+    overscroll-behavior: contain;
     white-space: pre-line;
-    mask-image: linear-gradient(var(--ink) 60%, transparent);
+    scrollbar-width: thin;
+    scrollbar-color: var(--field-border) transparent;
+  }
+  [data-ui] .prompt:focus-visible {
+    outline-offset: 2px;
   }
   [data-ui] .switch-row {
     display: flex;
@@ -245,6 +273,10 @@ const strings = JSON.stringify({
     height: 1rem;
     border-radius: 50%;
     background: var(--bg);
+  }
+  /* Los botones del pie están dibujados: van apagados para que no parezcan pulsables. */
+  [data-ui] .foot .ui-btn {
+    opacity: 0.45;
   }
   [data-ui] .foot {
     display: flex;

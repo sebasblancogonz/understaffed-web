@@ -74,7 +74,7 @@ colors:
 typography:
   display:
     fontFamily: "'Bricolage Grotesque Variable', 'Inter Variable', system-ui, -apple-system, 'Segoe UI', sans-serif"
-    fontSize: "clamp(2.75rem, 1rem + 4.15vw, 4.75rem)"
+    fontSize: "clamp(2rem, 1rem + 4.15vw, 4.75rem)"
     fontWeight: 800
     lineHeight: 1.04
     letterSpacing: "0"
@@ -256,7 +256,7 @@ Fondo blanco y tinta casi negra, un cobalto intenso para la acción y cinco colo
 **Character:** una grotesca con carácter para los titulares, en 750 y 800 y con muy poco tracking (de 0 a -0.02em), sobre Inter en 400 o 500 para el texto. El eje de tamaño óptico se ajusta solo (no se fija `font-variation-settings`), así que el h1 grande y el título de tarjeta usan cortes distintos de la misma familia.
 
 ### Hierarchy
-- **Display** (Bricolage 800, `clamp(2.75rem, 1rem + 4.15vw, 4.75rem)`, interlineado 1.04, tracking 0): solo el h1 del hero, en dos líneas forzadas.
+- **Display** (Bricolage 800, `clamp(2rem, 1rem + 4.15vw, 4.75rem)`, interlineado 1.04, tracking 0): solo el h1 del hero, en dos líneas forzadas.
 - **Headline** (Bricolage 800, `clamp(2rem, 1.1rem + 3.2vw, 3.75rem)`, 1.08, tracking 0): el h2 de cada sección. En la banda de la lista de espera baja a 750 con -0.01em.
 - **Title** (750, `clamp(1.25rem, 1.1rem + 0.5vw, 1.5rem)`): en Bricolage, el h3 de las tarjetas de Cómo funciona y LocalFirst (-0.01em, heredado de la regla base) y los pies de Estado (-0.02em). El nombre de cada ficha de requisitos es también un h3 en Bricolage 750 con -0.01em.
 - **Lead** (400, `clamp(1.125rem, 1rem + 0.5vw, 1.375rem)`): la frase gris bajo el h1 (hasta 40rem) y junto a cada h2 (hasta 34rem).
@@ -284,7 +284,7 @@ La regla base de h1, h2 y h3 es Bricolage 700 con -0.01em, pero cada titular de 
   - Desde 64rem, Roles reparte `1fr` y `27rem`, separados 3.5rem, entre la lista de plantillas y el diálogo de contratar. Cada plantilla es una fila con el nombre en una columna de 15rem y el arranque de sus instrucciones al lado; por debajo, uno sobre otro.
   - Estado son tres filas: la lista «Espera tu decisión», la franja «En marcha» y la franja «Coste por rol». Desde 64rem cada fila reparte `1.45fr` y `1fr` entre el recorte y su pie, centrado en vertical; por debajo, el pie va bajo el recorte. En pantallas de menos de 40rem un recorte no se encoge hasta dejar de leerse: conserva un ancho mínimo (34rem la lista y 37rem las franjas), su marco se desplaza de lado y su borde derecho se desvanece para decir que sigue.
   - Requisitos usa dos columnas y pasa a cuatro desde 48rem.
-- **Hero:** el titular, la frase y los botones van centrados. Las cinco etiquetas de rol forman una fila bajo los botones; desde 72rem flotan alrededor del titular, tres a la izquierda y dos a la derecha, giradas entre -9° y 3°. El bloque arranca `clamp(2.5rem, 1rem + 4vw, 5rem)` por debajo de la cabecera. La pista de la demo va `clamp(3rem, 1.5rem + 4vw, 5.5rem)` por debajo de los botones y la ventana del tablero 1.25rem bajo ella. El aire del hero manda sobre meter las acciones de la tarea en el primer pliegue: de eso se ocupan la pista y «Probar la demo». La ventana va a todo el ancho del contenedor, sobre una franja `stage` que empieza `clamp(5rem, 3rem + 8vw, 12rem)` por debajo del borde superior de la demo, llega de lado a lado de la ventana del navegador y deja 2 a 3rem de franja bajo la ventana. El hero recorta lo que sobresale con `overflow: hidden`, así que no hay desplazamiento lateral.
+- **Hero:** el titular, la frase y los botones van centrados. Las cinco etiquetas de rol forman una fila bajo los botones; desde 72rem flotan alrededor del titular, tres a la izquierda y dos a la derecha, giradas entre -9° y 3°. El bloque arranca `clamp(3rem, 1.5rem + 5vw, 7rem)` por debajo de la cabecera. La pista de la demo va `clamp(3.5rem, 2rem + 5vw, 7.5rem)` por debajo de los botones y la ventana del tablero 1.25rem bajo ella. El aire del hero manda sobre meter las acciones de la tarea en el primer pliegue: de eso se ocupan la pista y «Probar la demo». La ventana va a todo el ancho del contenedor, sobre una franja `stage` que empieza `clamp(5rem, 3rem + 8vw, 12rem)` por debajo del borde superior de la demo, llega de lado a lado de la ventana del navegador y deja 2 a 3rem de franja bajo la ventana. El hero recorta lo que sobresale con `overflow: hidden`, así que no hay desplazamiento lateral.
 - **Demo del tablero:**
   - La barra lateral aparece desde 60rem.
   - La altura es fija: 25rem en móvil y 28rem desde 60rem.
@@ -342,7 +342,7 @@ Los botones son grandes píldoras firmes, y se hunden un poco al pulsarlos.
 - **Dentro de `data-ui`:**
   - Los campos llevan borde de 1 px en `field-border` y esquina `rounded.ui`, con 2.25rem de alto y letra de 0.875rem.
   - El interruptor es una píldora de 2.25 × 1.25rem que pasa a `brand` al activarse.
-  - El diálogo de contratar de Roles es una imagen hecha en HTML (`role="img"`), no un formulario: sus campos, su interruptor y sus botones se dibujan y no se pueden usar. Las instrucciones enseñan su arranque y se desvanecen hacia abajo. Lo que sí se usa es la lista de plantillas de al lado: cada fila lleva un botón que la cubre entera y cambia el título, el nombre, las instrucciones y el contador del diálogo. Sin JavaScript esos botones no aparecen y el diálogo enseña la plantilla Desarrollador backend.
+  - El diálogo de contratar de Roles es un fragmento de la app hecho en HTML (`role="group"` con nombre), no un formulario: sus campos, su interruptor y sus botones del pie se dibujan, van al 45 % de opacidad y no se pueden usar. Las instrucciones se leen enteras en un campo de hasta 13rem que se desplaza y recibe el foco del teclado. Lo que sí se usa es la lista de plantillas de al lado: cada fila lleva una flecha al final y un botón que la cubre entera y cambia el título, el nombre, las instrucciones y el contador del diálogo. Sin JavaScript esos botones no aparecen y el diálogo enseña la plantilla Desarrollador backend.
 
 ### Navigation
 - **Cabecera:** a todo el ancho, con la marca (`Mark` más la palabra en Inter 750 y -0.03em), enlaces grises en 500 que pasan a tinta al pasar el ratón, el enlace de idioma y el botón en píldora «Pedir acceso». Por debajo de 64rem, los enlaces y el idioma pasan al menú de secciones: un botón redondo de 2.75rem con contorno de 1,5 px en `field-border` y un panel con borde, esquina `rounded.md` y sombra de ventana, cuyos enlaces miden 2.75rem de alto. Se cierra al elegir, con Escape o al tocar fuera. El enlace de la sección que se está leyendo pasa a tinta (`aria-current`).
