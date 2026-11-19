@@ -30,7 +30,9 @@ const chipFor = (state: Card['state']) =>
   state === 'awaiting' ? d.chips.awaiting : state === 'running' ? d.chips.running : state === 'awaitingReview' ? d.chips.awaitingReview : '';
 ---
 
-<div class="demo-wrap">
+<div class="demo-wrap" id="demo">
+  {/* Qué toca hacer en cada paso. Va sobre la ventana para que se lea antes que el tablero. */}
+  <p class="hint" data-hint>{d.hints[0]}</p>
   <div class="window demo" data-ui data-demo data-step="0" data-strings={strings} role="group" aria-label={d.label} tabindex="-1">
     <aside class="side" aria-hidden="true">
       <p class="side-brand"><Mark class="side-mark" /><span>Understaffed</span></p>
@@ -81,6 +83,15 @@ const chipFor = (state: Card['state']) =>
                           <span class="agent" />
                         </span>
                       </p>
+                      {/* Las acciones van justo bajo la tarea, siempre a la vista; debajo, lo que se decide. */}
+                      <div class="actions" data-actions>
+                        <button type="button" class="btn primary" data-act="approve">{d.actions.approveSpec}</button>
+                        <button type="button" class="btn" data-act="request">{d.actions.requestChanges}</button>
+                        <button type="button" class="btn primary" data-act="run" hidden>{d.actions.run}</button>
+                        <button type="button" class="btn primary" data-act="approvecode" hidden>{d.actions.approveCode}</button>
+                        <button type="button" class="btn" data-act="sendback" hidden>{d.actions.sendBack}</button>
+                        <button type="button" class="btn" data-act="restart" hidden>{d.actions.restart}</button>
+                      </div>
                       <p class="logline" data-log hidden />
                       {/* Lo que se aprueba: los criterios de la spec, y después los archivos que cambió el rol. */}
                       <div class="detail" data-spec>
@@ -107,14 +118,6 @@ const chipFor = (state: Card['state']) =>
                         <p class="said">{d.code.message}</p>
                       </div>
                       <p class="note" data-note hidden />
-                      <div class="actions" data-actions>
-                        <button type="button" class="btn primary" data-act="approve">{d.actions.approveSpec}</button>
-                        <button type="button" class="btn" data-act="request">{d.actions.requestChanges}</button>
-                        <button type="button" class="btn primary" data-act="run" hidden>{d.actions.run}</button>
-                        <button type="button" class="btn primary" data-act="approvecode" hidden>{d.actions.approveCode}</button>
-                        <button type="button" class="btn" data-act="sendback" hidden>{d.actions.sendBack}</button>
-                        <button type="button" class="btn" data-act="restart" hidden>{d.actions.restart}</button>
-                      </div>
                     </li>
                   )}
                   {d.others[i].map((card) => (
@@ -155,7 +158,6 @@ const chipFor = (state: Card['state']) =>
     </div>
   </div>
   <div class="below">
-    <p class="hint" data-hint>{d.hints[0]}</p>
     <p class="next" data-next hidden><a class="button" href={`#${t.waitlist.id}`}>{t.hero.cta}</a></p>
     <p class="caption">{d.caption}</p>
     <div class="fallback">
@@ -175,7 +177,8 @@ const chipFor = (state: Card['state']) =>
     position: relative;
     isolation: isolate;
     /* Aire entre los botones del hero y la ventana. */
-    margin-top: clamp(3rem, 1.5rem + 4vw, 5.5rem);
+    margin-top: clamp(1.75rem, 1rem + 1.5vw, 2.25rem);
+    scroll-margin-top: 5.5rem;
     padding-bottom: clamp(2rem, 1.5rem + 2vw, 3rem);
   }
   .demo-wrap::before {
@@ -357,7 +360,7 @@ const chipFor = (state: Card['state']) =>
     color: var(--brand);
   }
   [data-ui] .viewport {
-    height: 25rem;
+    height: 27rem;
     overflow: hidden;
   }
   [data-ui] .track {
@@ -398,6 +401,12 @@ const chipFor = (state: Card['state']) =>
   }
   [data-ui] .task {
     box-shadow: 0 8px 24px -8px color-mix(in srgb, var(--brand) 35%, transparent);
+  }
+  /* La tarea que pide una decisión lleva un aro: es lo que hay que pulsar. */
+  [data-ui] .task.awaiting {
+    box-shadow:
+      0 0 0 1px var(--brand),
+      0 8px 24px -8px color-mix(in srgb, var(--brand) 35%, transparent);
   }
   [data-ui] .state {
     margin-bottom: 0.45rem;
@@ -450,7 +459,7 @@ const chipFor = (state: Card['state']) =>
     font-variant-numeric: tabular-nums;
   }
   [data-ui] .prio {
-    padding: 0.05rem 0.45rem;
+    padding: 0.05rem 0.5rem;
     border-radius: 999px;
     background: var(--ui-chip);
     color: var(--ui-ink);
@@ -507,7 +516,7 @@ const chipFor = (state: Card['state']) =>
     margin-top: 0.3rem;
   }
   [data-ui] .criteria li {
-    padding: 0.3rem 0.45rem;
+    padding: 0.3rem 0.5rem;
     border: 1px solid var(--ui-border);
     border-radius: 6px;
     font-weight: 600;
@@ -559,6 +568,10 @@ const chipFor = (state: Card['state']) =>
     display: grid;
     gap: 0.35rem;
     margin-top: 0.6rem;
+  }
+  [data-ui] .actions:empty,
+  [data-ui] .actions.idle {
+    display: none;
   }
   [data-ui] .btn {
     min-height: 1.875rem;
@@ -626,11 +639,12 @@ const chipFor = (state: Card['state']) =>
     display: none;
   }
   .hint {
-    min-height: 3em;
-    margin-bottom: 0.5rem;
+    max-width: 40rem;
+    margin: 0 auto 1rem;
     color: var(--ink);
-    font-size: var(--step-small);
-    font-weight: 500;
+    font-weight: 600;
+    text-align: center;
+    text-wrap: balance;
   }
   .next {
     margin-block: 0.25rem 1rem;

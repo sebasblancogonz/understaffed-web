@@ -46,7 +46,10 @@ const strings = {
           <p class="note">{privacyBefore}<a href={`mailto:${email}`}>{email}</a>{privacyAfter}</p>
         </form>
         <!-- Tras apuntarse: volver al formulario para corregir la dirección o apuntar otra. -->
-        <p class="again" data-again hidden><button type="button" class="link">{waitlist.again}</button></p>
+        <p class="again" data-again hidden>
+          <button type="button" class="link">{waitlist.again}</button>
+          <a class="link" href="#demo" data-try>{waitlist.backToDemo}</a>
+        </p>
         <!-- El envío lo hace el script. Sin él, en lugar del formulario se ve cómo apuntarse por correo. -->
         <p class="nojs">{noJsBefore}<a href={`mailto:${email}`}>{email}</a>{noJsAfter}</p>
       </div>
@@ -183,12 +186,18 @@ const strings = {
     justify-content: center;
   }
   .again {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.25rem 1.5rem;
     margin-top: 1.5rem;
   }
   .again[hidden] {
     display: none;
   }
   .link {
+    display: inline-flex;
+    align-items: center;
     min-height: 2.75rem;
     padding: 0 0.5rem;
     border: 0;

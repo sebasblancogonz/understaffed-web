@@ -24,7 +24,7 @@ const ratios: Record<string, string> = { 'estado-decision': '1220 / 844', 'estad
       {
         status.shots.map((shot, i) => (
           <figure class:list={[shot.strip ? 'is-strip' : 'is-list']} data-reveal style={`--i:${i}; --mark:${marks[i]}`}>
-            <div class:list={['window', 'frame', { strip: shot.strip }]}>
+            <div class:list={['window', 'frame', { strip: shot.strip }]} role="group" aria-label={shot.title}>
               <Shot
                 lang={t.lang}
                 file={shot.file}
@@ -35,6 +35,7 @@ const ratios: Record<string, string> = { 'estado-decision': '1220 / 844', 'estad
               />
             </div>
             <figcaption>
+              <span class="swipe">{status.swipe}</span>
               <span class="cap-title">{shot.title}</span>
               <span>{shot.caption}</span>
               {shot.file === 'estado-coste' && <span class="cost">{status.cost}</span>}
@@ -106,6 +107,15 @@ const ratios: Record<string, string> = { 'estado-decision': '1220 / 844', 'estad
     height: 0.6em;
     border-radius: 50%;
     background: var(--mark);
+  }
+  /* Solo donde el recorte no cabe y su marco se desplaza. */
+  .swipe {
+    font-size: var(--step-small);
+  }
+  @media (min-width: 40rem) {
+    .swipe {
+      display: none;
+    }
   }
   .cost {
     margin-top: 0.25rem;
