@@ -43,9 +43,13 @@ El hero SHALL contener un único `h1` que diga que cada tarea pasa dos veces por
 - **WHEN** el visitante activa «Probar la demo»
 - **THEN** la ventana de la demostración queda a la vista y el foco pasa a la acción que toca en la tarea #6
 
+#### Scenario: Aire en el hero
+- **WHEN** se mide el hero a 1440 px de ancho
+- **THEN** el titular arranca 5rem por debajo de la cabecera y la pista de la demostración 5.5rem por debajo de los botones
+
 #### Scenario: Las acciones de la demo en el primer pliegue
 - **WHEN** se carga la portada a 1440 × 900
-- **THEN** «Aprobar spec» y «Pedir cambios» quedan dentro de la ventana del navegador sin desplazar
+- **THEN** la pista de la demostración y el arranque de su ventana quedan dentro de la ventana del navegador; las acciones de la tarea pueden quedar por debajo, porque el aire del hero manda
 
 ### Requirement: Explicación del flujo de trabajo
 La sección "cómo funciona" SHALL describir que el usuario contrata roles, les asigna tareas de un tablero y revisa su trabajo, y que cada tarea es un cambio de OpenSpec en el repositorio. MUST usar los términos roles, tareas, tablero, revisión y spec, y presentar los pasos en el orden real de una tarea: spec, aprobación de la spec, ejecución, revisión y aprobación del código.
