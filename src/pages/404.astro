@@ -1,0 +1,56 @@
+---
+// Vercel sirve `404.html` para cualquier ruta que no exista, en el idioma que sea: van los dos.
+import '@fontsource-variable/inter';
+import '@fontsource-variable/bricolage-grotesque/opsz.css';
+import '../styles/global.css';
+import Mark from '../components/ui/Mark.astro';
+import { locales, paths } from '../config';
+import { getDict } from '../i18n';
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <meta name="color-scheme" content="light dark" />
+    <title>404 · Understaffed</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  </head>
+  <body>
+    <main>
+      <Mark />
+      <h1>404</h1>
+      {
+        locales.map((lang) => (
+          <div lang={lang}>
+            <p>{getDict(lang).notFound.title}</p>
+            <a href={paths[lang]}>{getDict(lang).notFound.home}</a>
+          </div>
+        ))
+      }
+    </main>
+  </body>
+</html>
+
+<style>
+  main {
+    display: grid;
+    justify-items: center;
+    align-content: center;
+    gap: 1.5rem;
+    min-height: 100vh;
+    padding: var(--margin);
+    text-align: center;
+  }
+  h1 {
+    font-size: var(--step-display);
+    font-weight: 800;
+  }
+  a {
+    display: inline-block;
+    padding-block: 0.75rem;
+    color: var(--accent);
+  }
+</style>

@@ -8,10 +8,12 @@ export const en: Dict = {
   ogLocale: 'en_US',
   meta: {
     // DRAFT
-    title: 'Understaffed: a team of AI agents for your software projects',
+    title: 'Understaffed: AI agents for your software projects',
     // DRAFT
     description:
-      'Understaffed manages software projects with a team of AI agents organized like a company. You hire roles, give them tasks from a board, and nothing reaches your branch without your approval.',
+      'Understaffed: software projects with AI agents. You hire roles, give them tasks from a board, and nothing reaches your branch without your approval.',
+    // DRAFT: requirements, for the structured data
+    softwareRequirements: 'git 2.30 or later, and Claude Code or Codex installed and signed in',
     ogImageAlt: 'Understaffed, software project management with AI agents',
   },
   skip: 'Skip to content',
@@ -148,7 +150,7 @@ export const en: Dict = {
     // DRAFT
     title: 'How a task reaches your branch',
     // DRAFT
-    lead: 'The spec, before any code is written. The code, before it reaches your branch.',
+    lead: 'Understaffed manages software projects with a team of AI agents organized like a company. You approve the spec before the code, and the code before your branch.',
     cards: [
       {
         tone: 'lilac',
@@ -340,6 +342,11 @@ export const en: Dict = {
     productLabel: 'Product',
     languageLabel: 'Language',
     copyright: '© 2026 Understaffed',
+  },
+  // DRAFT
+  notFound: {
+    title: 'This page doesn’t exist',
+    home: 'Go to the home page',
   },
   placeholder: { label: 'TODO: screenshot pending' },
 };

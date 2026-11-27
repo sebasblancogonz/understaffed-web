@@ -27,7 +27,7 @@ export interface Link {
 export interface Dict {
   lang: Lang;
   ogLocale: string;
-  meta: { title: string; description: string; ogImageAlt: string };
+  meta: { title: string; description: string; softwareRequirements: string; ogImageAlt: string };
   skip: string;
   header: { home: string; navLabel: string; nav: Link[]; cta: string; menu: string; switchText: string };
   hero: {
@@ -184,5 +184,6 @@ export interface Dict {
     languageLabel: string;
     copyright: string;
   };
+  notFound: { title: string; home: string };
   placeholder: { label: string };
 }
