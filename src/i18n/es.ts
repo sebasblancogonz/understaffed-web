@@ -8,10 +8,12 @@ export const es: Dict = {
   ogLocale: 'es_ES',
   meta: {
     // DRAFT
-    title: 'Understaffed: un equipo de agentes de IA para tus proyectos de software',
+    title: 'Understaffed: agentes de IA para tus proyectos de software',
     // DRAFT
     description:
-      'Understaffed gestiona proyectos de software con un equipo de agentes de IA organizado como una empresa. Contratas roles, les asignas tareas de un tablero y nada llega a tu rama sin tu aprobación.',
+      'Understaffed: proyectos de software con agentes de IA. Contratas roles, les asignas tareas de un tablero y nada llega a tu rama sin tu aprobación.',
+    // DRAFT: los requisitos, para los datos estructurados
+    softwareRequirements: 'git 2.30 o posterior, y Claude Code o Codex instalado y con la sesión iniciada',
     ogImageAlt: 'Understaffed, gestión de proyectos de software con agentes de IA',
   },
   skip: 'Saltar al contenido',
@@ -148,7 +150,7 @@ export const es: Dict = {
     // DRAFT
     title: 'Así llega una tarea a tu rama',
     // DRAFT
-    lead: 'La spec, antes de que se escriba código. El código, antes de llegar a tu rama.',
+    lead: 'Understaffed gestiona proyectos de software con un equipo de agentes de IA organizado como una empresa. Apruebas la spec antes del código, y el código antes de tu rama.',
     cards: [
       {
         tone: 'lilac',
@@ -279,7 +281,7 @@ export const es: Dict = {
         tone: 'lilac',
         points: [
           'Compartes un proyecto o un grupo e invitas por email.',
-          'El tablero se sincroniza en vivo y una tarea nunca la trabajan dos personas a la vez. La cuenta funciona con un servidor propio.',
+          'El tablero se sincroniza en vivo y una tarea nunca la trabajan dos personas a la vez. La cuenta funciona con un servidor que alojas tú.',
         ],
         media: { kind: 'shot', shot: { file: 'colaboracion-equipo', alt: 'Backlog compartido: la tarea #9 en marcha en el ordenador de Javier Soto y la #10 especificándose para Marta Ruiz' } },
       },
@@ -340,6 +342,11 @@ export const es: Dict = {
     productLabel: 'Producto',
     languageLabel: 'Idioma',
     copyright: '© 2026 Understaffed',
+  },
+  // DRAFT
+  notFound: {
+    title: 'Esta página no existe',
+    home: 'Ir a la portada',
   },
   placeholder: { label: 'TODO: captura pendiente' },
 };

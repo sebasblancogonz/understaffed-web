@@ -370,7 +370,7 @@ Es una captura real de la app en `src/assets/{nombre}-{idioma}-{tema}.png`, serv
 
 ### Entradas
 - **Secciones:** las piezas con `data-reveal` suben 20 px y aparecen en 600 y 800 ms con `--ease-out`, escalonadas 80 ms por índice, cuando entran en pantalla.
-- **Hero:** el titular, la frase y los botones suben de forma escalonada (0, 90 y 180 ms). Después, las etiquetas aparecen una a una.
+- **Hero:** el titular, la frase y los botones suben de forma escalonada (0, 90 y 180 ms), sin fundido: se ven desde el primer momento. Después, las etiquetas aparecen una a una.
 - **Seguridad:** las entradas solo existen con la clase `js` y sin movimiento reducido. El script en línea añade `js` y la quita a los 3 s si `window.__landingReady` no aparece, así que nunca ocultan contenido.
 
 ## Do's and Don'ts

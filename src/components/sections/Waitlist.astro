@@ -43,15 +43,19 @@ const strings = {
             <p id="waitlist-error" class="error" role="alert"></p>
           </div>
           <p class="after">{waitlist.after}</p>
+          <!--email_off-->
           <p class="note">{privacyBefore}<a href={`mailto:${email}`}>{email}</a>{privacyAfter}</p>
+          <!--/email_off-->
         </form>
-        <!-- Tras apuntarse: volver al formulario para corregir la dirección o apuntar otra. -->
+        {/* Tras apuntarse: volver al formulario para corregir la dirección o apuntar otra. */}
         <p class="again" data-again hidden>
           <button type="button" class="link">{waitlist.again}</button>
           <a class="link" href="#demo" data-try>{waitlist.backToDemo}</a>
         </p>
-        <!-- El envío lo hace el script. Sin él, en lugar del formulario se ve cómo apuntarse por correo. -->
+        {/* El envío lo hace el script. Sin él, en lugar del formulario se ve cómo apuntarse por correo. */}
+        <!--email_off-->
         <p class="nojs">{noJsBefore}<a href={`mailto:${email}`}>{email}</a>{noJsAfter}</p>
+        <!--/email_off-->
       </div>
     </div>
   </div>
@@ -216,6 +220,13 @@ const strings = {
   }
   .error :global(a) {
     color: inherit;
+  }
+  @media (pointer: coarse) {
+    /* En un enlace en línea, el relleno agranda lo que se toca sin mover el texto. */
+    .note a,
+    .nojs a {
+      padding-block: 0.75rem;
+    }
   }
   .inner a {
     color: var(--on-band);

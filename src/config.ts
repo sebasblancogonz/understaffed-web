@@ -7,8 +7,9 @@ export const config = {
   waitlistUrl: (import.meta.env.PUBLIC_WAITLIST_URL as string | undefined) ?? 'https://handoff.understaffed.app/v2/waitlist',
   // El buzón de la lista de espera: recibe cada alta y es el contacto para salir de ella.
   waitlistEmail: 'waitlist@understaffed.app',
-  // TODO: imagen Open Graph (1200×630) aportada por el equipo en public/og.png.
-  ogImagePath: '/og.png',
+  // Imagen para compartir (1200×630), una por idioma. Borrador generado desde `media/og/og.html`,
+  // pendiente de que el equipo lo apruebe.
+  ogImagePaths: { es: '/og.png', en: '/og-en.png' },
 } as const;
 
 export const locales = ['es', 'en'] as const;

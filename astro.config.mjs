@@ -15,8 +15,13 @@ export default defineConfig({
     routing: { prefixDefaultLocale: false },
   },
   integrations: [
+    // Los mismos hreflang que el `<head>`: `es`, `en` y `x-default` hacia la versión en español.
     sitemap({
-      i18n: { defaultLocale: 'es', locales: { es: 'es-ES', en: 'en-US' } },
+      i18n: { defaultLocale: 'es', locales: { es: 'es', en: 'en' } },
+      serialize: (item) => ({
+        ...item,
+        links: item.links && [...item.links, { lang: 'x-default', url: new URL('/', site).href }],
+      }),
     }),
   ],
 });

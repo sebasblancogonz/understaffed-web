@@ -1,4 +1,5 @@
 ---
+import { getImage } from 'astro:assets';
 import '@fontsource-variable/inter';
 import '@fontsource-variable/jetbrains-mono';
 import '@fontsource-variable/bricolage-grotesque/opsz.css';
@@ -16,20 +17,58 @@ const t = getDict(lang);
 
 const site = Astro.site!;
 const canonical = new URL(paths[lang], site).href;
-const ogImage = new URL(config.ogImagePath, site).href;
+const ogImage = new URL(config.ogImagePaths[lang], site).href;
+
+// Datos estructurados: solo lo que la portada dice. Sin precio ni valoraciones.
+const shots = import.meta.glob<{ default: ImageMetadata }>('/src/assets/aprobacion-spec-*-light.png', { eager: true });
+const shot = shots[`/src/assets/aprobacion-spec-${lang}-light.png`]?.default;
+const screenshot = shot && new URL((await getImage({ src: shot, format: 'webp' })).src, site).href;
+const home = new URL(paths.es, site).href;
+const id = (name: string) => `${home}#${name}`;
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    { '@type': 'Organization', '@id': id('organization'), name: 'Understaffed', url: home, logo: new URL('/apple-touch-icon.png', site).href },
+    { '@type': 'WebSite', '@id': id('website'), name: 'Understaffed', url: home, inLanguage: [...locales], publisher: { '@id': id('organization') } },
+    {
+      '@type': 'WebPage',
+      '@id': `${canonical}#webpage`,
+      url: canonical,
+      name: t.meta.title,
+      description: t.meta.description,
+      inLanguage: lang,
+      isPartOf: { '@id': id('website') },
+      about: { '@id': id('software') },
+    },
+    {
+      '@type': 'SoftwareApplication',
+      '@id': id('software'),
+      name: 'Understaffed',
+      url: canonical,
+      description: t.meta.description,
+      applicationCategory: 'DeveloperApplication',
+      operatingSystem: 'Windows, macOS',
+      softwareRequirements: t.meta.softwareRequirements,
+      screenshot,
+      publisher: { '@id': id('organization') },
+    },
+  ],
+};
 ---
 
 <!doctype html>
 <html lang={t.lang}>
   <head>
     <meta charset="utf-8" />
-    <!-- La clase `js` activa la demostración y las entradas; sin ella la página se ve completa. -->
+    {/* La clase `js` activa la demostración y las entradas; sin ella la página se ve completa. */}
     <script is:inline>document.documentElement.classList.add('js');setTimeout(function(){if(!window.__landingReady)document.documentElement.classList.remove('js')},3000);</script>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{t.meta.title}</title>
     <meta name="description" content={t.meta.description} />
     <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="preload" href={interLatin} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={displayLatin} as="font" type="font/woff2" crossorigin />
     <meta name="color-scheme" content="light dark" />
@@ -43,24 +82,27 @@ const ogImage = new URL(config.ogImagePath, site).href;
     <meta property="og:description" content={t.meta.description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:locale" content={t.ogLocale} />
-    <!-- TODO: imagen Open Graph (public/og.png, 1200x630) pendiente del equipo -->
     <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content={t.meta.ogImageAlt} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={t.meta.title} />
     <meta name="twitter:description" content={t.meta.description} />
     <meta name="twitter:image" content={ogImage} />
     <meta name="twitter:image:alt" content={t.meta.ogImageAlt} />
+
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd).replace(/</g, '\\u003c')} />
   </head>
   <body>
-    <!--
+    {/*
       THESIS: la portada de un producto SaaS a la altura de las de Craft, Notion, Dub y monday.com, colorida y amable y sin copiar a ninguna, cuyo producto se demuestra en vez de describirse: la tarea #6 solo avanza cuando el visitante aprueba, y la #4 espera su revisión. Rechaza el hero de texto sin producto.
       OWN-WORLD: fondo blanco, tinta #0d1017, cobalto #0031e6 en la acción; cinco colores de rol en pastel (lila, naranja, verde, rosa y amarillo) en etiquetas con su círculo y en tarjetas suaves; Bricolage Grotesque en titulares e Inter en el texto; botones en píldora; encabezados de sección a la izquierda con la entradilla a su derecha; la demostración sobre una franja pastel de lado a lado; esquinas de 10, 14 y 24 px (32 en la banda de la lista de espera) y sombras suaves; las ventanas blancas de la app enseñan el producto.
       STORY: el visitante entiende que contrata roles de IA, ve que nada llega a su rama sin aprobar la spec y el código, lo prueba en el tablero y pide acceso.
       FIRST VIEWPORT: barra a todo el ancho con marca, cuatro enlaces, English y «Pedir acceso»; titular centrado en dos líneas a unos 76 px, frase gris, «Pedir acceso» en cobalto y «Ver cómo funciona» con contorno, los dos en píldora; cinco etiquetas pastel giradas alrededor; debajo, la ventana de la app a casi todo el ancho sobre la franja pastel, cortada por el borde inferior.
       FORM: canon de las referencias del usuario (Craft, Notion, Dub y monday.com; PRODUCT.md, decisión del 2026-11-18), que sustituyen a la tirada de dirección; comp aprobado .impeccable/mocks/comp-a-centrado.png, el A de tres, aprobado el 2026-11-18, y alejado después de Notion a petición del usuario (tipografía, píldoras, franja y encabezados). Sin clave de tirada.
       FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance
-    -->
+    */}
     <a class="skip" href="#main">{t.skip}</a>
     <slot name="header" />
     <main id="main" tabindex="-1">

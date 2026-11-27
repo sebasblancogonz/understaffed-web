@@ -1,3 +1,15 @@
 {
-  "buildPath": "comp"
+  "buildPath": "comp",
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "overused-font",
+        "value": "inter",
+        "createdAt": "2026-11-27T18:13:03.876Z",
+        "reason": "Agent triage: DESIGN.md and openspec/specs/site-presentation require Inter as the site's text font; media/og/og.html reuses it"
+      }
+    ]
+  }
 }

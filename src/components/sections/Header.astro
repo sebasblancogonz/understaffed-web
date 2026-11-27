@@ -32,7 +32,7 @@ const other: Lang = t.lang === 'es' ? 'en' : 'es';
         {t.header.switchText}
       </a>
       <a class="button cta" href={`#${t.waitlist.id}`}>{t.header.cta}</a>
-      <!-- Por debajo de 64rem, las secciones y el idioma van en este menú. -->
+      {/* Por debajo de 64rem, las secciones y el idioma van en este menú. */}
       <details class="menu" data-menu>
         <summary aria-label={t.header.menu}>
           <svg viewBox="0 0 20 20" width="20" height="20" aria-hidden="true">
@@ -80,6 +80,7 @@ const other: Lang = t.lang === 'es' ? 'en' : 'es';
   .brand {
     display: flex;
     align-items: center;
+    min-height: 2.75rem;
     gap: 0.625rem;
     --mark: 2rem;
     color: var(--ink);
@@ -196,6 +197,33 @@ const other: Lang = t.lang === 'es' ? 'en' : 'es';
     }
     .end {
       gap: 0.75rem;
+    }
+  }
+  /* Teléfonos estrechos (hasta 320 px): todo se junta, y «Pedir acceso» sigue a la vista. */
+  @media (max-width: 23.75rem) {
+    .bar {
+      gap: 0.5rem;
+    }
+    .brand {
+      --mark: 1.25rem;
+      gap: 0.3rem;
+    }
+    .word {
+      font-size: 1rem;
+    }
+    .end {
+      gap: 0.4rem;
+    }
+    .cta {
+      padding-inline: 0.625rem;
+    }
+  }
+  @media (max-width: 21rem) {
+    .word {
+      font-size: 0.875rem;
+    }
+    .cta {
+      padding-inline: 0.5rem;
     }
   }
   @media (min-width: 64rem) {
