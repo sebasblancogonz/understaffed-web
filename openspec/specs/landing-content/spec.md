@@ -74,11 +74,11 @@ La portada SHALL indicar que cada tarea tiene dos aprobaciones humanas: la spec 
 - **THEN** se mencionan exactamente dos aprobaciones, "la spec" y "el código", y ningún texto sugiere que el código se integre sin aprobación
 
 ### Requirement: Uso del CLI de IA existente
-La portada SHALL afirmar que Understaffed lanza el CLI de IA que el usuario ya tiene y ya paga, nombrando hoy solo Claude Code, y que no guarda claves.
+La portada SHALL afirmar que Understaffed lanza el CLI de IA que el usuario ya tiene y ya paga, nombrando hoy Claude Code y Codex, y que no guarda claves.
 
-#### Scenario: Solo Claude Code
+#### Scenario: Solo los CLI que funcionan
 - **WHEN** se revisan los textos de la portada
-- **THEN** Claude Code es el único CLI de IA nombrado como compatible y no se mencionan otros proveedores como soportados
+- **THEN** Claude Code y Codex son los únicos CLI de IA nombrados como compatibles y no se mencionan otros proveedores como soportados
 
 ### Requirement: Local primero, cuenta opcional
 La portada SHALL indicar que Understaffed funciona en local, que sin cuenta la app no hace ninguna petición de red y todo funciona igual, y que la cuenta, para sincronizar ordenadores y colaborar, es opcional. Lo presenta en tres tarjetas (sin cuenta, con cuenta y en equipo), cada una con una captura real o un recorte de una.
@@ -110,14 +110,14 @@ Toda imagen SHALL declarar ancho, alto y `alt` descriptivo para evitar saltos de
 - **THEN** tiene `width`, `height` y un `alt` no vacío, salvo las decorativas con `alt=""`
 
 ### Requirement: Requisitos de uso
-La portada SHALL incluir una sección de requisitos, presentada como un tablero de lo que la app usa, que indique que es una app de escritorio para Windows y macOS, que necesita git 2.30 o posterior y Claude Code instalado y con sesión iniciada, que OpenSpec va incluido y que la app no instala git ni Claude Code pero explica cómo hacerlo cuando faltan.
+La portada SHALL incluir una sección de requisitos, presentada como un tablero de lo que la app usa, que indique que es una app de escritorio para Windows y macOS, que necesita git 2.30 o posterior y Claude Code o Codex instalado y con sesión iniciada, que OpenSpec va incluido y que la app no instala git ni esos CLI pero explica cómo hacerlo cuando faltan.
 
 #### Scenario: Requisitos nombrados
 - **WHEN** se lee la sección de requisitos en cada idioma
-- **THEN** se mencionan Windows, macOS, git 2.30 o posterior y Claude Code con sesión iniciada, y se dice que la app no los instala pero explica cómo hacerlo
+- **THEN** se mencionan Windows, macOS, git 2.30 o posterior y Claude Code o Codex con sesión iniciada, y se dice que la app no los instala pero explica cómo hacerlo
 
 #### Scenario: Enlaces a las herramientas
-- **WHEN** se inspeccionan las fichas de Claude Code, Git y OpenSpec
+- **WHEN** se inspeccionan las fichas de Claude Code, Codex, Git y OpenSpec
 - **THEN** el nombre de cada una enlaza a la página de esa herramienta
 
 #### Scenario: Sin afirmaciones no verificadas

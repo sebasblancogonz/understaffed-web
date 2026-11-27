@@ -163,10 +163,10 @@ export const es: Dict = {
         // DRAFT
         title: 'Después, el trabajo',
         // DRAFT
-        text: 'El rol trabaja en una rama propia con Claude Code, el CLI que ya tienes y ya pagas. Understaffed no guarda claves.',
+        text: 'El rol trabaja en una rama propia con Claude Code o Codex, el CLI que ya tienes y ya pagas. Understaffed no guarda claves.',
         // app (README), abreviado
         code: {
-          label: 'Así lanza cada ejecución (abreviado):',
+          label: 'Así lanza cada ejecución con Claude Code (abreviado):',
           text: 'claude -p\n  --output-format stream-json\n  --permission-mode acceptEdits\n  --tools Read,Glob,Grep,Edit,\n          Write,Agent,Skill\n  --append-system-prompt-file\n      <instrucciones del rol>',
         },
       },
@@ -290,10 +290,11 @@ export const es: Dict = {
     // DRAFT
     title: 'Funciona con lo que ya usas',
     // DRAFT
-    text: 'Understaffed no instala git ni Claude Code, pero te explica cómo hacerlo cuando faltan.',
+    text: 'Necesitas git y uno de los dos CLI. Understaffed no los instala, pero te explica cómo hacerlo cuando faltan.',
     // DRAFT
     tiles: [
       { name: 'Claude Code', text: 'Instalado y con la sesión iniciada.', href: 'https://claude.com/product/claude-code' },
+      { name: 'Codex', text: 'O este, si es el que usas.', href: 'https://developers.openai.com/codex/cli' },
       { name: 'Git', text: '2.30 o posterior.', href: 'https://git-scm.com/' },
       { name: 'OpenSpec', text: 'Va incluido en la app.', href: 'https://github.com/Fission-AI/OpenSpec' },
       { name: 'Windows y macOS', text: 'App de escritorio.' },

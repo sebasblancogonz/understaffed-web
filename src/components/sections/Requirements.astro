@@ -74,9 +74,17 @@ const parts = (text: string) => text.split(/(\bgit\b)/g);
     color: var(--muted);
     font-size: var(--step-small);
   }
-  @media (min-width: 48rem) {
+  /* Con un número impar de fichas, la última ocupa la fila entera en dos columnas. */
+  .tiles li:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+  }
+  /* Cinco en fila solo cuando caben los nombres enteros. */
+  @media (min-width: 60rem) {
     .tiles {
-      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+    .tiles li:last-child:nth-child(odd) {
+      grid-column: auto;
     }
   }
 </style>
