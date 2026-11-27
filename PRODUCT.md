@@ -38,7 +38,7 @@ hay enlace de descarga público.
 ## Positioning
 
 - No llama a APIs de IA: lanza como subproceso el CLI del proveedor que el usuario ya tiene y ya
-  paga, y no pide ni guarda claves ni credenciales. Hoy el único CLI compatible es Claude Code.
+  paga, y no pide ni guarda claves ni credenciales. Hoy los CLI compatibles son Claude Code y Codex.
 - Cada tarea del tablero es un cambio de OpenSpec en el repositorio del proyecto. La verdad vive
   en archivos versionados del repo, no en la app.
 - Cada tarea tiene dos aprobaciones humanas: primero la spec y después el código. Nada se
@@ -103,10 +103,10 @@ hay enlace de descarga público.
 **Límites que la web no puede cruzar**
 
 - Plataformas: solo Windows y macOS. No se nombran otros sistemas operativos.
-- Requisitos: git 2.30 o posterior, y Claude Code instalado y con la sesión iniciada. La app no
-  instala ninguno de los dos, pero explica cómo hacerlo cuando faltan. No hace falta instalar
+- Requisitos: git 2.30 o posterior, y Claude Code o Codex instalado y con la sesión iniciada. La
+  app no instala ninguno, pero explica cómo hacerlo cuando faltan. No hace falta instalar
   base de datos ni OpenSpec.
-- CLI de IA: Claude Code es el único compatible. Cursor y Copilot forman parte del contexto del
+- CLI de IA: Claude Code y Codex son los compatibles. Cursor y Copilot forman parte del contexto del
   usuario, no son integraciones, y no se presentan como compatibles.
 - Colaboración: están hechas las fases 1 y 2. Están pendientes la fase 3 (ramas y logs bajo
   demanda, y Aprobar que sube al remoto) y las integraciones con Jira, Linear o GitHub Issues,
@@ -135,8 +135,6 @@ hay enlace de descarga público.
 - El texto legal para recoger emails: el aviso de privacidad y el consentimiento. La web lleva
   un aviso en borrador (para qué se usa el email y cómo salir de la lista) que el equipo tiene
   que revisar.
-- La URL pública definitiva. Hoy `site` apunta a `https://understaffed.example` en
-  `astro.config.mjs`.
 - Si el servicio de cuentas de Understaffed estará abierto al público en el lanzamiento. Hoy
   el servidor que se usa es el del autor, en su propio VPS.
 - El precio y la licencia: no hay nada decidido ni publicado.
@@ -217,7 +215,7 @@ parecía demasiado a la portada de Notion, y la web toma un estilo propio:
    rellenarse.
 3. **La verdad vive en el repositorio.** La app es una vista y un mando, no un silo, y la web lo
    cuenta con los términos de la app: roles, tareas, tablero, spec y revisión.
-4. **Cero configuración para empezar.** Los únicos requisitos son git y Claude Code, que la app
+4. **Cero configuración para empezar.** Los únicos requisitos son git y Claude Code o Codex, que la app
    detecta y explica cómo instalar.
 5. **Una persona primero, el equipo después.** La historia empieza en el trabajo de una persona
    con sus agentes y crece hacia la colaboración.

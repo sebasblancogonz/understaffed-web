@@ -2,9 +2,9 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 
-// TODO: URL pública definitiva. Hasta fijarla, canónicas, hreflang y sitemap
-// apuntan a este valor provisional. Se puede sobrescribir con SITE_URL.
-const site = process.env.SITE_URL ?? 'https://understaffed.example';
+// La URL pública: de ella salen las canónicas, hreflang, la imagen Open Graph y el sitemap.
+// Es la de `www` porque `understaffed.app` redirige ahí. Se puede sobrescribir con SITE_URL.
+const site = process.env.SITE_URL ?? 'https://www.understaffed.app';
 
 export default defineConfig({
   site,
