@@ -342,6 +342,7 @@ export const en: Dict = {
     productLabel: 'Product',
     languageLabel: 'Language',
     copyright: '© 2026 Understaffed',
+    maker: 'A BlancoLabs product',
   },
   // DRAFT
   notFound: {

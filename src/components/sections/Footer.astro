@@ -38,7 +38,9 @@ const other: Lang = t.lang === 'es' ? 'en' : 'es';
         </ul>
       </div>
     </div>
-    <p class="copy">{footer.copyright}</p>
+    <p class="copy">
+      {footer.copyright} · <a class="maker" href="https://www.blancolabs.es">{footer.maker}</a>
+    </p>
   </div>
 </footer>
 
@@ -95,6 +97,16 @@ const other: Lang = t.lang === 'es' ? 'en' : 'es';
   .copy {
     margin-top: 3rem;
     color: var(--muted);
+  }
+  .maker {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+  @media (pointer: coarse) {
+    .maker {
+      display: inline-block;
+      padding-block: 0.75rem;
+    }
   }
   @media (min-width: 48rem) {
     .grid {

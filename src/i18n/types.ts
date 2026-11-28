@@ -183,6 +183,7 @@ export interface Dict {
     productLabel: string;
     languageLabel: string;
     copyright: string;
+    maker: string;
   };
   notFound: { title: string; home: string };
   placeholder: { label: string };
